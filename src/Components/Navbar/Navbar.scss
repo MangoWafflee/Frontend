@@ -1,0 +1,15 @@
+.nav_container {
+    width: 100%;
+  }
+  
+  .nav_bar {
+    position: fixed;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 440px;
+    height: 60px;
+    margin: 0;
+    background-color: green;
+    bottom: 0;
+  }

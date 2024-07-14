@@ -1,14 +1,18 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import './App.css';
+import Navbar from './Components/Navbar/Navbar';
+
 
 function App() {
   return (
-    <BrowserRouter>
       <div className="page">
-        <div className="main_box"></div>
+        <div className="main_box">
+          <div className='wrap'> 
+            content
+          </div>
+          <Navbar/>
+        </div>
       </div>
-    </BrowserRouter>
   );
 }
 export default App;
