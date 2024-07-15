@@ -39,7 +39,16 @@ export default function Navbar() {
             className="nav-link"
             activeClassName="active"
           >
-            마이
+            프로필
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/camerarecognition"
+            className="nav-link"
+            activeClassName="active"
+          >
+            카메라
           </NavLink>
         </li>
       </ul>

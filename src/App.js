@@ -6,6 +6,7 @@ import MainPage from './pages/Main/MainPage.jsx';
 import FriendPage from './pages/Friend/FriendPage.jsx';
 import ChallengePage from './pages/Challenge/ChallengePage.jsx';
 import ProfilePage from './pages/Profile/ProfilePage.jsx';
+import CameraRecognitionPage from './pages/CameraRecognition/CameraRecognitionPage.jsx';
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
             <Route
               path="/profile"
               element={<ProfilePage />}
+            />
+            <Route
+              path="/camerarecognition"
+              element={<CameraRecognitionPage />}
             />
           </Routes>
         </div>
