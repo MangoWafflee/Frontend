@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-export default function Main() {
+export default function MainPage() {
   return (
     <div>
       <div>a1</div>
@@ -86,7 +86,6 @@ export default function Main() {
       <div>a81</div>
       <div>a82</div>
       <div>a83</div>
-
     </div>
-  )
+  );
 }

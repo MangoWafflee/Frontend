@@ -10,25 +10,21 @@
   width: 440px;
   height: 60px;
   margin: 0;
-  background-color: green;
+  background-color: rgb(255, 252, 48);
   bottom: 0;
-
 
   // navbar 요소
   li {
-
     // 선택되지 않았을 때
     .nav-link {
-      color: black;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
     }
 
     // 선택되었을 때
     .active {
-      color: white;
+      color: rgb(105, 105, 105);
     }
-
   }
-
-
-
 }
