@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Navbar from './Components/Navbar/Navbar';
+import Navbar from './components/Navbar/Navbar.jsx';
 import { Route, Routes } from 'react-router-dom';
 import MainPage from './pages/Main/MainPage.jsx';
 import FriendPage from './pages/Friend/FriendPage.jsx';

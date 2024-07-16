@@ -1,0 +1,19 @@
+.friend-ranking{
+    display: flex;
+    overflow-x: auto;
+    background-color: rgb(251, 187, 76);
+    margin: 10px 20px;
+    border-radius: 10px;
+    .friend-info{
+        padding: 10px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .friend-img{
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+        }
+    }
+}
