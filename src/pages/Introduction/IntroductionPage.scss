@@ -1,0 +1,40 @@
+.introduction-page {
+    height: 100%;
+    
+
+    .top-layer {
+        display: flex;
+        justify-content: space-between;
+
+        //삭제할거
+        border: 1px solid black;
+    }
+
+    .swiper {
+        width: 100%;
+        height: 800px;
+        border: 1px solid black;
+
+        .swiper-slide {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    .kakao-login-button {
+        position: fixed;
+        cursor: pointer;
+        bottom: 100px;
+        z-index: 1;
+        left: 50%;
+
+        img {
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
