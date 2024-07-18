@@ -8,16 +8,16 @@
     border-radius: 10px;
     border: 1px solid black;
 
-    .previous-button,.next-button{
-        font-weight: bold;
-        cursor: pointer;
-    }
-
     .calendar {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
+
+        .previous-button,.next-button{
+            font-weight: bold;
+            cursor: pointer;
+        }
 
         .calendar-tile {
             position: relative;
@@ -31,6 +31,12 @@
                 
             }
         }
+    }
+
+    button{
+        background-color: rgb(255, 187, 0);
+        border-radius: 5px;
+        padding: 5px;
     }
 
 }

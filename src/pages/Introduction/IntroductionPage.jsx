@@ -5,20 +5,17 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "./IntroductionPage.scss";
 import kakaoLoginImage from '../../assets/kakao_login_large_wide.png';
+import Header from "../../components/Header/Header";
 
 export default function IntroductionPage() {
 	return (
-		<div className="introduction-page">
-			<div className="top-layer">
-				<div className="logo">logo</div>
-				<div>??</div>
-			</div>
+		<div className="introduction_page">
+			<Header/>
 			<Swiper
 				pagination={{
 					dynamicBullets: true,
 				}}
 				modules={[Pagination]}
-				className="mySwiper"
 			>
 				<SwiperSlide>Slide 1</SwiperSlide>
 				<SwiperSlide>Slide 2</SwiperSlide>
@@ -27,7 +24,7 @@ export default function IntroductionPage() {
 				<SwiperSlide>Slide 5</SwiperSlide>
 				<SwiperSlide>Slide 6</SwiperSlide>
 			</Swiper>
-            <div className="kakao-login-button">
+            <div className="kakao_login_button">
                 <img src={kakaoLoginImage} alt="카카오 로그인 버튼" />
             </div>
             <div>

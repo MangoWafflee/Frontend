@@ -1,14 +1,9 @@
-.introduction-page {
-    height: 100%;
+.introduction_page {
+    display: flex;
+    flex-direction: column;
     
 
-    .top-layer {
-        display: flex;
-        justify-content: space-between;
-
-        //삭제할거
-        border: 1px solid black;
-    }
+    
 
     .swiper {
         width: 100%;
@@ -23,18 +18,19 @@
         }
     }
 
-    .kakao-login-button {
+    .kakao_login_button {
         position: fixed;
         cursor: pointer;
-        bottom: 100px;
+        bottom: 60px;
         z-index: 1;
         left: 50%;
-
+        transform: translateX(-25%);
+        
         img {
-            
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 50%;
         }
     }
 }

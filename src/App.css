@@ -15,7 +15,9 @@ a {
   text-decoration: none;
 }
 
-button{
+button {
+  border: none;
+  background: none;
   cursor: pointer;
 }
 
@@ -61,6 +63,10 @@ html {
   height: 100%;
   overflow: hidden;
   overflow-y: auto;
-  padding-bottom: 60px; /* navbar 높이 만큼 추가 */
-  
+  scrollbar-width: none; 
+}
+
+.is_nav{
+  padding-bottom: 60px;
+  /* navbar 높이 만큼 추가 */
 }
