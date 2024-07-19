@@ -1,6 +1,6 @@
 import React from "react";
 import "./MainPage.scss";
-import WeekCalendar from "../../components/Calendar/WeekCalendar";
+import WeekCalendar from "../../features/weekCalendar/WeekCalendar";
 import FriendRanking from "../../components/Ranking/FriendRanking";
 import useNotification from "../../hooks/useNotification";
 
