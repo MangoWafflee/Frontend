@@ -19,6 +19,19 @@ export default function WeekCalendar() {
 		setStandardDay(newDate);
 	};
 
+	// 오늘 날짜로 설정하는 함수
+	const setToday = () => {
+		setStandardDay(new Date());
+	};
+
+	// 해당 월의 몇 번째 주인지 계산하는 함수
+	const getWeekOfMonth = (date) => {
+		const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+		const dayOfWeek = startOfMonth.getDay();
+		const adjustedDate = date.getDate() + dayOfWeek - 1;
+		return Math.floor(adjustedDate / 7) + 1;
+	};
+
 	useEffect(() => {
 		// 기준 날짜로부터 이전 7일의 날짜 배열 생성
 		const getPrevious7Days = () => {
@@ -32,9 +45,18 @@ export default function WeekCalendar() {
 					weekday: "long",
 					locale: "ko-KR",
 				});
-				dates.push({ day, dayOfWeek });
+				dates.push({ day, dayOfWeek, isToday: isToday(date) });
 			}
 			return dates;
+		};
+
+		const isToday = (someDate) => {
+			const today = new Date();
+			return (
+				someDate.getDate() === today.getDate() &&
+				someDate.getMonth() === today.getMonth() &&
+				someDate.getFullYear() === today.getFullYear()
+			);
 		};
 
 		setPrevious7Days(getPrevious7Days());
@@ -42,13 +64,31 @@ export default function WeekCalendar() {
 
 	return (
 		<div className="calendar-container">
+			<div className="calendar-header">
+				<div>
+					{standardDay.toLocaleString("default", {
+						year: "2-digit",
+					})} {" "}
+					 {standardDay.getMonth() + 1}월{" "}
+					{getWeekOfMonth(standardDay)}번째 주
+				</div>
+				<button className="today-button" onClick={setToday}>오늘</button>
+			</div>
 			<div className="calendar">
 				<div className="previous-button" onClick={setOneWeekAgo}>
 					{"<"}
 				</div>
 				{previous7Days.map((date, index) => (
 					<div key={index} className="calendar-tile">
-						<div className="calendar-dayofweek">{`${date.dayOfWeek[0]}`}</div>
+						<div
+							className={`calendar-dayofweek ${
+								date.dayOfWeek[0] === "토"
+									? "sat"
+									: date.dayOfWeek[0] === "일"
+									? "sun"
+									: ""
+							}`}
+						>{`${date.isToday ? "오늘" : date.dayOfWeek[0]}`}</div>
 						<div className="calendar-day">
 							{`${date.day}`}
 							{/* <span className="smile">😃</span> */}
@@ -60,16 +100,7 @@ export default function WeekCalendar() {
 				</div>
 			</div>
 
-			<button>웃음 도전?</button>
+			<button>오늘 웃음 도전?</button>
 		</div>
 	);
 }
-
-const EmojiOverlay = ({ date }) => {
-	const emojis = ["😀", "😃", "😃", "😃", "😃", "😃", "😃"];
-	return (
-		<div className="emoji-overlay">
-			{emojis[date.getDay() - 1]} {date.getDate()}
-		</div>
-	);
-};
