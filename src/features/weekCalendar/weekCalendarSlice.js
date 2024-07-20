@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState={
-    // 일주일치 웃음과 관련된 정보
+    // 일주일치 웃음과 관련된 데이터
     value:[],
 };
 
@@ -20,5 +20,8 @@ export const weekCalendarSlice=createSlice({
         },
     }
 })
+
+// 상태에 대한 선택자 정의
+export const selectValue=(state)=>state.weekCalendar.value;
 
 export default weekCalendarSlice.reducer;

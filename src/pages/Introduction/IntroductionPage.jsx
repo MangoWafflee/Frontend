@@ -8,6 +8,9 @@ import kakaoLoginImage from '../../assets/kakao_login_large_wide.png';
 import Header from "../../components/Header/Header";
 
 export default function IntroductionPage() {
+
+	// 로그인 여부 확인 후 로그인 되어 있으면 메인페이지로 이동
+
 	return (
 		<div className="introduction_page">
 			<Header/>

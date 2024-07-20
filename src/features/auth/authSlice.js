@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// 초기값
 const initialState={
+    status:'idle',
     isLoggedIn: false,
     user: null,
     token: null,
@@ -35,8 +37,17 @@ const authSlice = createSlice({
         state.error = null;
       },
     },
+    // Thunks 파일에 있는 비동기에 관한 처리
+    // extraReducers:{
+
+    // }
   });
   
 export const { loginStart, loginSuccess, loginFailure, logout } = authSlice.actions;
+
+// 상태 선택자 정의
+export const selectIsLoggedIn = (state) => state.auth.isLoggedIn; // 로그인 여부
+export const selectCurrentUser = (state) => state.auth.user; // 유저 정보
+export const selectAuthError = (state) => state.auth.error; // 에러 정보
 
 export default authSlice.reducer;
