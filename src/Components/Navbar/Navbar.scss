@@ -1,5 +1,8 @@
 .nav_container {
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;
 }
 
 .nav_bar {
@@ -7,7 +10,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 440px;
+  width: 600px;
   height: 60px;
   margin: 0;
   background-color: rgb(255, 252, 48);
@@ -26,5 +29,14 @@
     .active {
       color: rgb(105, 105, 105);
     }
+  }
+}
+
+@media (max-width: 600px) {
+  .nav_container {
+    width: 100%;
+  }
+  .nav_bar {
+    width: 100%;
   }
 }

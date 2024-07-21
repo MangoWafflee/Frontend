@@ -35,20 +35,18 @@ html {
 }
 
 .page {
-  max-width: 600px;
+  width: 600px;
   background-color: white;
-  /* 중앙 영역의 배경색 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* 그림자 효과 */
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-self: center;
   height: 100vh;
 }
 
 .wrap {
-  max-width: 600px;
-  width: 100%;
+  width: 600px;
   height: 100%;
   overflow: hidden;
   overflow-y: auto;
@@ -57,12 +55,14 @@ html {
 
 .is_nav {
   padding-bottom: 60px;
-  /* navbar 높이 만큼 추가 */
 }
 
 /* 뷰포트 너비가 600px 이하일 때 적용되는 스타일 */
 @media (max-width: 600px) {
-  .container {
+  .page {
+    width: 100%;
+  }
+  .wrap {
     width: 100%;
   }
 }
