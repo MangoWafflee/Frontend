@@ -1,0 +1,16 @@
+.main-page{
+    display: flex;
+    flex-direction: column;
+
+    h2{
+        padding: 0px 20px;
+    }
+
+    .top-layer{
+        display: flex;
+        justify-content: space-between;
+
+        //삭제할거
+        border: 1px solid black;
+    }
+}

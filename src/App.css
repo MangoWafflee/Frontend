@@ -8,11 +8,17 @@
 
 ul,
 ol {
-    list-style: none;
+  list-style: none;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
 body,
@@ -22,7 +28,8 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f0f0; /* 배경색 설정 */
+  background-color: #f0f0f0;
+  /* 배경색 설정 */
   overflow-x: hidden;
   overflow-y: hidden;
 }
@@ -30,8 +37,10 @@ html {
 .page {
   min-width: 440px;
   max-width: 440px;
-  background-color: #ececec; /* 중앙 영역의 배경색 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  background-color: white;
+  /* 중앙 영역의 배경색 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 그림자 효과 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,15 +52,21 @@ html {
   position: relative;
   width: 100%;
   display: flex;
-  align-items: center; /* 내부 내용 가운데 정렬 */
+  align-items: center;
+  /* 내부 내용 가운데 정렬 */
   flex-direction: column;
   overflow-y: auto;
 }
 
-.wrap{
+.wrap {
   width: 100%;
   height: 100%;
   overflow: hidden;
   overflow-y: auto;
-  padding-bottom: 60px; /* navbar 높이 만큼 추가 */
+  scrollbar-width: none; 
+}
+
+.is_nav{
+  padding-bottom: 60px;
+  /* navbar 높이 만큼 추가 */
 }
