@@ -2,13 +2,13 @@ import React from 'react';
 import './App.css';
 import { Route, Routes, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import Navbar from './components/Navbar/Navbar.jsx';
-import MainPage from './pages/Main/MainPage.jsx';
-import FriendPage from './pages/Friend/FriendPage.jsx';
-import ChallengePage from './pages/Challenge/ChallengePage.jsx';
-import ProfilePage from './pages/Profile/ProfilePage.jsx';
-import CameraRecognitionPage from './pages/CameraRecognition/CameraRecognitionPage.jsx';
-import IntroductionPage from './pages/Introduction/IntroductionPage.jsx';
+import Navbar from './components/Navbar/Navbar';
+import MainPage from './pages/Main/MainPage';
+import FriendPage from './pages/Friend/FriendPage';
+import ChallengePage from './pages/Challenge/ChallengePage';
+import ProfilePage from './pages/Profile/ProfilePage';
+import CameraRecognitionPage from './pages/CameraRecognition/CameraRecognitionPage';
+import IntroductionPage from './pages/Introduction/IntroductionPage';
 
 const Layout = () => (
   <div className="page">
