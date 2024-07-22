@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function IntroductionPage() {
 	// 로그인 여부 확인 후 로그인 되어 있으면 메인페이지로 이동
+	Notification.requestPermission();
 	const navigate = useNavigate();
 	const notify = useNotification();
 
