@@ -1,16 +1,36 @@
-.main-page{
+.main-page {
     display: flex;
     flex-direction: column;
 
-    h2{
+    h2 {
         padding: 0px 20px;
     }
 
-    .top-layer{
-        display: flex;
-        justify-content: space-between;
+    .main-menu {
+        width: 500px;
+        height: 600px;
+        display: grid;
+        background-color: bisque;
+        grid-template-columns: 45% 45%;
+        grid-template-rows: 45% 45%;
+        grid-template-areas:
+            "individual-record challenge"
+            "ranking challenge";
+        gap: 10px;
 
-        //삭제할거
-        border: 1px solid black;
+        .individual-record {
+            grid-area: individual-record;
+            background-color: black;
+        }
+
+        .challenge {
+            grid-area: challenge;
+            background-color: red;
+        }
+
+        .ranking {
+            grid-area: ranking;
+            background-color: blue;
+        }
     }
 }
