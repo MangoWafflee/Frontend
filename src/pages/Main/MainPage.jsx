@@ -8,8 +8,8 @@ import Header from '../../components/Header/Header';
 export default function MainPage() {
   // 로그인 여부 확인해서 로그인 안되어있는데 시도시 소개페이지로 이동
 
-  Notification.requestPermission();
-  const notify = useNotification();
+  // Notification.requestPermission();
+  // const notify = useNotification();
 
   return (
     <div className="main-page">
@@ -23,7 +23,7 @@ export default function MainPage() {
       <FriendRanking />
       <FriendRanking />
       <FriendRanking />
-      <button
+      {/* <button
         onClick={() =>
           notify('This is a notification!', {
             body: 'Here is the notification body',
@@ -31,7 +31,7 @@ export default function MainPage() {
         }
       >
         Show Notification
-      </button>
+      </button> */}
     </div>
   );
 }
