@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -14,6 +14,11 @@ export default function IntroductionPage() {
 
   const navigate = useNavigate();
   const notify = useNotification();
+
+  useEffect(() => {
+    if(false)
+      navigate('/app')
+  }, [navigate])
 
   return (
     <div className="introduction_page">

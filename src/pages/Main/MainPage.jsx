@@ -1,12 +1,14 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import './MainPage.scss';
 import WeekCalendar from '../../features/weekCalendar/WeekCalendar';
 import FriendRanking from '../../components/Ranking/FriendRanking';
 import useNotification from '../../hooks/useNotification';
 import Header from '../../components/Header/Header';
+import { useNavigate } from "react-router-dom";
 
 export default function MainPage() {
   // 로그인 여부 확인해서 로그인 안되어있는데 시도시 소개페이지로 이동
+  const navigate = useNavigate();
   
   return (
     <div className="main-page">
@@ -33,7 +35,7 @@ export default function MainPage() {
               <div className="progress" style={{width:`${'20'}%`}}></div>
             </div>
           </div>
-          <span>{'>더보기'}</span>
+          <span onClick={()=>navigate('/challenge')}>{'>더보기'}</span>
         </div>
 
         {/* 미정 */}
