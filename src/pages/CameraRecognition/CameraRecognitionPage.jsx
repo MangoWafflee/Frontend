@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 
 export default function CameraRecognitionPage() {
@@ -6,14 +6,33 @@ export default function CameraRecognitionPage() {
   const canvasRef = useRef(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
 
-  const loadModels = async () => {
-    const MODEL_URL = process.env.PUBLIC_URL + '/models';
-    await faceapi.loadTinyFaceDetectorModel(MODEL_URL);
-    await faceapi.loadFaceLandmarkTinyModel(MODEL_URL);
-    await faceapi.loadFaceRecognitionModel(MODEL_URL);
-    await faceapi.loadFaceExpressionModel(MODEL_URL);
-    setModelsLoaded(true);
-  };
+  useEffect(() => {
+    const loadModels = async () => {
+      const MODEL_URL = process.env.PUBLIC_URL + '/models';
+      try {
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri(
+            MODEL_URL
+          ),
+          faceapi.nets.faceLandmark68TinyNet.loadFromUri(
+            MODEL_URL
+          ),
+          faceapi.nets.faceRecognitionNet.loadFromUri(
+            MODEL_URL
+          ),
+          faceapi.nets.faceExpressionNet.loadFromUri(
+            MODEL_URL
+          ),
+        ]);
+        setModelsLoaded(true);
+        console.log('모든 모델이 로드되었습니다.');
+      } catch (error) {
+        console.error('모델 로드 에러:', error);
+      }
+    };
+
+    loadModels();
+  }, []);
 
   const startVideo = () => {
     navigator.mediaDevices
@@ -22,7 +41,7 @@ export default function CameraRecognitionPage() {
         videoRef.current.srcObject = stream;
       })
       .catch((err) =>
-        console.error('Error accessing camera: ', err)
+        console.error('카메라 접근 에러: ', err)
       );
   };
 
@@ -74,7 +93,7 @@ export default function CameraRecognitionPage() {
           resizedDetections
         );
       } catch (error) {
-        console.error('Error detecting faces: ', error);
+        console.error('얼굴 인식 에러:', error);
       }
       requestAnimationFrame(detectFaces);
     };
@@ -82,13 +101,16 @@ export default function CameraRecognitionPage() {
     detectFaces();
   };
 
-  const handleStartButtonClick = async () => {
-    await loadModels();
-    startVideo();
-    videoRef.current.addEventListener(
-      'play',
-      handleVideoOnPlay
-    );
+  const handleStartButtonClick = () => {
+    if (modelsLoaded) {
+      startVideo();
+      videoRef.current.addEventListener(
+        'play',
+        handleVideoOnPlay
+      );
+    } else {
+      console.error('모델이 아직 로드되지 않았습니다.');
+    }
   };
 
   return (
@@ -103,8 +125,8 @@ export default function CameraRecognitionPage() {
         ref={videoRef}
         autoPlay
         muted
-        width="720"
-        height="560"
+        width="400px"
+        height="400px"
       />
     </div>
   );
