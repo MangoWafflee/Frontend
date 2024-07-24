@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
 
 export default function CameraRecognitionPage() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const [modelsLoaded, setModelsLoaded] = useState(false);
 
   const loadModels = async () => {
     const MODEL_URL = process.env.PUBLIC_URL + '/models';
@@ -11,6 +12,7 @@ export default function CameraRecognitionPage() {
     await faceapi.loadFaceLandmarkTinyModel(MODEL_URL);
     await faceapi.loadFaceRecognitionModel(MODEL_URL);
     await faceapi.loadFaceExpressionModel(MODEL_URL);
+    setModelsLoaded(true);
   };
 
   const startVideo = () => {
@@ -18,17 +20,13 @@ export default function CameraRecognitionPage() {
       .getUserMedia({ video: {} })
       .then((stream) => {
         videoRef.current.srcObject = stream;
-        videoRef.current.addEventListener(
-          'play',
-          handleVideoOnPlay
-        );
       })
       .catch((err) =>
         console.error('Error accessing camera: ', err)
       );
   };
 
-  const handleVideoOnPlay = () => {
+  const handleVideoOnPlay = async () => {
     if (!videoRef.current) return;
 
     const canvas = faceapi.createCanvasFromMedia(
@@ -44,48 +42,61 @@ export default function CameraRecognitionPage() {
 
     const detectFaces = async () => {
       if (!videoRef.current) return;
-
-      const detections = await faceapi
-        .detectAllFaces(
-          videoRef.current,
-          new faceapi.TinyFaceDetectorOptions()
-        )
-        .withFaceLandmarks(true)
-        .withFaceExpressions();
-
-      const resizedDetections = faceapi.resizeResults(
-        detections,
-        displaySize
-      );
-      const context = canvas.getContext('2d');
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      faceapi.draw.drawDetections(
-        canvas,
-        resizedDetections
-      );
-      faceapi.draw.drawFaceLandmarks(
-        canvas,
-        resizedDetections
-      );
-      faceapi.draw.drawFaceExpressions(
-        canvas,
-        resizedDetections
-      );
+      try {
+        const detections = await faceapi
+          .detectAllFaces(
+            videoRef.current,
+            new faceapi.TinyFaceDetectorOptions()
+          )
+          .withFaceLandmarks(true)
+          .withFaceExpressions();
+        const resizedDetections = faceapi.resizeResults(
+          detections,
+          displaySize
+        );
+        const context = canvas.getContext('2d');
+        context.clearRect(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+        faceapi.draw.drawDetections(
+          canvas,
+          resizedDetections
+        );
+        faceapi.draw.drawFaceLandmarks(
+          canvas,
+          resizedDetections
+        );
+        faceapi.draw.drawFaceExpressions(
+          canvas,
+          resizedDetections
+        );
+      } catch (error) {
+        console.error('Error detecting faces: ', error);
+      }
+      requestAnimationFrame(detectFaces);
     };
 
-    videoRef.current.addEventListener('play', () => {
-      setInterval(detectFaces, 100);
-    });
+    detectFaces();
   };
 
   const handleStartButtonClick = async () => {
     await loadModels();
     startVideo();
+    videoRef.current.addEventListener(
+      'play',
+      handleVideoOnPlay
+    );
   };
 
   return (
     <div>
-      <button onClick={handleStartButtonClick}>
+      <button
+        onClick={handleStartButtonClick}
+        disabled={!modelsLoaded}
+      >
         Start Video
       </button>
       <video
