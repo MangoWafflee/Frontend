@@ -1,4 +1,5 @@
 import React from "react";
+import { ReactComponent as SearchSVG } from '../../assets/icons/Search.svg';
 import { useNavigate } from "react-router-dom";
 import './FriendSearchPage.scss'
 
@@ -8,7 +9,8 @@ export default function FriendSearchPage() {
 		<div>
 			<header>
                 <div className="search-bar">
-                    <span>🚑️</span>
+					{/* 크기 조정 필요 */}
+                    <SearchSVG/>
                     <input type="text" placeholder="검색" maxLength={20}/>
                 </div>
 				<span onClick={() => navigate(-1)}>취소</span>

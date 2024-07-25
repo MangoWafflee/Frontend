@@ -1,11 +1,31 @@
+header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .search-bar {
+        padding: 5px;
+        display: flex;
+        align-items: center;
+
+        // svg {
+        //     max-width: 24px;
+        //     max-height: 24px;
+        // }
+    }
+
+}
+
+
 main {
     width: 300px;
 
     .friend-tile {
         display: flex;
         align-items: center;
-        width: 100%; 
-        
+        width: 100%;
+
         img {
             width: 30px;
             height: 30px;
