@@ -5,6 +5,9 @@ export default function CameraRecognitionPage() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] =
+    useState(false);
+  let animationFrameId;
 
   useEffect(() => {
     const loadModels = async () => {
@@ -95,19 +98,40 @@ export default function CameraRecognitionPage() {
       } catch (error) {
         console.error('얼굴 인식 에러:', error);
       }
-      requestAnimationFrame(detectFaces);
+      animationFrameId = requestAnimationFrame(detectFaces);
     };
 
     detectFaces();
   };
 
+  const stopVideo = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      videoRef.current.srcObject
+        .getTracks()
+        .forEach((track) => track.stop());
+    }
+    if (canvasRef.current) {
+      canvasRef.current.remove();
+      canvasRef.current = null;
+    }
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
+  };
+
   const handleStartButtonClick = () => {
     if (modelsLoaded) {
-      startVideo();
-      videoRef.current.addEventListener(
-        'play',
-        handleVideoOnPlay
-      );
+      if (isVideoPlaying) {
+        stopVideo();
+        setIsVideoPlaying(false);
+      } else {
+        startVideo();
+        videoRef.current.addEventListener(
+          'play',
+          handleVideoOnPlay
+        );
+        setIsVideoPlaying(true);
+      }
     } else {
       console.error('모델이 아직 로드되지 않았습니다.');
     }
@@ -119,7 +143,7 @@ export default function CameraRecognitionPage() {
         onClick={handleStartButtonClick}
         disabled={!modelsLoaded}
       >
-        Start Video
+        {isVideoPlaying ? 'Stop Video' : 'Start Video'}
       </button>
       <video
         ref={videoRef}
