@@ -15,6 +15,17 @@
     }
   }
 
+  // 삭제할 거
+  .to_main{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    display: center;
+    background-color: white;
+    color: black;
+    text-align: center;
+  }
+
   .kakao_login_button {
     position: fixed;
     cursor: pointer;

@@ -9,6 +9,8 @@ import ChallengePage from './pages/Challenge/ChallengePage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import CameraRecognitionPage from './pages/CameraRecognition/CameraRecognitionPage';
 import IntroductionPage from './pages/Introduction/IntroductionPage';
+import NotificationCenterPage from './pages/NotificationCenter/NotificationCenterPage';
+import FriendSearchPage from './pages/FriendSearch/FriendSearchPage';
 
 const Layout = () => (
   <div className="page">
@@ -35,7 +37,9 @@ function App() {
       </Route>
       <Route element={<Layout />}>
         <Route path="/app" element={<MainPage />} />
+        <Route path="/app/notification" element={<NotificationCenterPage/>} />
         <Route path="/friend" element={<FriendPage />} />
+        <Route path="/friend/search" element={<FriendSearchPage />} />
         <Route
           path="/challenge"
           element={<ChallengePage />}

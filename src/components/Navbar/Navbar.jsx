@@ -1,6 +1,8 @@
 import React from 'react';
 import './Navbar.scss';
 import { NavLink } from 'react-router-dom';
+import { ReactComponent as HomeSVG } from "../../assets/icons/Home.svg";
+import { ReactComponent as SelectedHomeSVG } from "../../assets/icons/SelectedHome.svg";
 
 export default function Navbar() {
   return (
@@ -12,7 +14,7 @@ export default function Navbar() {
             className="nav-link"
             activeClassName="active"
           >
-            홈
+            <HomeSVG/>
           </NavLink>
         </li>
         <li>
