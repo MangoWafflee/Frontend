@@ -23,9 +23,7 @@ const Layout = () => (
 
 const IntroductionLayout = () => (
   <div className="page">
-    <div className="wrap">
       <Outlet />
-    </div>
   </div>
 );
 

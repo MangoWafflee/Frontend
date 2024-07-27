@@ -21,7 +21,7 @@ export default function IntroductionPage() {
 
 	return (
 		<div className="introduction_page">
-			<Header />
+			<span>앱 이름 </span>
 			<Swiper
 				pagination={{
 					dynamicBullets: true,
