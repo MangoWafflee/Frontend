@@ -1,7 +1,35 @@
 .top_layer {
+  height: 6vh;
   width: 100%;
   display: flex;
   justify-content: space-between;
-  //삭제할거
-  border: 1px solid black;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+
+  .logo {
+    display: flex;
+    align-items: center;
+    // logo중앙정렬 필요
+    padding-left: 6.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #505050;
+  }
+
+  .icon-bell {
+    display: flex;
+    align-items: center;
+    padding-right: 1rem;
+    font-size: 1.5rem;
+
+    .nav-link {
+      color: rgb(155, 155, 155);
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    // 선택되었을 때
+    .active {
+      color: rgb(35, 35, 35);
+    }
+  }
 }
