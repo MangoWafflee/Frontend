@@ -1,49 +1,59 @@
 #profile-page {
-    position: relative;
+  //   position: relative;
+  width: 100%;
 
-    .user-image {
-        position: absolute;
-        // 임의 조정
-        top: 150px;
-        left: 120px;
+  .background-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
 
-        img {
-            width: 50px;
-            height: 50px;
-        }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 이미지가 컨테이너를 완전히 채우도록 합니다 */
+    }
+  }
 
+  .user-image {
+    position: absolute;
+    // 임의 조정
+    top: 200px;
+    left: 240px;
+
+    img {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  .user-point {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0px;
+    border-bottom: 1px solid black;
+  }
+
+  .menus {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+    .menu {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 10px;
+      padding: 5px 10px;
+      background-color: white;
+      border-radius: 10px;
+      border: 1px solid black;
     }
 
-    .user-point{
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        padding: 20px 0px;
-        border-bottom: 1px solid black;
+    .menu2 {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0px;
+      padding: 5px 0px;
     }
-
-    .menus{
-        display: flex;
-        flex-direction: column;
-        margin-top: 20px;
-
-        .menu{
-            display: flex;
-            justify-content: space-between;
-            margin:  5px 10px;
-            padding: 5px 10px;
-            background-color: white;
-            border-radius: 10px;
-            border: 1px solid black;
-        }
-
-        .menu2{
-            display: flex;
-            justify-content: space-between;
-            margin:  5px 0px;
-            padding: 5px 0px;
-            
-            
-        }
-    }
+  }
 }

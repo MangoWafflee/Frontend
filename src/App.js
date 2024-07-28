@@ -1,21 +1,24 @@
-import React from 'react';
-import './App.css';
-import { Route, Routes, Outlet } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import Navbar from './components/Navbar/Navbar';
-import MainPage from './pages/Main/MainPage';
-import FriendPage from './pages/Friend/FriendPage';
-import ChallengePage from './pages/Challenge/ChallengePage';
-import ProfilePage from './pages/Profile/ProfilePage';
-import CameraRecognitionPage from './pages/CameraRecognition/CameraRecognitionPage';
-import IntroductionPage from './pages/Introduction/IntroductionPage';
-import NotificationCenterPage from './pages/NotificationCenter/NotificationCenterPage';
-import FriendSearchPage from './pages/FriendSearch/FriendSearchPage';
+import React from "react";
+import { Outlet, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Header from "./components/Header/Header";
+import Navbar from "./components/Navbar/Navbar";
+import CameraRecognitionPage from "./pages/CameraRecognition/CameraRecognitionPage";
+import ChallengePage from "./pages/Challenge/ChallengePage";
+import FriendPage from "./pages/Friend/FriendPage";
+import FriendSearchPage from "./pages/FriendSearch/FriendSearchPage";
+import IntroductionPage from "./pages/Introduction/IntroductionPage";
+import MainPage from "./pages/Main/MainPage";
+import NotificationCenterPage from "./pages/NotificationCenter/NotificationCenterPage";
+import ProfilePage from "./pages/Profile/ProfilePage";
 
 const Layout = () => (
   <div className="page">
+    <Header />
     <div className="wrap is_nav">
+      {/* <Header /> */}
       <Outlet />
+      {/* <Navbar /> */}
     </div>
     <Navbar />
   </div>
@@ -35,18 +38,12 @@ function App() {
       </Route>
       <Route element={<Layout />}>
         <Route path="/app" element={<MainPage />} />
-        <Route path="/app/notification" element={<NotificationCenterPage/>} />
+        <Route path="/app/notification" element={<NotificationCenterPage />} />
         <Route path="/friend" element={<FriendPage />} />
         <Route path="/friend/search" element={<FriendSearchPage />} />
-        <Route
-          path="/challenge"
-          element={<ChallengePage />}
-        />
+        <Route path="/challenge" element={<ChallengePage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route
-          path="/camerarecognition"
-          element={<CameraRecognitionPage />}
-        />
+        <Route path="/camerarecognition" element={<CameraRecognitionPage />} />
       </Route>
     </Routes>
   );
