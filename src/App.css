@@ -60,5 +60,6 @@ html {
 }
 
 .is_nav {
-  padding-bottom: 60px;
+  padding-bottom: 6vh;
+  padding-top: 6vh;
 }

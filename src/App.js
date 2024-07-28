@@ -16,9 +16,7 @@ const Layout = () => (
   <div className="page">
     <Header />
     <div className="wrap is_nav">
-      {/* <Header /> */}
       <Outlet />
-      {/* <Navbar /> */}
     </div>
     <Navbar />
   </div>
@@ -26,7 +24,7 @@ const Layout = () => (
 
 const IntroductionLayout = () => (
   <div className="page">
-      <Outlet />
+    <Outlet />
   </div>
 );
 

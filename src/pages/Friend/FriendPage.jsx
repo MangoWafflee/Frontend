@@ -5,13 +5,14 @@ import "./FriendPage.scss";
 
 import { Avatar, Box, Divider, Typography } from "@mui/material";
 import { useRef } from "react";
+import UserDefaultImage from "../../assets/images/UserDefaultImage.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import UserCard from "../../components/UserCard/UserCard";
 
 export default function FriendPage() {
   const [searchText, setSearchText] = useState(""); // 검색창 값
   const [searchUserName, setSearchUserName] = useState(""); // 검색한 유저 이름
-  const [searchUserImg, setSearchUserImg] = useState(""); // 검색한 유저 이미지
+  const [searchUserImage, setSearchUserImage] = useState(""); // 검색한 유저 이미지
   const [searchUserNickname, setSearchUserNickname] = useState(""); // 검색한 유저 닉네임
 
   //   const [friendList, setFriendList] = useState(null);
@@ -20,19 +21,50 @@ export default function FriendPage() {
     {
       userName: "손흥민",
       userNickname: "son",
-      userImg: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
+      userImage: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
     },
     {
       userName: "이상현",
       userNickname: "sang",
-      //   userImg: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
+      //   userImage: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
     },
     {
       userName: "박지성",
       userNickname: "ji",
-      userImg: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
+      userImage: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
     },
   ];
+
+  //   useEffect(() => {
+  //   //API 요청(친구목록 가져오기)
+  //   let url;
+
+  // 	const fetchData = async () => {
+  // 		const response = await fetch(url, {
+  // 		  method: "GET",
+  // 		  headers: {
+  // 			"Content-Type": "application/json",
+  // 		  },
+  // 		});
+
+  // 		if (response.status === 404) {
+  // 			console.log(url);
+  // 		  console.log("검색 결과가 없습니다.");
+  // 		}
+
+  // 		if (response.status === 200) {
+  // 		  const data = await response.json(); // response.json()이 완료될 때까지 기다림
+
+  //   		  console.log(url);
+  // 		  console.log(data);
+
+  // 		  setFriendList(data); // 상태 업데이트
+  // 		} else {
+  // 		  console.log("실패");
+  // 		}
+  // 	  };
+  // 	  fetchData();
+  // }, [friendList]);
 
   function searchFunction(e) {
     e.preventDefault();
@@ -41,10 +73,17 @@ export default function FriendPage() {
 
     // 더미데이터
     setSearchUserName("손흥민");
-    setSearchUserImg("https://cdn-icons-png.flaticon.com/512/4715/4715329.png");
+    setSearchUserImage(
+      "https://cdn-icons-png.flaticon.com/512/4715/4715329.png"
+    );
     setSearchUserNickname("son");
 
-    setIsModalOpen(!isModalOpen); // 모달 열기/닫기 토글
+    //나중에 존재하는 닉네임인지 확인하는 걸로 바꿔야함
+    if (searchText === null || searchText === "") {
+      alert("검색어를 입력해주세요.");
+    } else {
+      setIsModalOpen(!isModalOpen); // 모달 열기/닫기 토글
+    }
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림/닫힘 상태
@@ -63,13 +102,14 @@ export default function FriendPage() {
     }
   };
 
-  const handleFriendClick = (nickname) => {
-    setSearchText(nickname);
-
-    // 더미데이터
-    setSearchUserName("손흥민");
-    setSearchUserImg("https://cdn-icons-png.flaticon.com/512/4715/4715329.png");
-    setSearchUserNickname("son");
+  const handleFriendClick = (userNickname, userName, userImage) => {
+    setSearchUserName(userName);
+    if (userImage === undefined || userImage === null || userImage === "") {
+      setSearchUserImage(UserDefaultImage);
+    } else {
+      setSearchUserImage(userImage);
+    }
+    setSearchUserNickname(userNickname);
 
     setIsModalOpen(!isModalOpen); // 모달 열기/닫기 토글
   };
@@ -95,18 +135,28 @@ export default function FriendPage() {
           </h3>
           <Divider />
         </div>
-        {friendList !== null &&
+        {friendList === null || friendList.length === 0 ? (
+          <div className="friend-list-empty">
+            <h3>친구를 추가해보세요!</h3>
+          </div>
+        ) : (
           friendList.map((result, index) => (
             <div
               className="friend"
               key={index}
-              onClick={() => handleFriendClick(result.userNickname)}
+              onClick={() =>
+                handleFriendClick(
+                  result.userNickname,
+                  result.userName,
+                  result.userImage
+                )
+              }
             >
               <Box
                 sx={{ display: "flex", alignItems: "center", margin: "0.5rem" }}
               >
                 <Avatar
-                  src={result.userImg}
+                  src={result.userImage}
                   aria-label={result.userName}
                   sx={{ width: 45, height: 45 }}
                 >
@@ -118,7 +168,7 @@ export default function FriendPage() {
                   <Typography
                     color="text.primary"
                     sx={{
-                      fontSize: "0.9rem",
+                      fontSize: "1rem",
                       textAlign: "left",
                       marginLeft: "1rem",
                       fontWeight: "bold",
@@ -132,7 +182,7 @@ export default function FriendPage() {
                     sx={{
                       fontSize: "0.8rem",
                       textAlign: "left",
-                      marginLeft: "1rem",
+                      marginLeft: "1.5rem",
                     }}
                     noWrap
                   >
@@ -141,7 +191,8 @@ export default function FriendPage() {
                 </div>
               </Box>
             </div>
-          ))}
+          ))
+        )}
       </div>
 
       {isModalOpen && (
@@ -150,7 +201,7 @@ export default function FriendPage() {
             <div className="modal-content">
               <UserCard
                 userName={searchUserName}
-                userImg={searchUserImg}
+                userImage={searchUserImage}
                 userNickname={searchUserNickname}
               ></UserCard>
             </div>

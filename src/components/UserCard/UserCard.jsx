@@ -1,18 +1,11 @@
 import React from "react";
 
-import {
-  Avatar,
-  Box,
-  Card,
-  CardHeader,
-  CardMedia,
-  Typography,
-} from "@mui/material";
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 
-export default function UserCard({ userName, userImg, userNickname }) {
+export default function UserCard({ userName, userImage, userNickname }) {
   return (
     <Card>
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="300"
         image={userImg}
@@ -37,13 +30,7 @@ export default function UserCard({ userName, userImg, userNickname }) {
                 {userName[0]}
               </Typography>
             </Avatar>
-            {/* <Typography
-              color="text.secondery"
-              sx={{ fontSize: "0.85rem", textAlign: "left" }}
-              noWrap
-            >
-              {userName}
-            </Typography> */}
+
             <div className="friend-info">
               <Typography
                 color="text.primary"
@@ -71,7 +58,41 @@ export default function UserCard({ userName, userImg, userNickname }) {
             </div>
           </Box>
         }
+      /> */}
+      <CardMedia
+        component="img"
+        height="300"
+        image={userImage}
+        alt={userNickname}
       />
+      <CardContent>
+        <div className="user-info">
+          <Typography
+            color="text.primary"
+            sx={{
+              fontSize: "1.1rem",
+              textAlign: "left",
+              //   marginLeft: "1rem",
+              fontWeight: "bold",
+            }}
+            noWrap
+          >
+            {userName}
+          </Typography>
+          <Typography
+            color="text.secondary"
+            sx={{
+              fontSize: "0.9rem",
+              textAlign: "left",
+              marginLeft: "1rem",
+              fontWeight: "bold",
+            }}
+            noWrap
+          >
+            {userNickname}
+          </Typography>
+        </div>
+      </CardContent>
     </Card>
   );
 }
