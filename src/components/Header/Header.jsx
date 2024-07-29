@@ -1,18 +1,39 @@
-import React from 'react';
-import './Header.scss';
-import {useNavigate} from 'react-router-dom';
+import React from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
-export default function Header() {
+import { faAngleLeft, faBell } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-  const navigate=useNavigate();
+import "./Header.scss";
+
+export default function Header({ forceRedirect }) {
+  let navigate = useNavigate();
+
+  let goBack = () => {
+    navigate(-1);
+  };
 
   return (
-    <header>
-      {/* 앱 로고 및 알림 아이콘 */}
-      <div className="top_layer">
-        <div className="logo">logo</div>
-        <div onClick={()=>navigate('/app/notification')}>💡 </div>
+    <div className="header">
+      <div className="icon-back">
+        <NavLink
+          to="#"
+          className="nav-link"
+          onClick={forceRedirect ? () => {} : goBack}
+        >
+          <FontAwesomeIcon icon={faAngleLeft} />
+        </NavLink>
       </div>
-    </header>
+      <div className="logo">MongoWaffle</div>
+      <div className="icon-bell">
+        <NavLink
+          to="/app/notification"
+          className="nav-link"
+          activeClassName="active"
+        >
+          <FontAwesomeIcon icon={faBell} />
+        </NavLink>
+      </div>
+    </div>
   );
 }

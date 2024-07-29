@@ -1,49 +1,48 @@
-header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+// header {
+//     width: 100%;
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
 
-    .search-bar {
-        padding: 5px;
-        display: flex;
-        align-items: center;
+//     .search-bar {
+//         padding: 5px;
+//         display: flex;
+//         align-items: center;
 
-        // svg {
-        //     max-width: 24px;
-        //     max-height: 24px;
-        // }
-    }
+//         // svg {
+//         //     max-width: 24px;
+//         //     max-height: 24px;
+//         // }
+//     }
 
-}
+// }
 
+// main {
+//     width: 300px;
 
-main {
-    width: 300px;
+//     .friend-tile {
+//         display: flex;
+//         align-items: center;
+//         width: 100%;
 
-    .friend-tile {
-        display: flex;
-        align-items: center;
-        width: 100%;
+//         img {
+//             width: 30px;
+//             height: 30px;
+//             margin-right: 10px;
+//         }
 
-        img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-        }
+//         .friend-info {
+//             display: flex;
+//             flex-direction: column;
 
-        .friend-info {
-            display: flex;
-            flex-direction: column;
+//             span:nth-child(2) {
+//                 font-size: 12px;
+//                 color: gray;
+//             }
+//         }
 
-            span:nth-child(2) {
-                font-size: 12px;
-                color: gray;
-            }
-        }
-
-        .friend-request-button {
-            margin-left: auto; // 오른쪽 끝에 위치
-        }
-    }
-}
+//         .friend-request-button {
+//             margin-left: auto; // 오른쪽 끝에 위치
+//         }
+//     }
+// }
