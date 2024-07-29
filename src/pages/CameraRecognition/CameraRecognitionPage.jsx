@@ -178,7 +178,7 @@ export default function CameraRecognitionPage() {
             </svg>
           </div>
           <Flex gap="small" wrap>
-            <Button onClick type="primary">
+            <Button type="primary">
               {'링크 URL 보내기'}
             </Button>
           </Flex>
