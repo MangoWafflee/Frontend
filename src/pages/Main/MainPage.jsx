@@ -22,9 +22,11 @@ export default function MainPage() {
 						title="챌린지🔥"
 						extra={<Link to="/challenge">{"More"}</Link>}
 						style={{
-							width: 180
+							width: 180,
 						}}
-            bodyStyle={{ padding: 10 }}
+						styles={{
+							body: { padding: 10 }
+						  }}
 					>
 						<div className="challenge circular">
 							<span>일주일 연속 웃기</span>
