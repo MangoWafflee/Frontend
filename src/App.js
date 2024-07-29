@@ -11,6 +11,7 @@ import IntroductionPage from "./pages/Introduction/IntroductionPage";
 import MainPage from "./pages/Main/MainPage";
 import NotificationCenterPage from "./pages/NotificationCenter/NotificationCenterPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import AchievementPage from "./pages/Achievement/AchievementPage";
 
 const Layout = () => (
   <div className="page">
@@ -42,6 +43,7 @@ function App() {
         <Route path="/challenge" element={<ChallengePage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/camerarecognition" element={<CameraRecognitionPage />} />
+        <Route path="/achievement" element={<AchievementPage />} />
       </Route>
     </Routes>
   );
