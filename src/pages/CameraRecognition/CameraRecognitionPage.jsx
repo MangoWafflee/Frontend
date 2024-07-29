@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
+import { Button, Flex } from 'antd';
+import './CameraRecognitionPage.scss';
 
 export default function CameraRecognitionPage() {
   const videoRef = useRef(null);
@@ -7,6 +9,7 @@ export default function CameraRecognitionPage() {
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] =
     useState(false);
+  const [emotions, setEmotions] = useState({});
   let animationFrameId;
 
   useEffect(() => {
@@ -95,6 +98,13 @@ export default function CameraRecognitionPage() {
           canvas,
           resizedDetections
         );
+
+        if (detections.length > 0) {
+          const emotions = detections[0].expressions;
+          setEmotions(emotions);
+        } else {
+          setEmotions({});
+        }
       } catch (error) {
         console.error('얼굴 인식 에러:', error);
       }
@@ -138,20 +148,31 @@ export default function CameraRecognitionPage() {
   };
 
   return (
-    <div>
-      <button
-        onClick={handleStartButtonClick}
-        disabled={!modelsLoaded}
-      >
-        {isVideoPlaying ? 'Stop Video' : 'Start Video'}
-      </button>
+    <div className="camera-recognition-container">
       <video
         ref={videoRef}
         autoPlay
         muted
-        width="400px"
-        height="400px"
+        className="video-box"
       />
+      <div className="emotion-display">
+        {Object.entries(emotions).map(
+          ([emotion, value]) => (
+            <p key={emotion}>
+              {emotion}: {(value * 100).toFixed(2)}%
+            </p>
+          )
+        )}
+      </div>
+      <Flex gap="small" wrap>
+        <Button
+          onClick={handleStartButtonClick}
+          disabled={!modelsLoaded}
+          type="primary"
+        >
+          {isVideoPlaying ? '멈추기' : '실행'}
+        </Button>
+      </Flex>
     </div>
   );
 }
