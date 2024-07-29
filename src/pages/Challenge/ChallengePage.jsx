@@ -213,9 +213,7 @@ const participatingChallengeList = [
 								alt="challenge-image"
 							/>
 						</div>
-						{/* <img src={selectedChallenge.img} alt="challenge-image" /> */}
 						<h3>{selectedChallenge.title}</h3>
-						{/* <p>{`${calculateDateDifference(selectedChallenge.endDate)}일 남음`}</p> */}
 						<br />
 						<p>{selectedChallenge.subTitle}</p>
 						<br />

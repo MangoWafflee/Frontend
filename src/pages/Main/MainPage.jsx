@@ -1,22 +1,28 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import WeekCalendar from "../../features/weekCalendar/WeekCalendar";
 import "./MainPage.scss";
 import { Progress, Card } from "antd";
 
 export default function MainPage() {
-	// 로그인 여부 확인해서 로그인 안되어있는데 시도시 소개페이지로 이동
 	const navigate = useNavigate();
+
+	// 로그인 여부 확인해서 로그인 안되어있는데 시도시 소개페이지로 이동
+	useEffect(() => {
+		if (false) navigate("/");
+	}, [navigate]);
+
+	// 일주일 달력에 관한 웃음 기록
+	const smileRecordList=[];
 
 	return (
 		<div className="main-page">
-			<h3>ㅇㅇㅇ님 2일째 웃고 계시네요🔥</h3>
+			<h3>ㅇㅇㅇ님 22일째 웃고 계시네요🔥</h3>
 			<WeekCalendar />
 			<div className="main-menu circular">
 				{/* 개인 기록 or 뱃지 */}
-				<div className="record-container circular">개인 기록</div>
+				<div className="record-container circular" onClick={()=>navigate('/achievement')}>개인 기록</div>
 				{/* 챌린지 */}
-
 				<div className="challenge-container circular">
 					<Card
 						title="챌린지🔥"
