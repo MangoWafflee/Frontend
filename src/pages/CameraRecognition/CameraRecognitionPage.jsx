@@ -12,6 +12,8 @@ export default function CameraRecognitionPage() {
     height: 1,
   });
   const [happyPercentage, setHappyPercentage] = useState(0);
+  const [maxHappyPercentage, setMaxHappyPercentage] =
+    useState(0);
   const [videoVisible, setVideoVisible] = useState(true);
 
   useEffect(() => {
@@ -37,13 +39,17 @@ export default function CameraRecognitionPage() {
   }, []);
 
   useEffect(() => {
-    if (happyPercentage > 70) {
+    if (happyPercentage > maxHappyPercentage) {
+      setMaxHappyPercentage(happyPercentage);
+    }
+
+    if (maxHappyPercentage > 70) {
       const timer = setTimeout(() => {
         setVideoVisible(false);
       }, 3000);
       return () => clearTimeout(timer); // 타이머를 정리합니다.
     }
-  }, [happyPercentage]);
+  }, [happyPercentage, maxHappyPercentage]);
 
   const startVideo = () => {
     navigator.mediaDevices
@@ -137,10 +143,15 @@ export default function CameraRecognitionPage() {
             ref={videoRef}
             autoPlay
             muted
-            className="video-box"
+            className={`video-box ${
+              maxHappyPercentage > 70 ? 'animate' : ''
+            }`}
           />
           <div className="happy-percentage">
-            {happyPercentage}%
+            현재 행복도: {happyPercentage}%
+          </div>
+          <div className="max-happy-percentage">
+            최고 행복도: {maxHappyPercentage}%
           </div>
           <Flex gap="small" wrap>
             <Button
