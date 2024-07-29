@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-cache-v1';
+const CACHE_NAME = 'my-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -8,6 +8,7 @@ const urlsToCache = [
 
 // 설치 이벤트에서 파일 캐시하기
 self.addEventListener('install', (event) => {
+  console.log("서비스 워커 install");
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -18,6 +19,7 @@ self.addEventListener('install', (event) => {
 
 // fetch 이벤트에서 캐시된 파일 반환하기
 self.addEventListener('fetch', (event) => {
+  console.log("서비스 워커 fetch", event.request.url);
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -27,10 +29,12 @@ self.addEventListener('fetch', (event) => {
         return fetch(event.request);
       })
   );
+  
 });
 
 // 활성화 이벤트에서 오래된 캐시 제거하기
 self.addEventListener('activate', (event) => {
+  console.log("서비스 워커 activate");
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {

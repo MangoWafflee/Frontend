@@ -7,6 +7,7 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
+  // 브라우저가 서비스 워커를 지원하는지 확인
   if ('serviceWorker' in navigator) {
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -17,19 +18,14 @@ export function register(config) {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
       if (isLocalhost) {
-        // This is running on localhost. Let's check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl, config);
+        // 로컬 환경에서 서비스 워커가 유효한지 확인하는 함수 호출
+        // 실제 서비스 워커를 바로 등록하지 않고, 유효성을 검사하는 과정을 거침
+        // checkValidServiceWorker(swUrl, config);
 
-        // Add some additional logging to localhost, pointing developers to the
-        // service worker/PWA documentation.
-        navigator.serviceWorker.ready.then(() => {
-          console.log(
-            'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://cra.link/PWA'
-          );
-        });
+        // 임의 조치
+        registerValidSW(swUrl, config);
       } else {
-        // Is not localhost. Just register service worker
+        // 로컬 호스트가 아닌 경우 서비스 워커를 바로 등록
         registerValidSW(swUrl, config);
       }
     });

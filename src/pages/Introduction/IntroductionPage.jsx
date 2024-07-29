@@ -21,7 +21,7 @@ export default function IntroductionPage() {
 
 	return (
 		<div className="introduction_page">
-			<span>앱 이름 </span>
+			<span>앱 이름6 </span>
 			<Swiper
 				pagination={{
 					dynamicBullets: true,
