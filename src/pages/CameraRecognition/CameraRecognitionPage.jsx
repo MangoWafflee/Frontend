@@ -143,11 +143,15 @@ export default function CameraRecognitionPage() {
   useEffect(() => {
     if (modelsLoaded && faceDetected) {
       setAnimationVisible(true);
-      const timer = setTimeout(
-        () => setAnimationVisible(false),
-        3000
-      );
+      videoRef.current.classList.add('animate');
+      const timer = setTimeout(() => {
+        setAnimationVisible(false);
+      }, 3000);
       return () => clearTimeout(timer);
+    }
+    if (!faceDetected) {
+      setAnimationVisible(false);
+      videoRef.current.classList.remove('animate');
     }
   }, [modelsLoaded, faceDetected]);
 
