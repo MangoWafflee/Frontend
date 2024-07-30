@@ -4,6 +4,45 @@ import "./NotificationCenterPage.scss";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+const getRelativeTime = (dateString) => {
+  const now = new Date();
+  const requestDate = new Date(dateString);
+  const diffInSeconds = Math.floor((now - requestDate) / 1000);
+
+  const secondsInMinute = 60;
+  const secondsInHour = secondsInMinute * 60;
+  const secondsInDay = secondsInHour * 24;
+  const secondsInWeek = secondsInDay * 7;
+  const secondsInMonth = secondsInDay * 30;
+  const secondsInYear = secondsInDay * 365;
+
+  let result;
+
+  if (diffInSeconds < secondsInMinute) {
+    result = "방금 전";
+  } else if (diffInSeconds < secondsInHour) {
+    const minutes = Math.floor(diffInSeconds / secondsInMinute);
+    result = `${minutes}분 전`;
+  } else if (diffInSeconds < secondsInDay) {
+    const hours = Math.floor(diffInSeconds / secondsInHour);
+    result = `${hours}시간 전`;
+  } else if (diffInSeconds < secondsInWeek) {
+    const days = Math.floor(diffInSeconds / secondsInDay);
+    result = `${days}일 전`;
+  } else if (diffInSeconds < secondsInMonth) {
+    const weeks = Math.floor(diffInSeconds / secondsInWeek);
+    result = `${weeks}주 전`;
+  } else if (diffInSeconds < secondsInYear) {
+    const months = Math.floor(diffInSeconds / secondsInMonth);
+    result = `${months}개월 전`;
+  } else {
+    const years = Math.floor(diffInSeconds / secondsInYear);
+    result = `${years}년 전`;
+  }
+
+  return result;
+};
+
 export default function NotificationCenter() {
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -110,7 +149,7 @@ export default function NotificationCenter() {
   // useEffect 훅
   useEffect(() => {
     fetchNotifications(); // 컴포넌트 마운트 시 데이터 가져오기
-    const intervalId = setInterval(fetchNotifications, 10000); // 10초마다 폴링
+    const intervalId = setInterval(fetchNotifications, 5000); // 10초마다 폴링
 
     return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 클린업
   }, []);
@@ -125,36 +164,43 @@ export default function NotificationCenter() {
         {notifications.length === 0 ? (
           <p>알림이 없습니다.</p>
         ) : (
-          notifications.map((notification) => (
-            <div className="notification" key={notification.id}>
-              <div className="user-info">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/4715/4715329.png"
-                  alt="유저 이미지"
-                />
-                <div className="friend-request-info">
-                  <span>친구 요청</span>
-                  <span>{notification.senderName}</span> {/* 유저 이름 추가 */}
+          notifications
+            .slice()
+            .reverse()
+            .map((notification) => (
+              <div className="notification" key={notification.id}>
+                <div className="user-info">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/4715/4715329.png"
+                    alt="유저 이미지"
+                  />
+                  <div className="friend-request-info">
+                    <span>
+                      {notification.sender.name}님이 팔로우하고 싶어합니다.
+                    </span>
+                  </div>
+                  <div className="timestamp">
+                    {getRelativeTime(notification.requestDate)}
+                  </div>
+                </div>
+                <div className="button-container">
+                  <button
+                    className="accept-button"
+                    onClick={() => handleAcceptRequest(notification.id)}
+                    disabled={isLoading}
+                  >
+                    확인
+                  </button>{" "}
+                  <button
+                    className="reject-button"
+                    onClick={() => handleRejectRequest(notification.id)}
+                    disabled={isLoading}
+                  >
+                    삭제
+                  </button>
                 </div>
               </div>
-              <div className="button-container">
-                <button
-                  className="accept-button"
-                  onClick={() => handleAcceptRequest(notification.id)}
-                  disabled={isLoading}
-                >
-                  수락
-                </button>{" "}
-                <button
-                  className="reject-button"
-                  onClick={() => handleRejectRequest(notification.id)}
-                  disabled={isLoading}
-                >
-                  거절
-                </button>
-              </div>
-            </div>
-          ))
+            ))
         )}
         <hr />
         {/* 웃음 알림 */}
