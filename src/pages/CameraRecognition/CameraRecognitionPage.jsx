@@ -8,13 +8,16 @@ export default function CameraRecognitionPage() {
   const canvasRef = useRef(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [videoDimensions, setVideoDimensions] = useState({
-    width: 1,
-    height: 1,
+    width: 360,
+    height: 360,
   });
   const [happyPercentage, setHappyPercentage] = useState(0);
   const [maxHappyPercentage, setMaxHappyPercentage] =
     useState(0);
   const [videoVisible, setVideoVisible] = useState(true);
+  const [faceDetected, setFaceDetected] = useState(false);
+  const [animationVisible, setAnimationVisible] =
+    useState(false);
 
   useEffect(() => {
     const loadModels = async () => {
@@ -60,8 +63,8 @@ export default function CameraRecognitionPage() {
           'loadedmetadata',
           () => {
             setVideoDimensions({
-              width: videoRef.current.videoWidth,
-              height: videoRef.current.videoHeight,
+              width: 360, // 고정된 너비
+              height: 360, // 고정된 높이
             });
           }
         );
@@ -106,62 +109,80 @@ export default function CameraRecognitionPage() {
         );
 
         if (resizedDetections.length > 0) {
+          setFaceDetected(true); // 얼굴이 인식됨
           const happy =
             resizedDetections[0].expressions.happy;
-          setHappyPercentage((happy * 100).toFixed(0));
+          if (happy > maxHappyPercentage) {
+            setHappyPercentage((happy * 100).toFixed(0));
+          }
         } else {
+          setFaceDetected(false); // 얼굴이 인식되지 않음
           setHappyPercentage(0);
         }
       } catch (error) {
         console.error('얼굴 인식 에러:', error);
       }
     };
-    // 1초마다 얼굴 인식
+    // 0.5초마다 얼굴 인식
     const intervalId = setInterval(detectFaces, 500);
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
   };
 
-  const handleStartButtonClick = () => {
+  useEffect(() => {
     if (modelsLoaded) {
       startVideo();
       videoRef.current.addEventListener(
         'play',
         handleVideoOnPlay
       );
-    } else {
-      console.error('모델이 아직 로드되지 않았습니다.');
     }
-  };
+  }, [modelsLoaded]);
+
+  useEffect(() => {
+    if (modelsLoaded && faceDetected) {
+      setAnimationVisible(true);
+      const timer = setTimeout(
+        () => setAnimationVisible(false),
+        3000
+      );
+      return () => clearTimeout(timer);
+    }
+  }, [modelsLoaded, faceDetected]);
 
   return (
     <div className="camera-recognition-container">
       {videoVisible ? (
         <>
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            className={`video-box ${
-              maxHappyPercentage > 70 ? 'animate' : ''
-            }`}
-          />
-          <div className="happy-percentage">
-            현재 행복도: {happyPercentage}%
+          <div className="video-container">
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              className="video-box"
+            />
+            {animationVisible && (
+              <svg className="circle-animation">
+                <circle cx="185" cy="180" r="175" />
+              </svg>
+            )}
           </div>
-          <div className="max-happy-percentage">
-            최고 행복도: {maxHappyPercentage}%
+          <div className="emotion-display">
+            <div className="happy-percentage">
+              현재 행복도: {happyPercentage}%
+            </div>
+            <div className="max-happy-percentage">
+              최고 행복도: {maxHappyPercentage}%
+            </div>
+            <div>
+              얼굴 인식 상태:{' '}
+              {faceDetected
+                ? '얼굴이 인식되었습니다.'
+                : '얼굴이 인식되지 않았습니다.'}
+            </div>
           </div>
-          <Flex gap="small" wrap>
-            <Button
-              onClick={handleStartButtonClick}
-              disabled={!modelsLoaded}
-              type="primary"
-            >
-              {'실행'}
-            </Button>
-          </Flex>
         </>
       ) : (
         <>

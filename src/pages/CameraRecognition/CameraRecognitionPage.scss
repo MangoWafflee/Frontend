@@ -1,9 +1,3 @@
-body,
-html {
-  height: 100%;
-  margin: 0;
-}
-
 .camera-recognition-container {
   display: flex;
   flex-direction: column;
@@ -13,12 +7,19 @@ html {
 }
 
 .video-box {
-  width: 360px;
-  height: 360px;
+  width: 350px;
+  height: 350px;
   border-radius: 50%;
   object-fit: cover;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.video-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .emotion-display {
@@ -26,23 +27,29 @@ html {
   text-align: center;
 }
 
+.circle-animation {
+  position: absolute;
+  margin-top: 10px;
+  width: 370px;
+  height: 370px;
+  border-radius: 50%;
+}
+
+.circle-animation circle {
+  fill: none;
+  stroke: #1890ff;
+  stroke-width: 5;
+  stroke-dasharray: 1100; /* Adjust this value to match the circumference */
+  stroke-dashoffset: 1100; /* Adjust this value to match the circumference */
+  animation: drawCircle 3s linear forwards;
+}
+
 @keyframes drawCircle {
   from {
-    stroke-dashoffset: 942;
+    stroke-dashoffset: 1100; /* Adjust this value to match the circumference */
   }
   to {
     stroke-dashoffset: 0;
-  }
-}
-
-@keyframes fadeInCheck {
-  from {
-    opacity: 0;
-    transform: scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 
@@ -77,4 +84,15 @@ html {
   opacity: 0;
   animation: fadeInCheck 1s ease forwards;
   animation-delay: 3s;
+}
+
+@keyframes fadeInCheck {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
