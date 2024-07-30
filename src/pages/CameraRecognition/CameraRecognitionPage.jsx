@@ -6,6 +6,7 @@ import './CameraRecognitionPage.scss';
 export default function CameraRecognitionPage() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const maxHappyPercentageRef = useRef(0); // useRef 초기화
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [videoDimensions, setVideoDimensions] = useState({
     width: 360,
@@ -42,18 +43,20 @@ export default function CameraRecognitionPage() {
   }, []);
 
   useEffect(() => {
-    if (happyPercentage > maxHappyPercentage) {
+    if (happyPercentage > maxHappyPercentageRef.current) {
+      maxHappyPercentageRef.current = happyPercentage; // useRef로 업데이트
       setMaxHappyPercentage(happyPercentage);
     }
+  }, [happyPercentage]);
 
-    if (maxHappyPercentage > 70) {
+  useEffect(() => {
+    if (maxHappyPercentageRef.current > 70) {
       const timer = setTimeout(() => {
         setVideoVisible(false);
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer); // 타이머를 정리합니다.
     }
-  }, [happyPercentage, maxHappyPercentage]);
-
+  }, [maxHappyPercentage]);
   const startVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video: {} })
@@ -112,9 +115,7 @@ export default function CameraRecognitionPage() {
           setFaceDetected(true); // 얼굴이 인식됨
           const happy =
             resizedDetections[0].expressions.happy;
-          if (happy > maxHappyPercentage) {
-            setHappyPercentage((happy * 100).toFixed(0));
-          }
+          setHappyPercentage((happy * 100).toFixed(0));
         } else {
           setFaceDetected(false); // 얼굴이 인식되지 않음
           setHappyPercentage(0);
