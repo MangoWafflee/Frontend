@@ -26,7 +26,10 @@ root.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 
-// serviceWorkerRegistration.unregister();
+// 개발환경에서는 서비스 워커 등록 X
+if (process.env.NODE_ENV === 'production') {
+  serviceWorkerRegistration.register();
+}
 // registerPushNotifications();
 
 // If you want to start measuring performance in your app, pass a function

@@ -28,7 +28,7 @@ export default function IntroductionPage() {
 	const kakaoRedirectURI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
 	const kakaoRestApiKey = process.env.REACT_APP_REST_API_KEY;
 
-	const loginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestApiKey}&redirect_uri=${kakaoRedirectURI}&response_type=code`;
+	const loginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestApiKey}&redirect_uri=${kakaoRedirectURI}&response_type=code&scope=account_email`;
 
 	// 카카오 로그인 버튼 누를 시
 	const handleLogin = async () => {
@@ -145,7 +145,7 @@ export default function IntroductionPage() {
 			/>
 
 			<div className="to_main" onClick={() => navigate("/app")}>
-				메인 페이지로!
+				메인 페이지 ㄲ
 			</div>
 
 			<div
