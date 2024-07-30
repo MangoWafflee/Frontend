@@ -17,7 +17,7 @@ import AchievementPage from "./pages/Achievement/AchievementPage";
 const Layout = () => (
 	<div className="page">
 		<Header />
-		<div className="wrap is_nav">
+		<div className="is_nav">
 			<Outlet />
 		</div>
 		<Navbar />
@@ -37,7 +37,7 @@ function App() {
 				<Route path="/" element={<IntroductionPage />} />
 			</Route>
 			<Route element={<Layout />}>
-				<Route path="/login/oauth2/code/kakao" component={<LoginRedirectPage/>} />
+				<Route path="/user/oauth2/code/kakao" element={<LoginRedirectPage/>} />
 				<Route path="/app" element={<MainPage />} />
 				<Route
 					path="/app/notification"
