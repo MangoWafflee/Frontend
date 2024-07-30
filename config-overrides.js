@@ -1,5 +1,4 @@
-const { override, addWebpackAlias } = require("customize-cra");
-const path = require("path");
+const { override } = require('customize-cra');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const addWorkbox = () => config => {

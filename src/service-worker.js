@@ -1,6 +1,4 @@
 /* eslint-disable no-restricted-globals */
-// src/service-worker.js
-
 import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
@@ -35,7 +33,14 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
+        return fetch(event.request).then(
+          (fetchResponse) => {
+            return caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, fetchResponse.clone());
+              return fetchResponse;
+            });
+          }
+        );
       })
   );
 });
@@ -68,6 +73,5 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(data.title, options)
   );
 });
-
 
 /* eslint-enable no-restricted-globals */
