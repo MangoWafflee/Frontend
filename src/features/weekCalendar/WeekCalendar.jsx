@@ -3,8 +3,10 @@ import { useSwipeable } from 'react-swipeable';
 import './WeekCalendar.scss';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function WeekCalendar() {
+  const navigate = useNavigate();
   const [standardDay, setStandardDay] = useState(
     new Date()
   );
@@ -121,8 +123,13 @@ export default function WeekCalendar() {
           </div>
         ))}
       </div>
-
-      {/* <button>오늘 웃음 도전?</button> */}
+      <button
+        className="smile-button"
+        type="primary"
+        onClick={() => navigate('/camerarecognition')}
+      >
+        오늘의 웃음 도전 😃
+      </button>
     </div>
   );
 }

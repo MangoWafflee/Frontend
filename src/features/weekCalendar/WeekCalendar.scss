@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 20px;
+  margin: 1.3rem;
   padding: 20px 0px;
   border-radius: 15px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -18,12 +18,6 @@
     margin-bottom: 0.8rem;
     justify-content: center;
     .today-button {
-      background-image: linear-gradient(
-        to right bottom,
-        #ff5c5c,
-        #ad6dfc
-      );
-      color: white;
       margin-left: 20px;
     }
   }
@@ -86,8 +80,24 @@
   }
 
   button {
-    background-color: white;
     border-radius: 5px;
     padding: 5px;
+    background-image: linear-gradient(
+      to right bottom,
+      #ff5c5c,
+      #ad6dfc
+    );
+    color: white;
+    border: none;
+  }
+  button:hover {
+    opacity: 0.8; /* 색을 조금 흐리게 함 */
+  }
+  .smile-button {
+    padding: 0.5rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    font-size: 0.8rem;
+    font-weight: bold;
   }
 }
