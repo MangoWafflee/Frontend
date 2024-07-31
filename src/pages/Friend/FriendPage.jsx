@@ -15,6 +15,9 @@ export default function FriendPage() {
   const [searchUserImage, setSearchUserImage] = useState(""); // 검색한 유저 이미지
   const [searchUserNickname, setSearchUserNickname] = useState(""); // 검색한 유저 닉네임
 
+  const [isFriend, setIsFriend] = useState(false); // 친구 여부
+  const [isFriendApply, setIsFriendApply] = useState(false); // 친구 요청 수락 여부
+
   //   const [friendList, setFriendList] = useState(null);
   // 더미데이터
   const friendList = [
@@ -203,6 +206,8 @@ export default function FriendPage() {
                 userName={searchUserName}
                 userImage={searchUserImage}
                 userNickname={searchUserNickname}
+                isFriend={isFriend}
+                isFriendApply={isFriendApply}
               ></UserCard>
             </div>
           </div>

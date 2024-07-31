@@ -7,18 +7,30 @@
   left: 0;
   right: 0;
   height: 6vh;
-  background-color: #fff;
+  // background-color: #fff;
+  //그라데이션 효과 주기
+  background-image: linear-gradient(to right bottom, #ff5c5c, #ad6dfc);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   max-width: 380px;
   margin-left: auto;
   margin-right: auto;
+  transition: top 0.3s;
+
+  &.hidden {
+    top: -6vh;
+  }
+
+  &.visible {
+    top: 0;
+  }
 
   .logo {
     display: flex;
     align-items: center;
     font-size: 1.5rem;
     font-weight: bold;
-    color: #505050;
+    color: #eaeaea;
+    padding-left: 1rem;
   }
 
   .icon-back {
@@ -35,7 +47,7 @@
 
     // 선택되었을 때
     .active {
-      color: rgb(35, 35, 35);
+      color: #eaeaea;
     }
   }
 
@@ -46,14 +58,14 @@
     font-size: 1.5rem;
 
     .nav-link {
-      color: rgb(155, 155, 155);
+      color: rgb(255, 166, 0);
       font-size: 20px;
       font-weight: bold;
     }
 
     // 선택되었을 때
     .active {
-      color: rgb(35, 35, 35);
+      color: rgba(255, 255, 255, 0);
     }
   }
 }
