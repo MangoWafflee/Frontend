@@ -1,8 +1,3 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-// import { ReactComponent as HomeSVG } from "../../assets/icons/Home.svg";
-import "./Navbar.scss";
-
 import {
   faCamera,
   faCircleUser,
@@ -11,47 +6,86 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import "./Navbar.scss";
 
 export default function Navbar() {
+  const location = useLocation();
+  const allowedPaths = [
+    "/app",
+    "/friend",
+    "/challenge",
+    "/camerarecognition",
+    "/profile",
+  ];
+
+  // 현재 경로가 allowedPaths에 포함되지 않으면 null 반환
+  if (!allowedPaths.includes(location.pathname)) {
+    return null;
+  }
+
   return (
-    // <div className="nav_container">
     <div className="nav_bar">
+      {/* HomePage */}
       <div>
-        <NavLink to="/app" className="nav-link" activeClassName="active">
-          {/* <HomeSVG /> */}
+        <NavLink
+          to="/app"
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
           <FontAwesomeIcon icon={faHouse} />
         </NavLink>
       </div>
+
+      {/* FriendPage */}
       <div>
-        <NavLink to="/friend" className="nav-link" activeClassName="active">
-          {/* 친구 */}
+        <NavLink
+          to="/friend"
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </NavLink>
       </div>
+
+      {/* ChallengePage */}
       <div>
-        <NavLink to="/challenge" className="nav-link" activeClassName="active">
-          {/* 뱃지 */}
+        <NavLink
+          to="/challenge"
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
           <FontAwesomeIcon icon={faFaceGrinHearts} />
         </NavLink>
       </div>
 
+      {/* CameraRecognitionPage */}
       <div>
         <NavLink
           to="/camerarecognition"
-          className="nav-link"
-          activeClassName="active"
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
         >
-          {/* 카메라 */}
           <FontAwesomeIcon icon={faCamera} />
         </NavLink>
       </div>
+
+      {/* ProfilePage */}
       <div>
-        <NavLink to="/profile" className="nav-link" activeClassName="active">
-          {/* 프로필 */}
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
           <FontAwesomeIcon icon={faCircleUser} />
         </NavLink>
       </div>
     </div>
-    // </div>
   );
 }
