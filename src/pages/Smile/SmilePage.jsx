@@ -113,7 +113,7 @@ export default function SmilePage() {
       </div>
       <div className="smile-page-calendar">
         <Calendar
-          //   fullscreen={false}
+          // fullscreen={false}
           cellRender={cellRender}
           onSelect={cellClickHandler}
         />

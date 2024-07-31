@@ -15,7 +15,10 @@
 
   .friend-apply-button,
   .smile-watch-button {
-    background-color: #ff5757; /* 배경색을 붉은색으로 변경합니다 */
+    // background-color: #ff5757; /* 배경색을 붉은색으로 변경합니다 */
+    // background-color: #ff6e6e; /* 배경색을 보라색으로 변경합니다 */
+    //그라데이션 효과 주기
+    background-image: linear-gradient(to right top, #ff5c5c, #ad6dfc);
     color: white; /* 텍스트 색상을 흰색으로 변경합니다 */
     border: none;
     border-radius: 15px;
@@ -27,7 +30,9 @@
 
   .friend-apply-button:active,
   .smile-watch-button:active {
-    background-color: #ff1e1e; /* 배경색을 붉은색으로 변경합니다 */
+    // background-color: #ff1e1e; /* 배경색을 붉은색으로 변경합니다 */
+    //그라데이션 효과 주기
+    background-image: linear-gradient(to right top, #ff1111, #da55ff);
   }
 
   .friend-apply-button.requested {

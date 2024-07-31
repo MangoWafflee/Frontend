@@ -71,7 +71,10 @@
   width: 80%;
   margin: 30px;
   padding: 20px;
-  background-color: #e8e8e8;
+  // background-color: #e8e8e8;
+  //그라데이션 효과 주기
+  background-image: linear-gradient(to right top, #ffc3c3, #e1c8ff);
+
   border-radius: 20px;
   box-shadow: 0px 4px 8px 0 rgba(0, 0, 0, 0.2);
   text-align: left;
@@ -90,7 +93,7 @@
   margin-bottom: 25px;
   margin-top: 5px;
   margin-right: 10px;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   color: #999; /* Placeholder 색상 */
   padding: 0.5rem;
 }
@@ -122,7 +125,7 @@
   padding-bottom: 20px;
 
   .submit-button {
-    background-color: #ff7070; /* 배경색을 붉은색으로 변경합니다 */
+    background-color: #ff5757; /* 배경색을 붉은색으로 변경합니다 */
     color: white; /* 텍스트 색상을 흰색으로 변경합니다 */
     border: none;
     border-radius: 15px;
@@ -133,6 +136,6 @@
   }
 
   .submit-button:active {
-    background-color: #fa5050; /* 배경색을 붉은색으로 변경합니다 */
+    background-color: #ff1e1e; /* 배경색을 붉은색으로 변경합니다 */
   }
 }
