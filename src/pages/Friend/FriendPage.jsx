@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./FriendPage.scss";
-import { Avatar, Box, Divider, Typography, Button } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 import UserDefaultImage from "../../assets/images/UserDefaultImage.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import FriendItem from "./FriendItem";
+import "./FriendPage.scss";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+// Friend Page API연결 test버전
 export default function FriendPage() {
   const [searchText, setSearchText] = useState(""); // 검색창 값
   const [searchUserName, setSearchUserName] = useState(""); // 검색한 유저 이름
