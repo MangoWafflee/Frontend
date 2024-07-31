@@ -1,12 +1,12 @@
 .ahcievement-page {
     padding: 20px 20px;
 
-    .badge-container{
+    .badge-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
-        grid-template-rows: repeat(auto-fit,minmax(100px,1fr));
-        grid-auto-rows: minmax(100px,1fr);
-        grid-auto-columns: minmax(100px,1fr);
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+        grid-auto-rows: minmax(100px, 1fr);
+        grid-auto-columns: minmax(100px, 1fr);
 
         .badge {
             display: flex;
@@ -14,30 +14,35 @@
             align-items: center;
             text-align: center;
             margin: 10px 0px;
-            cursor:default;
-    
+            cursor: default;
+
             img {
-                width: 50px;
-                height: 50px;
+                width: 100px;
+                height: 100px;
             }
-    
-            .grayscale{
+
+            .challenge-badge {
+                width: 70px;
+                height: 90px;
+            }
+
+            .grayscale {
                 filter: grayscale(100%);
             }
-    
+
             .column {
                 display: flex;
                 flex-direction: column;
-    
+
                 p {
                     font-size: 0.8rem;
                     color: grey;
                 }
             }
-    
-    
+
+
         }
     }
 
-    
+
 }

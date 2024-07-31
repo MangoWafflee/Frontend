@@ -5,6 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../app/axios";
 import { useQuery } from "@tanstack/react-query";
+import challenge1 from '../../assets/challenges/challenge1.png';
+import challenge2 from '../../assets/challenges/challenge2.png';
+import challenge3 from '../../assets/challenges/challenge3.png';
+import challenge_24_07_7 from '../../assets/challenges/challenge_24_07_7.png';
+
 
 // 챌린지 정보 백엔드에서 받아오는 api
 	// const getChallenges=async()=>{
@@ -53,11 +58,11 @@ export default function ChallengePage() {
 const participatingChallengeList = [
 	{
 	  id: 1,
-	  title: "[7월] 5일 웃기 챌린지",
-	  subTitle: "이번 달 5일 웃어보세요.",
-	  startDate: "2024-07-01",
-	  endDate: "2024-07-31",
-	  img: "https://cafe24.poxo.com/ec01/badgemall/UVTjSep0dwP4/wX7AtHyXOEbmR/izsmT9MqFaYuvpxwVgFX/Z51umynKwSmnYrwd14t/CZo2v7nIOjCuZneWQQ==/_/img/goldbadge_m.png",
+	  title: "[8월] 7일 웃기 챌린지",
+	  subTitle: "이번 달 7일 웃어보세요.",
+	  startDate: "2024-08-01",
+	  endDate: "2024-08-31",
+	  img: challenge1,
 	  participating: true,
 	  successStatus: null,
 	  participantCount: 1230,
@@ -66,11 +71,11 @@ const participatingChallengeList = [
 	},
 	{
 	  id: 2,
-	  title: "[7월] 7일 웃기 챌린지",
-	  subTitle: "이번 달 7일 웃어보세요.",
-	  startDate: "2024-07-01",
-	  endDate: "2024-07-31",
-	  img: "https://cafe24.poxo.com/ec01/badgemall/UVTjSep0dwP4/wX7AtHyXOEbmR/izsmT9MqFaYuvpxwVgFX/Z51umynKwSmnYrwd14t/CZo2v7nIOjCuZneWQQ==/_/img/goldbadge2_m.png",
+	  title: "[8월] 14일 웃기 챌린지",
+	  subTitle: "이번 달 14일 웃어보세요.",
+	  startDate: "2024-08-01",
+	  endDate: "2024-08-31",
+	  img: challenge2,
 	  participating: true,
 	  successStatus: null,
 	  participantCount: 2615,
@@ -83,28 +88,15 @@ const participatingChallengeList = [
   const onGoingChallengeList = [
 	{
 	  id: 3,
-	  title: "[7월] 20일 웃기 챌린지",
+	  title: "[8월] 20일 웃기 챌린지",
 	  subTitle: "이번 달 20일 웃어보세요.",
-	  startDate: "2024-07-01",
-	  endDate: "2024-07-31",
-	  img: "https://cafe24.poxo.com/ec01/badgemall/UVTjSep0dwP4/wX7AtHyXOEbmR/izsmT9MqFaYuvpxwVgFX/Z51umynKwSmnYrwd14t/CZo2v7nIOjCuZneWQQ==/_/img/goldbadge_m.png",
+	  startDate: "2024-08-01",
+	  endDate: "2024-08-31",
+	  img: challenge3,
 	  participating: false,
 	  successStatus: null,
 	  participantCount: 956,
 	  totalAttempts: 20,
-	  completedAttempts: 0,
-	},
-	{
-	  id: 4,
-	  title: "[7월] 7일 출석 챌린지",
-	  subTitle: "이번 달 7일 출석해보세요.",
-	  startDate: "2024-07-01",
-	  endDate: "2024-07-31",
-	  img: "https://cafe24.poxo.com/ec01/badgemall/UVTjSep0dwP4/wX7AtHyXOEbmR/izsmT9MqFaYuvpxwVgFX/Z51umynKwSmnYrwd14t/CZo2v7nIOjCuZneWQQ==/_/img/goldbadge_m.png",
-	  participating: false,
-	  successStatus: null,
-	  participantCount: 700,
-	  totalAttempts: 7,
 	  completedAttempts: 0,
 	},
   ];
@@ -117,7 +109,7 @@ const participatingChallengeList = [
 	  subTitle: "이번 달 20일 웃어보세요.",
 	  startDate: "2024-06-01",
 	  endDate: "2024-06-30",
-	  img: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
+	  img: challenge_24_07_7,
 	  participating: true,
 	  successStatus: true,
 	  participantCount: 2500,
