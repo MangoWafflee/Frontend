@@ -11,13 +11,11 @@ import { registerPushNotifications } from "./pushNotification";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<Provider store={store}>
-				<App />
-			</Provider>
-		</BrowserRouter>
-	</React.StrictMode>
+  <BrowserRouter>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </BrowserRouter>
 );
 
 // If you want your app to work offline and load faster, you can change
@@ -26,7 +24,7 @@ root.render(
 
 // 개발환경에서는 서비스 워커 등록 X
 if (process.env.NODE_ENV === "production") {
-	serviceWorkerRegistration.register();
+  serviceWorkerRegistration.register();
 }
 // serviceWorkerRegistration.register();
 // registerPushNotifications();
