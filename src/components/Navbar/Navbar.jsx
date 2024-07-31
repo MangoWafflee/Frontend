@@ -3,7 +3,7 @@ import {
   faCircleUser,
   faFaceGrinHearts,
   faHouse,
-  faMagnifyingGlass,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
@@ -39,6 +39,18 @@ export default function Navbar() {
         </NavLink>
       </div>
 
+      {/* CameraRecognitionPage */}
+      <div>
+        <NavLink
+          to="/camerarecognition"
+          className={({ isActive }) =>
+            isActive ? "nav-link active" : "nav-link"
+          }
+        >
+          <FontAwesomeIcon icon={faCamera} />
+        </NavLink>
+      </div>
+
       {/* FriendPage */}
       <div>
         <NavLink
@@ -47,7 +59,7 @@ export default function Navbar() {
             isActive ? "nav-link active" : "nav-link"
           }
         >
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
+          <FontAwesomeIcon icon={faUsers} />
         </NavLink>
       </div>
 
@@ -60,18 +72,6 @@ export default function Navbar() {
           }
         >
           <FontAwesomeIcon icon={faFaceGrinHearts} />
-        </NavLink>
-      </div>
-
-      {/* CameraRecognitionPage */}
-      <div>
-        <NavLink
-          to="/camerarecognition"
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          <FontAwesomeIcon icon={faCamera} />
         </NavLink>
       </div>
 
