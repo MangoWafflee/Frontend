@@ -97,7 +97,7 @@ export default function ProfilePage() {
             </div>
           </button>
         </Link>
-        <Link to="/profile/smile" className="user-link">
+        <Link to={`/profile/smile/${user.nickname}`} className="user-link">
           <button className="chattingList-btn">
             <span role="img" aria-label="conversation">
               📝 나의 웃음 기록
