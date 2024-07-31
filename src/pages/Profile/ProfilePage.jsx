@@ -90,7 +90,7 @@ export default function ProfilePage() {
         <Link to="/profile/edit" className="user-link">
           <button className="edit-profile-btn">
             <span role="img" aria-label="pencil">
-              ✏️ 나의 회원정보 수정
+              📝 나의 회원정보 수정
             </span>
             <div className="move-page-icon">
               <FontAwesomeIcon icon={faChevronRight} />
@@ -100,7 +100,20 @@ export default function ProfilePage() {
         <Link to={`/profile/smile/${user.nickname}`} className="user-link">
           <button className="chattingList-btn">
             <span role="img" aria-label="conversation">
-              📝 나의 웃음 기록
+              😊 나의 웃음 기록
+            </span>
+            <div className="move-page-icon">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </div>
+          </button>
+        </Link>
+        <Link
+          to={`/profile/achievement/${user.nickname}`}
+          className="user-link"
+        >
+          <button className="edit-profile-btn">
+            <span role="img" aria-label="pencil">
+              🏅 나의 챌린지 기록
             </span>
             <div className="move-page-icon">
               <FontAwesomeIcon icon={faChevronRight} />

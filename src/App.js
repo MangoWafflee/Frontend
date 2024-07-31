@@ -47,7 +47,10 @@ function App() {
         <Route path="/camerarecognition" element={<CameraRecognitionPage />} />
         <Route path="/profile/edit" element={<ProfileEditPage />} />
         <Route path="/profile/smile/:nickname" element={<SmilePage />} />
-        <Route path="/achievement" element={<AchievementPage />} />
+        <Route
+          path="/profile/achievement/:nickname"
+          element={<AchievementPage />}
+        />
       </Route>
     </Routes>
   );
