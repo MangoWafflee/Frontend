@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { Divider, Modal, message } from "antd";
 import "./ChallengePage.scss";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import axios from "../../app/axios";
+import { useQuery } from "@tanstack/react-query";
+
+// 챌린지 정보 백엔드에서 받아오는 api
+	// const getChallenges=async()=>{
+	// 	const response= await axios.get('api주소');
+	// 	return response.data;
+	// }
 
 export default function ChallengePage() {
 	const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태 여부
@@ -17,6 +24,18 @@ export default function ChallengePage() {
 		message.success("챌린지에 참가되었습니다.");
 	};
 
+	// const {
+	// 	data,
+	// 	error,
+	// 	isLoading,
+	// } = useQuery({
+	// 	queryKey: ["challenges"],
+	// 	queryFn: getChallenges,
+	// });
+
+	// if (isLoading) return <div>Loading...</div>;
+	// if (error) return <div>An error occurred: {error.message}</div>;
+
 	// 날짜 차이를 계산하는 함수
 	const calculateDateDifference = (endDateStr) => {
 		const endDate = new Date(endDateStr);
@@ -25,6 +44,10 @@ export default function ChallengePage() {
 		const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // 차이를 일 단위로 변환
 		return dayDiff;
 	};
+
+	
+
+	
 
 	// 참여중인 챌린지 더미 데이터
 const participatingChallengeList = [

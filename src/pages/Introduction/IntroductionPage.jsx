@@ -5,6 +5,7 @@ import useNotification from "../../hooks/useNotification";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faX } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet-async";
 
 export default function IntroductionPage() {
 	const navigate = useNavigate();
@@ -43,6 +44,25 @@ export default function IntroductionPage() {
 
 	return (
 		<div className="introduction_page">
+			<Helmet>
+				<meta property="og:site_name" content="힣히힣" />
+				<meta
+					property="og:title"
+					content="웃어보자 타이틀"
+				/>
+				<meta
+					property="og:url"
+					content="https://hahasmile.netlify.app/"
+				/>
+				<meta
+					property="og:description"
+					content="웃음을 기록해보아요"
+				/>
+				<meta
+					property="og:image"
+					content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVgFjrG_0zAzNLWLo6OULuFynY2haCp9RgrQ&s"
+				/>
+			</Helmet>
 			{/* 메뉴바 */}
 			{isMenuOpen && (
 				<div className="menu">
@@ -63,9 +83,7 @@ export default function IntroductionPage() {
 						>
 							<span>서비스 소개</span>
 						</li>
-						<li>
-							적을만한거 있나
-						</li>
+						<li>적을만한거 있나</li>
 					</ul>
 				</div>
 			)}
