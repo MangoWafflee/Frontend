@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
-import "./App.css";
+import "./App.scss";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import AchievementPage from "./pages/Achievement/AchievementPage";
@@ -24,18 +24,6 @@ const Layout = () => (
     <Navbar />
   </div>
 );
-
-// const Layout = () => {
-//   return (
-//     <div className="page">
-//       <Header />
-//       <div className="wrap is_nav">
-//         <Outlet />
-//       </div>
-//       <Navbar />
-//     </div>
-//   );
-// };
 
 const IntroductionLayout = () => (
   <div className="page">
@@ -63,23 +51,6 @@ function App() {
       </Route>
     </Routes>
   );
-  // return (
-  //   <Routes>
-  //     <Route element={<IntroductionLayout />}>
-  //       <Route path="/" element={<IntroductionPage />} />
-  //     </Route>
-  //     <Route element={<Layout />}>
-  //       <Route path="/app" element={<MainPage />} />
-  //       <Route path="/app/notification" element={<NotificationCenterPage />} />
-  //       <Route path="/friend" element={<FriendPage />} />
-  //       <Route path="/challenge" element={<ChallengePage />} />
-  //       <Route path="/profile" element={<ProfilePage />} />
-  //       <Route path="/camerarecognition" element={<CameraRecognitionPage />} />
-  //       <Route path="/profile/edit" element={<ProfileEditPage />} />
-  //       <Route path="/profile/smile/:nickname" element={<SmilePage />} />
-  //     </Route>
-  //   </Routes>
-  // );
 }
 
 export default App;

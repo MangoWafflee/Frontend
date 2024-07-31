@@ -1,3 +1,5 @@
+@import '../../App.scss';
+
 .introduction_page {
   width: 100%;
   display: flex;
@@ -9,7 +11,7 @@
     background-image: linear-gradient(to right bottom, #ff5c5c, #ad6dfc);
     color: white;
     height: 60px;
-    width: 380px;
+    width: $max-width;
     text-align: center;
     display: flex;
     justify-content: space-between;
@@ -31,7 +33,7 @@
   .menu {
     position: fixed;
     top: 0;
-    width: 380px;
+    width: $max-width;
     height: 20%;
     background-color: white;
     z-index: 10;
@@ -120,7 +122,7 @@
 
 
 
-  @media (max-width: 380px) {
+  @media (max-width: $max-width) {
     .menu {
       width: 100%;
     }
