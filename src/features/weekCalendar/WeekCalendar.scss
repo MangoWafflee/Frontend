@@ -1,85 +1,93 @@
 .calendar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  padding: 20px 0px;
+  border-radius: 15px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  background-color: rgb(255, 255, 255);
+
+  .calendar-header {
     display: flex;
-    flex-direction: column;
+    font-size: 1.15rem;
+    font-weight: bold;
+    align-items: center;
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+    justify-content: center;
+    .today-button {
+      background-image: linear-gradient(
+        to right bottom,
+        #ff5c5c,
+        #ad6dfc
+      );
+      color: white;
+      margin-left: 20px;
+    }
+  }
+
+  .calendar {
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px;
-    padding: 20px 0px;
-    border-radius: 10px;
-    border: 1px solid black;
-    background-color:skyblue ;
+    gap: 10px;
+    margin-bottom: 0.8rem;
 
-    .calendar-header{
-        display: flex;
-        font-size: 20px;
-
-        .today-button{
-            background-color: gray;
-            color: white;
-            margin-left: 20px;
-            margin-bottom: 20px;
-        }
+    .previous-button,
+    .next-button {
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .calendar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 20px;
+    .calendar-tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      border-radius: 5px;
+      padding: 10px;
 
-        .previous-button,.next-button{
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+      // 오늘인 경우 배경색 변경
+      &.today {
+        background-image: linear-gradient(
+          to right bottom,
+          #ff5c5c,
+          #ad6dfc
+        );
+      }
+      // 요일
+      .calendar-dayofweek {
+        font-size: 16px;
+        font-weight: bold;
+      }
 
-        .calendar-tile {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
+      .smile {
+        position: absolute;
+        left: 0;
+      }
 
-            // 요일
-            .calendar-dayofweek{
-                font-size: 16px;
-                font-weight: bold;
-            }
+      // 일
+      .calendar-day {
+      }
 
-            .smile{
-                position: absolute;
-                left: 0;
-                
-            
-            }
+      .sat {
+        color: blue;
+      }
 
-            // 일
-            .calendar-day{
-               
-
-            }
-
-            .sat{
-                color: blue;
-            }
-
-            .sun{
-                color: red;
-            }
-
-            
-        }
+      .sun {
+        color: red;
+      }
     }
+  }
 
-    button{
-        background-color: white;
-        border-radius: 5px;
-        padding: 5px;
-    }
-
+  button {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+  }
 }
-
