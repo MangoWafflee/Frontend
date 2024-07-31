@@ -35,23 +35,29 @@
 // }
 
 .friend-page {
-  .friend-list {
+  .friend-list,
+  .user-list {
     padding: 0.5rem;
+    position: relative;
+    margin-bottom: 5em;
 
-    .friend-list-empty {
+    .friend-list-empty,
+    .user-list-empty {
       text-align: center; /* 텍스트를 가운데로 정렬합니다. */
       color: #888; /* 연한 색으로 색상을 변경합니다. */
-      position: absolute; /* 위치를 절대적으로 설정합니다. */
-      top: 30%; /* 부모 요소의 상단을 기준으로 50% 위치로 이동합니다. */
-      left: 50%; /* 부모 요소의 왼쪽을 기준으로 50% 위치로 이동합니다. */
-      transform: translate(
-        -50%,
-        -100%
-      ); /* 요소의 가로 세로 중앙으로 이동합니다. */
+      margin-top: 1.2rem;
+      // position: absolute; /* 위치를 절대적으로 설정합니다. */
+      // top: 50%; /* 부모 요소의 상단을 기준으로 50% 위치로 이동합니다. */
+      // left: 50%; /* 부모 요소의 왼쪽을 기준으로 50% 위치로 이동합니다. */
+      // transform: translate(
+      //   -50%,
+      //   -100%
+      // ); /* 요소의 가로 세로 중앙으로 이동합니다. */
     }
   }
-  .friend-list-bar {
-    padding: 0.3rem;
+  .friend-list-bar,
+  .user-list-bar {
+    padding: 0.5rem;
   }
   //   .friend {
   //     .friend-info {

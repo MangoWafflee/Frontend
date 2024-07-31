@@ -46,20 +46,20 @@ const getRelativeTime = (dateString) => {
 export default function NotificationCenter() {
 
   const [notifications, setNotifications] = useState([]);
+  const [friends, setFriends] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const userId = "13"; // 실제 userId로 변경
 
   // 데이터 가져오기 함수
   const fetchNotifications = async () => {
     setIsLoading(true);
     try {
-      const userId = "6"; // 실제 userId로 변경
       const url = `${BACKEND_URL}/follow/received?userId=${userId}`;
-
       console.log("Fetch URL:", url);
 
       const response = await fetch(url);
-
       console.log("Fetch response status:", response.status);
 
       if (!response.ok) {
@@ -70,6 +70,27 @@ export default function NotificationCenter() {
       setNotifications(data);
     } catch (error) {
       console.error("Error fetching notifications:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchFriends = async () => {
+    setIsLoading(true);
+    try {
+      const url = `${BACKEND_URL}/follow/list/${userId}`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setFriends(data);
+      }
+    } catch (error) {
+      console.error("Error fetching friends:", error);
     } finally {
       setIsLoading(false);
     }
@@ -90,20 +111,24 @@ export default function NotificationCenter() {
         }),
       });
 
-      console.log(`Response status: ${response.status}`);
-      const responseBody = await response.text();
-      console.log(`Response body: ${responseBody}`);
-
       if (!response.ok) {
         throw new Error("API 요청 실패");
       }
 
-      // 요청 성공 시 알림 리스트 갱신
-      setNotifications((prevNotifications) =>
-        prevNotifications.filter(
-          (notification) => notification.id !== requestId
-        )
-      );
+      const responseBody = await response.text();
+      if (responseBody === "팔로우 수락 완료! 우리는 칭긔") {
+        // 친구 목록 갱신
+        await fetchFriends();
+
+        // 알림 리스트 갱신
+        setNotifications((prevNotifications) =>
+          prevNotifications.filter(
+            (notification) => notification.id !== requestId
+          )
+        );
+      } else {
+        console.error("Unexpected response body:", responseBody);
+      }
     } catch (error) {
       console.error("Error accepting follow request:", error);
     } finally {
