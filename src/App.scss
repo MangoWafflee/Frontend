@@ -29,25 +29,17 @@ input {
   color: inherit;
 }
 
-/* body,
-html {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(205, 205, 205, 0.511);
-  overflow-x: hidden;
-} */
-
 body,
 html {
   background-color: rgba(205, 205, 205, 0.511);
   overflow-x: hidden;
 }
 
+// 페이지 max-width
+$max-width : 400px;
+
 .page {
-  max-width: 390px;
+  max-width: $max-width;
   margin-left: auto;
   margin-right: auto;
   min-height: 100vh;

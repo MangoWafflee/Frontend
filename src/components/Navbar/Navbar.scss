@@ -1,3 +1,5 @@
+@import '../../App.scss';
+
 .nav_bar {
   display: flex;
   justify-content: space-around;
@@ -12,7 +14,7 @@
   // background-image: linear-gradient(to right bottom, #ff5c5c, #ad6dfc);
   padding: 1px 0px;
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.2);
-  max-width: 390px;
+  max-width: $max-width;
   margin-left: auto;
   margin-right: auto;
   z-index: 1000;
