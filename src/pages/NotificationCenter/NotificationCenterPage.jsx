@@ -44,6 +44,7 @@ const getRelativeTime = (dateString) => {
 };
 
 export default function NotificationCenter() {
+
   const [notifications, setNotifications] = useState([]);
   const [friends, setFriends] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -242,18 +243,19 @@ export default function NotificationCenter() {
           </div>
         </div>
 
-        <div className="notification">
-          <div className="user-info">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/4715/4715329.png"
-              alt="유저 이미지"
-            />
-            <span>
-              <span className="timestamp">7분전</span> 우리흥님이 웃었어요
-            </span>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+				<div className="notification">
+					<div className="user-info">
+						<img
+							src="https://cdn-icons-png.flaticon.com/512/4715/4715329.png"
+							alt="유저 이미지"
+						/>
+						<span>
+							<strong>우리흥</strong>님이 웃었어요
+							<span className="timestamp"> 7분 전</span>
+						</span>
+					</div>
+				</div>
+			</main>
+		</div>
+	);
 }

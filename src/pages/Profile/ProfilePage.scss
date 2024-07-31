@@ -51,7 +51,10 @@
   .profile-btn-container {
     margin: 20px;
     padding: 15px;
-    background-color: #e8e8e8;
+    // background-color: #e8e8e8;
+    //그라데이션 효과 주기
+    background-image: linear-gradient(to right top, #ffc3c3, #e1c8ff);
+
     border-radius: 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 컨테이너에 그림자 효과를 추가합니다 */
   }
@@ -68,7 +71,7 @@
     font-size: 1em; /* 텍스트 크기를 약간 증가시킵니다 */
     text-align: left;
     border: none;
-    background-color: #f2f2f2;
+    background-color: #ffffff;
     border-radius: 15px;
     color: #333; /* 텍스트 색상을 약간 어두운 회색으로 변경합니다 */
   }
@@ -90,7 +93,7 @@
     padding-bottom: 20px;
 
     .user-logout-btn {
-      background-color: #ff7070; /* 배경색을 붉은색으로 변경합니다 */
+      background-color: #ff5757; /* 배경색을 붉은색으로 변경합니다 */
       color: white; /* 텍스트 색상을 흰색으로 변경합니다 */
       border: none;
       border-radius: 15px;
@@ -101,7 +104,7 @@
     }
 
     .user-logout-btn:active {
-      background-color: #fa5050; /* 배경색을 붉은색으로 변경합니다 */
+      background-color: #ff1e1e; /* 배경색을 붉은색으로 변경합니다 */
     }
   }
 }

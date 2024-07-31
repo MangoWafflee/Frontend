@@ -13,8 +13,12 @@ export default function FriendPage() {
   const [searchUserImage, setSearchUserImage] = useState(""); // 검색한 유저 이미지
   const [searchUserNickname, setSearchUserNickname] = useState(""); // 검색한 유저 닉네임
 
-  const [userId, setUserId] = useState(4); // 현재 로그인한 사용자의 ID
-  const [userDummyData, setUserDummyData] = useState([
+  const [isFriend, setIsFriend] = useState(false); // 친구 여부
+  const [isFriendApply, setIsFriendApply] = useState(false); // 친구 요청 수락 여부
+
+  //   const [friendList, setFriendList] = useState(null);
+  // 더미데이터
+  const friendList = [
     {
       userId: 7,
       userName: "손흥민",
@@ -248,6 +252,22 @@ export default function FriendPage() {
           <Typography>친구 목록이 비어있습니다.</Typography>
         )}
       </div>
+
+      {isModalOpen && (
+        <div className="modal-background" onClick={handleOutsideClick}>
+          <div className="modal" ref={modalRef}>
+            <div className="modal-content">
+              <UserCard
+                userName={searchUserName}
+                userImage={searchUserImage}
+                userNickname={searchUserNickname}
+                isFriend={isFriend}
+                isFriendApply={isFriendApply}
+              ></UserCard>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

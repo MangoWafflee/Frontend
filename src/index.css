@@ -7,9 +7,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 스크롤바 없애기 */
 body::-webkit-scrollbar {
-  width: 0; /* 세로 스크롤바 없애기 */
-  height: 0; /* 가로 스크롤바 없애기 */
+  width: 0;
+  height: 0;
 }
 
 code {

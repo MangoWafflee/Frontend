@@ -5,6 +5,7 @@ import useNotification from "../../hooks/useNotification";
 import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faX } from "@fortawesome/free-solid-svg-icons";
+import { Helmet } from "react-helmet-async";
 
 export default function IntroductionPage() {
 	const navigate = useNavigate();
@@ -43,6 +44,19 @@ export default function IntroductionPage() {
 
 	return (
 		<div className="introduction_page">
+			<Helmet>
+				<meta property="og:site_name" content="힣히힣" />
+				<meta property="og:title" content="웃어보자 타이틀" />
+				<meta
+					property="og:url"
+					content="https://hahasmile.netlify.app/"
+				/>
+				<meta property="og:description" content="웃음을 기록해보아요" />
+				<meta
+					property="og:image"
+					content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVgFjrG_0zAzNLWLo6OULuFynY2haCp9RgrQ&s"
+				/>
+			</Helmet>
 			{/* 메뉴바 */}
 			{isMenuOpen && (
 				<div className="menu">
@@ -55,24 +69,24 @@ export default function IntroductionPage() {
 						/>
 					</button>
 					<ul>
-						<li
-							onClick={() => {
-								handleClick();
-								scrollToTop();
-							}}
-						>
-							<span>서비스 소개</span>
-						</li>
 						<li>
-							적을만한거 있나
+							<span
+								onClick={() => {
+									handleClick();
+									scrollToTop();
+								}}
+							>
+								서비스 소개
+							</span>
 						</li>
+						<li><span onClick={handleLogin}>로그인 / 회원가입</span></li>
 					</ul>
 				</div>
 			)}
 			{isMenuOpen && <div className="overlay"></div>}
 			{/* 상단바 */}
 			<header>
-				<span>망고와플</span>
+				<span>SmileHub</span>
 				<FontAwesomeIcon
 					icon={faBars}
 					style={{ cursor: "pointer" }}
@@ -83,8 +97,8 @@ export default function IntroductionPage() {
 			{/* 소개 메인 */}
 			<section>
 				<div className="container"></div>
-				<h2>망고와플</h2>
-				<h2 style={{ color: "green" }}>웃음을 기록하다</h2>
+				<h2>스마일 허브</h2>
+				<h2 className="gradient-text">웃음을 기록하다</h2>
 				<img src="r" alt="관련 이미지" />
 			</section>
 			{/* 앱 기능 소개 */}
