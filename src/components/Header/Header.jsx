@@ -84,7 +84,7 @@ export default function Header() {
               : isSmilePath
               ? `😆${nickname}님의 웃음`
               : isEditProfilePath
-              ? "📝 프로필 수정"
+              ? "📝프로필 수정"
               : isAchievementPath
               ? `🏅${nickname}님의 챌린지 기록`
               : ""}
