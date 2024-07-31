@@ -13,6 +13,11 @@
   object-fit: cover;
   margin-top: 20px;
   margin-bottom: 20px;
+  border: 5px solid transparent;
+}
+
+.video-box.animate {
+  animation: borderAnimation 1s ease-in-out;
 }
 
 .video-container {
@@ -40,19 +45,9 @@
   stroke: #1890ff;
   stroke-width: 5;
   stroke-dasharray: 1100; /* Adjust this value to match the circumference */
-  stroke-dashoffset: 1100; /* Adjust this value to match the circumference */
-  animation: drawCircle 3s linear forwards;
+  stroke-dashoffset: 0; /* Adjust this value to match the circumference */
+  //animation: drawCircle 3s linear forwards;
 }
-
-@keyframes drawCircle {
-  from {
-    stroke-dashoffset: 1100; /* Adjust this value to match the circumference */
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
 .circle-container {
   position: relative;
   width: 300px;
@@ -61,6 +56,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+@keyframes drawCircle {
+  from {
+    stroke-dashoffset: 942; /* Adjust this value to match the circumference */
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .circle {
