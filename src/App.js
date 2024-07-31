@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar/Navbar";
 import CameraRecognitionPage from "./pages/CameraRecognition/CameraRecognitionPage";
 import ChallengePage from "./pages/Challenge/ChallengePage";
 import FriendPage from "./pages/Friend/FriendPage";
-import FriendSearchPage from "./pages/FriendSearch/FriendSearchPage";
 import IntroductionPage from "./pages/Introduction/IntroductionPage";
 import MainPage from "./pages/Main/MainPage";
 import NotificationCenterPage from "./pages/NotificationCenter/NotificationCenterPage";
@@ -44,7 +43,6 @@ function App() {
 					element={<NotificationCenterPage />}
 				/>
 				<Route path="/friend" element={<FriendPage />} />
-				<Route path="/friend/search" element={<FriendSearchPage />} />
 				<Route path="/challenge" element={<ChallengePage />} />
 				<Route path="/profile" element={<ProfilePage />} />
 				<Route
