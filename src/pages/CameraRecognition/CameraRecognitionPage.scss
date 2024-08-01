@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 5rem;
   height: 100%;
 }
 
@@ -20,6 +21,62 @@
   animation: borderAnimation 1s ease-in-out;
 }
 
+.video-box.distort-animation {
+  animation: distort 2s ease-in-out;
+}
+
+@keyframes distort {
+  0% {
+    clip-path: polygon(
+      50% 0%,
+      85% 25%,
+      100% 75%,
+      75% 100%,
+      25% 85%,
+      0% 25%
+    );
+  }
+  25% {
+    clip-path: polygon(
+      55% 10%,
+      80% 30%,
+      95% 70%,
+      70% 90%,
+      30% 80%,
+      5% 30%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      60% 20%,
+      75% 35%,
+      90% 65%,
+      65% 85%,
+      35% 75%,
+      10% 35%
+    );
+  }
+  75% {
+    clip-path: polygon(
+      55% 10%,
+      80% 30%,
+      95% 70%,
+      70% 90%,
+      30% 80%,
+      5% 30%
+    );
+  }
+  100% {
+    clip-path: polygon(
+      50% 0%,
+      85% 25%,
+      100% 75%,
+      75% 100%,
+      25% 85%,
+      0% 25%
+    );
+  }
+}
 .video-container {
   position: relative;
   display: flex;
@@ -42,7 +99,7 @@
 
 .circle-animation circle {
   fill: none;
-  stroke: #1890ff;
+  stroke: #ff125d;
   stroke-width: 5;
   stroke-dasharray: 1100; /* Adjust this value to match the circumference */
   stroke-dashoffset: 0; /* Adjust this value to match the circumference */
@@ -52,11 +109,12 @@
   position: relative;
   width: 300px;
   height: 300px;
-  margin: 20px auto;
+  margin-top: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 @keyframes drawCircle {
   from {
     stroke-dashoffset: 942; /* Adjust this value to match the circumference */
@@ -66,9 +124,21 @@
   }
 }
 
+.max-happy-percentage {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ff125d;
+}
+
+.happy-text {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: black;
+}
 .circle {
   fill: none;
-  stroke: #1890ff;
+  stroke: #ff125d;
   stroke-width: 5;
   stroke-dasharray: 942;
   stroke-dashoffset: 942;
@@ -80,7 +150,7 @@
   width: 150px;
   height: 150px;
   fill: none;
-  stroke: #1890ff;
+  stroke: #ff125d;
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -98,4 +168,21 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.url-button {
+  margin-top: 4rem;
+  border-radius: 1.2rem;
+  padding: 1rem 2.5rem;
+  background-image: linear-gradient(
+    to right bottom,
+    #ff5c5c,
+    #ad6dfc
+  );
+  font-size: 1.2rem;
+  color: white;
+  border: none;
+}
+button:hover {
+  opacity: 0.8; /* 색을 조금 흐리게 함 */
 }

@@ -20,6 +20,7 @@ export default function CameraRecognitionPage() {
   const [animationVisible, setAnimationVisible] =
     useState(false);
 
+  // face-api 모델 로드 및 초기화 하는 거
   useEffect(() => {
     const loadModels = async () => {
       const MODEL_URL = process.env.PUBLIC_URL + '/models';
@@ -42,6 +43,7 @@ export default function CameraRecognitionPage() {
     loadModels();
   }, []);
 
+  // 실시간 행복 치수 -> 최대 행복 치수 업데이트
   useEffect(() => {
     if (happyPercentage > maxHappyPercentageRef.current) {
       maxHappyPercentageRef.current = happyPercentage; // useRef로 업데이트
@@ -49,14 +51,21 @@ export default function CameraRecognitionPage() {
     }
   }, [happyPercentage]);
 
+  // 최대 행복 치수 90% 이상일 때 흔들기 애니메이션
   useEffect(() => {
-    if (maxHappyPercentageRef.current > 70) {
+    if (maxHappyPercentageRef.current > 90) {
+      videoRef.current.classList.add('distort-animation');
       const timer = setTimeout(() => {
+        videoRef.current.classList.remove(
+          'distort-animation'
+        );
         setVideoVisible(false);
       }, 2000);
-      return () => clearTimeout(timer); // 타이머를 정리합니다.
+      return () => clearTimeout(timer);
     }
   }, [maxHappyPercentage]);
+
+  // 비디오 시작
   const startVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video: {} })
@@ -77,6 +86,7 @@ export default function CameraRecognitionPage() {
       );
   };
 
+  // 비디오 재생 시 얼굴 인식
   const handleVideoOnPlay = async () => {
     if (!videoRef.current) return;
 
@@ -131,6 +141,7 @@ export default function CameraRecognitionPage() {
     return () => clearInterval(intervalId);
   };
 
+  // 모델 로드 후 비디오 시작 및 얼굴 인식 시작
   useEffect(() => {
     if (modelsLoaded) {
       startVideo();
@@ -141,6 +152,7 @@ export default function CameraRecognitionPage() {
     }
   }, [modelsLoaded]);
 
+  // 얼굴 감지 시 비디오 주변 원 생성 애니메이션 추가
   useEffect(() => {
     if (modelsLoaded && faceDetected) {
       setAnimationVisible(true);
@@ -168,24 +180,35 @@ export default function CameraRecognitionPage() {
               playsInline
               className="video-box"
             />
-            {animationVisible && (
-              <svg className="circle-animation">
-                <circle cx="185" cy="180" r="175" />
-              </svg>
-            )}
+            {animationVisible &&
+              maxHappyPercentage < 90 && (
+                <svg className="circle-animation">
+                  <circle cx="185" cy="180" r="175" />
+                </svg>
+              )}
           </div>
           <div className="emotion-display">
-            <div className="happy-percentage">
-              현재 행복도: {happyPercentage}%
-            </div>
+            {/* <div className="happy-percentage">
+             {happyPercentage}%
+            </div> */}
             <div className="max-happy-percentage">
-              최고 행복도: {maxHappyPercentage}%
+              {maxHappyPercentage}%
             </div>
-            <div>
-              얼굴 인식 상태:{' '}
+            {/* <div className="detected-text">
               {faceDetected
                 ? '얼굴이 인식되었습니다.'
                 : '얼굴이 인식되지 않았습니다.'}
+            </div> */}
+            <div className="happy-text">
+              {maxHappyPercentage > 90
+                ? '행복한 얼굴이에요!'
+                : maxHappyPercentage > 70
+                ? '더 크게 웃어보아요!'
+                : maxHappyPercentage > 50
+                ? '입이 찢어지게! 흐하하하!'
+                : maxHappyPercentage > 30
+                ? '수줍은 미소네요! 더 크게!'
+                : '오늘도 행복한 하루를 시작하는거에요!'}
             </div>
           </div>
         </>
@@ -203,11 +226,7 @@ export default function CameraRecognitionPage() {
               <path d="M14 27 L22 35 L38 19" />
             </svg>
           </div>
-          <Flex gap="small" wrap>
-            <Button type="primary">
-              {'링크 URL 보내기'}
-            </Button>
-          </Flex>
+          <button className="url-button">URL 보내기</button>
         </>
       )}
     </div>
