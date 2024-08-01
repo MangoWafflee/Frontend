@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../app/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import './LoginRedirectPage.scss'
+import "./LoginRedirectPage.scss";
+import Loading from "../../components/Loading/Loading";
 
 export default function LoginRedirectPage() {
 	const navigate = useNavigate();
@@ -48,14 +49,21 @@ export default function LoginRedirectPage() {
 		console.log(process.env.REACT_APP_KAKAO_REDIRECT_URI);
 
 		// 인가 코드 보내고 토큰 및 유저 정보 받아오기
-		uploadProductMutation.mutate();
+		// uploadProductMutation.mutate();
+
+		// 테스트용 나중에 지울거
+		axios
+			.post("/user/oauth2/code/kakao", {
+				code: code,
+			})
+			.then((response) => console.log("response", response));
 	}, [navigate]);
 
 	return (
-		<div>
-			<h1>로그인 중...</h1>
+		<div className="login-redirect-page">
+			<div className="overlay"></div>
+			<Loading />
 			{!hasNickname && <div></div>}
-			{!hasNickname && <div className="overlay"></div>}
 		</div>
 	);
 }
