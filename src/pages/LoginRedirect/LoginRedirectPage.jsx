@@ -1,9 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../app/axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import './LoginRedirectPage.scss'
 
 export default function LoginRedirectPage() {
 	const navigate = useNavigate();
+	const [hasNickname, setHasNickname] = useState(true);
+
+	// 서버로 인가코드 보내고 토큰 받기
+	const getTokenAndUserData = async (code) => {
+		const response = axios
+			.post(`/user/oauth2/code/kakao`, {
+				code: code,
+			})
+			.then((response) => console.log("response", response));
+		return response;
+	};
+
+	const uploadProductMutation = useMutation({
+		mutationFn: getTokenAndUserData,
+		onSuccess: (response) => {
+			console.log(response);
+			// 닉네임 null 이면 창 띄워서 등록
+
+			navigate("/app");
+		},
+		onError: (error) => {
+			console.log(`로그인 오류 : ${error}`);
+			navigate("/");
+		},
+	});
 
 	useEffect(() => {
 		// 인가코드
@@ -20,26 +47,15 @@ export default function LoginRedirectPage() {
 		console.log(process.env.REACT_APP_KAKAO_SECRET);
 		console.log(process.env.REACT_APP_KAKAO_REDIRECT_URI);
 
-		// 서버로 인가코드 보내고 토큰 받기
-		// axios
-		// 	.post("https://kauth.kakao.com/oauth/token", {
-		// 		grant_type: "authorization_code",
-		// 		code: code,
-		// 		client_id: process.env.REACT_APP_REST_API_KEY,
-		// 		client_secret: process.env.REACT_APP_KAKAO_SECRET,
-		// 		redirect_uri: process.env.REACT_APP_KAKAO_REDIRECT_URI,
-		// 	})
-		// 	.then((response) => console.log("response", response));
-
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/oauth2/code/kakao,`,{
-      code : code
-    }).then((response) => console.log("response", response));
-
+		// 인가 코드 보내고 토큰 및 유저 정보 받아오기
+		uploadProductMutation.mutate();
 	}, [navigate]);
 
 	return (
 		<div>
 			<h1>로그인 중...</h1>
+			{!hasNickname && <div></div>}
+			{!hasNickname && <div className="overlay"></div>}
 		</div>
 	);
 }
