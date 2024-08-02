@@ -21,7 +21,7 @@ export default function LoginRedirectPage() {
 	const token = useSelector(selectToken);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [hasNickname, setHasNickname] = useState(false); // 유저의 닉네임 여부
+	const [hasNickname, setHasNickname] = useState(true); // 유저의 닉네임 여부
 	const [searchText, setSearchText] = useState(""); // 닉네임칸에 적는 텍스트
 	const [isAvailableNickname, setIsAvailableNickname] = useState(false); // 사용 가능한 닉네임 여부
 
@@ -80,7 +80,7 @@ export default function LoginRedirectPage() {
 			},
 			{
 				headers: {
-					Authorization: `Bearer ${token}`,
+					Authorization: token,
 				},
 			}
 		);
@@ -131,15 +131,15 @@ export default function LoginRedirectPage() {
 	});
 
 	useEffect(() => {
-		// // 인가코드
-		// const code = new URL(window.location.href).searchParams.get("code");
-		// // 인가코드 없을 시
-		// if (code === "" || code === null) {
-		// 	alert("잘못된 접근 입니다.");
-		// 	navigate("/");
-		// }
-		// // 인가 코드 보내고 토큰 및 유저 정보 받아오기
-		// getTokenAndUserDataMutation.mutate(code); // 토큰, 사용자 정보 받아오는 api 실행
+		// 인가코드
+		const code = new URL(window.location.href).searchParams.get("code");
+		// 인가코드 없을 시
+		if (code === "" || code === null) {
+			alert("잘못된 접근 입니다.");
+			navigate("/");
+		}
+		// 인가 코드 보내고 토큰 및 유저 정보 받아오기
+		getTokenAndUserDataMutation.mutate(code); // 토큰, 사용자 정보 받아오는 api 실행
 	}, []);
 
 	return (
