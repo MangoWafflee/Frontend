@@ -74,7 +74,7 @@ export default function LoginRedirectPage() {
 	const registerNickname = async (nickname) => {
 		const uid = user.uid;
 		const response = await axios.post(
-			`/nickname/${uid}`,
+			`/user/nickname/${uid}`,
 			{
 				nickname: nickname,
 			},
