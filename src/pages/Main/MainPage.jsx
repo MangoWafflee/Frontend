@@ -12,9 +12,6 @@ export default function MainPage() {
     if (false) navigate('/');
   }, [navigate]);
 
-  // 일주일 달력에 관한 웃음 기록
-  const smileRecordList = [];
-
   return (
     <div className="main-page">
       <div className="main-page title">
