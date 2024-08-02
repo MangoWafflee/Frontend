@@ -21,7 +21,7 @@ export default function LoginRedirectPage() {
 	const token = useSelector(selectToken);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [hasNickname, setHasNickname] = useState(false); // 유저의 닉네임 여부
+	const [hasNickname, setHasNickname] = useState(true); // 유저의 닉네임 여부
 	const [searchText, setSearchText] = useState(""); // 닉네임칸에 적는 텍스트
 	const [isAvailableNickname, setIsAvailableNickname] = useState(false); // 사용 가능한 닉네임 여부
 
@@ -55,10 +55,12 @@ export default function LoginRedirectPage() {
 		mutationFn: checkNickname,
 		onSuccess: (response) => {
 			console.log(response)
-			//
+			// 해당 닉네임 존재
 			if (response.data.message === "해당 닉네임은 존재합니다.") {
 				message.error(response.data.message);
-			} else if (
+			} 
+			// 해당 닉네임 사용 가능
+			else if (
 				response.data.message === "사용 가능합니다."
 			) {
 				setIsAvailableNickname(true);
@@ -66,8 +68,8 @@ export default function LoginRedirectPage() {
 			}
 		},
 		onError: (error) => {
-			console.log(`서버가 아파요 : ${error}`);
-			// navigate("/");
+			console.log(`네트워크를 확인해주세요 : ${error}`);
+			navigate("/");
 		},
 	});
 
@@ -98,8 +100,8 @@ export default function LoginRedirectPage() {
 			navigate("/app");
 		},
 		onError: (error) => {
-			console.log(`로그인 오류 : ${error}`);
-			// navigate("/");
+			alert(`문제 발생 : ${error}`)
+			navigate("/");
 		},
 	});
 
@@ -122,29 +124,30 @@ export default function LoginRedirectPage() {
 			// 닉네임 null 이면 닉네임 설정 창 띄우기
 			if (response.data.user.nickname === null) {
 				setHasNickname(false);
+			} 
+			// null이 아니면 메인 페이지로
+			else{
+				navigate('/app');
 			}
 		},
 		onError: (error) => {
-			console.log(`로그인 오류 : ${error}`);
+			alert("인가코드 오류입니다. 다시 로그인해주세요.")
 			navigate("/");
 		},
 	});
 
 	useEffect(() => {
 		// 인가코드
-		// const code = new URL(window.location.href).searchParams.get("code");
-		// // 인가코드 없을 시
-		// if (code === "" || code === null) {
-		// 	alert("잘못된 접근 입니다.");
-		// 	navigate("/");
-		// }
-		// console.log(code);
-		// console.log(process.env.REACT_APP_REST_API_KEY);
-		// console.log(process.env.REACT_APP_KAKAO_SECRET);
-		// console.log(process.env.REACT_APP_KAKAO_REDIRECT_URI);
-		// // 인가 코드 보내고 토큰 및 유저 정보 받아오기
-		// getTokenAndUserDataMutation.mutate(); // 토큰, 사용자 정보 받아오는 api 실행
-	}, [navigate]);
+		const code = new URL(window.location.href).searchParams.get("code");
+		// 인가코드 없을 시
+		if (code === "" || code === null) {
+			alert("잘못된 접근 입니다.");
+			navigate("/");
+		}
+
+		// 인가 코드 보내고 토큰 및 유저 정보 받아오기
+		getTokenAndUserDataMutation.mutate(code); // 토큰, 사용자 정보 받아오는 api 실행
+	}, []);
 
 	return (
 		<div className="login-redirect-page">
@@ -172,8 +175,7 @@ export default function LoginRedirectPage() {
 							onClick={handleRegister}
 						>
 							등록
-						</Button>
-						
+						</Button>	
 					</div>
 				)}
 			</div>
