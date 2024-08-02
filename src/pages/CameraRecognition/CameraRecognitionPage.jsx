@@ -60,7 +60,7 @@ export default function CameraRecognitionPage() {
           'distort-animation'
         );
         setVideoVisible(false);
-      }, 2000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [maxHappyPercentage]);
