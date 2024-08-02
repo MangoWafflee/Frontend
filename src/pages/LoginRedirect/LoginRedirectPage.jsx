@@ -4,28 +4,125 @@ import axios from "../../app/axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import "./LoginRedirectPage.scss";
 import Loading from "../../components/Loading/Loading";
+import { Input, Button, message } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import {
+	login,
+	selectUser,
+	selectIsLoggedIn,
+	selectToken,
+} from "../../features/auth/authSlice";
+
+const { Search } = Input;
 
 export default function LoginRedirectPage() {
+	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const user = useSelector(selectUser);
+	const token = useSelector(selectToken);
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const [hasNickname, setHasNickname] = useState(true);
+	const [hasNickname, setHasNickname] = useState(false); // 유저의 닉네임 여부
+	const [searchText, setSearchText] = useState(""); // 닉네임칸에 적는 텍스트
+	const [isAvailableNickname, setIsAvailableNickname] = useState(false); // 사용 가능한 닉네임 여부
 
-	// 서버로 인가코드 보내고 토큰 받기
-	const getTokenAndUserData = async (code) => {
-		const response = axios
-			.post(`/user/oauth2/code/kakao`, {
-				code: code,
+	// 닉네임 중복 체크 버튼 클릭 시
+	const handleSearch = () => {
+		checkNicknameMutation.mutate(); // 닉네임 중복 체크 api 실행
+	};
+
+	// 닉네임 칸 내용 변경될 시
+	const handleChange = (e) => {
+		setSearchText(e.target.value);
+		setIsAvailableNickname(false);
+	};
+
+	// 닉네임 등록 클릭
+	const handleRegister = async () => {
+		registerNicknameMutation.mutate(); // 닉네임 등록 api 실행
+	};
+
+	// 닉네임 중복 체크 api
+	const checkNickname = async () => {
+		const response = await axios
+			.post(`/user/check-nickname`, {
+				nickname: searchText,
 			})
+		return response;
+	};
+
+	// 닉네임 중복 체크 api Mutation
+	const checkNicknameMutation = useMutation({
+		mutationFn: checkNickname,
+		onSuccess: (response) => {
+			console.log(response)
+			//
+			if (response.data.message === "해당 닉네임은 존재합니다.") {
+				message.error(response.data.message);
+			} else if (
+				response.data.message === "사용 가능합니다."
+			) {
+				setIsAvailableNickname(true);
+				message.success(response.data.message);
+			}
+		},
+		onError: (error) => {
+			console.log(`서버가 아파요 : ${error}`);
+			// navigate("/");
+		},
+	});
+
+	// 닉네임 등록 api
+	const registerNickname = async () => {
+		const uid = user.uid;
+		const response = await axios
+			.post(
+				`/nickname/${uid}`,
+				{
+					nickname: searchText,
+				},
+				{
+					headers: {
+						Authorization: token,
+					},
+				}
+			)
 			.then((response) => console.log("response", response));
 		return response;
 	};
 
-	const uploadProductMutation = useMutation({
+	// 닉네임 등록 api Mutation
+	const registerNicknameMutation = useMutation({
+		mutationFn: registerNickname,
+		onSuccess: (response) => {
+			console.log(response)
+			navigate("/app");
+		},
+		onError: (error) => {
+			console.log(`로그인 오류 : ${error}`);
+			// navigate("/");
+		},
+	});
+
+	// 서버로 인가코드 보내고 토큰 받는 api
+	const getTokenAndUserData = async (code) => {
+		const response = await axios
+			.post(`/user/oauth2/code/kakao`, {
+				code: code,
+			})
+		return response;
+	};
+
+	// 서버로 인가코드 보내고 토큰 받는 api Mutation
+	const getTokenAndUserDataMutation = useMutation({
 		mutationFn: getTokenAndUserData,
 		onSuccess: (response) => {
-			console.log(response);
-			// 닉네임 null 이면 창 띄워서 등록
-
-			navigate("/app");
+			console.log(response)
+			// 유저 정보 저장
+			dispatch(login(response.data));
+			// 닉네임 null 이면 닉네임 설정 창 띄우기
+			if (response.data.user.nickname === null) {
+				setHasNickname(false);
+			}
 		},
 		onError: (error) => {
 			console.log(`로그인 오류 : ${error}`);
@@ -35,35 +132,51 @@ export default function LoginRedirectPage() {
 
 	useEffect(() => {
 		// 인가코드
-		const code = new URL(window.location.href).searchParams.get("code");
-
-		// 인가코드 없을 시
-		if (code === "" || code === null) {
-			alert("잘못된 접근 입니다.");
-			navigate("/");
-		}
-
-		console.log(code);
-		console.log(process.env.REACT_APP_REST_API_KEY);
-		console.log(process.env.REACT_APP_KAKAO_SECRET);
-		console.log(process.env.REACT_APP_KAKAO_REDIRECT_URI);
-
-		// 인가 코드 보내고 토큰 및 유저 정보 받아오기
-		// uploadProductMutation.mutate();
-
-		// 테스트용 나중에 지울거
-		axios
-			.post("/user/oauth2/code/kakao", {
-				code: code,
-			})
-			.then((response) => console.log("response", response));
+		// const code = new URL(window.location.href).searchParams.get("code");
+		// // 인가코드 없을 시
+		// if (code === "" || code === null) {
+		// 	alert("잘못된 접근 입니다.");
+		// 	navigate("/");
+		// }
+		// console.log(code);
+		// console.log(process.env.REACT_APP_REST_API_KEY);
+		// console.log(process.env.REACT_APP_KAKAO_SECRET);
+		// console.log(process.env.REACT_APP_KAKAO_REDIRECT_URI);
+		// // 인가 코드 보내고 토큰 및 유저 정보 받아오기
+		// getTokenAndUserDataMutation.mutate(); // 토큰, 사용자 정보 받아오는 api 실행
 	}, [navigate]);
 
 	return (
 		<div className="login-redirect-page">
 			<div className="overlay"></div>
-			<Loading />
-			{!hasNickname && <div></div>}
+			<div className="container">
+				{hasNickname ? (
+					<Loading />
+				) : (
+					<div>
+						<h2>환영합니다.</h2>
+						<h3>닉네임을 등록해주세요</h3>
+						<Search
+							placeholder="닉네임을 입력하세요."
+							enterButton="중복 확인"
+							size="large"
+							onSearch={handleSearch}
+							onChange={handleChange}
+							value={searchText}
+						/>
+						<p>4 ~ 12 자 이하요</p>
+						<Button
+							type="primary"
+							size="large"
+							disabled={!isAvailableNickname}
+							onClick={handleRegister}
+						>
+							등록
+						</Button>
+						
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
