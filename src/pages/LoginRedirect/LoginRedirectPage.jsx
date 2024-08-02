@@ -125,7 +125,7 @@ export default function LoginRedirectPage() {
 			}
 		},
 		onError: (error) => {
-			alert("인가코드 오류입니다. 다시 로그인해주세요.");
+			alert(`인가코드 오류 : ${error}`);
 			navigate("/");
 		},
 	});
