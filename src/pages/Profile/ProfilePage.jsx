@@ -3,7 +3,7 @@ import "./ProfilePage.scss";
 
 import { Divider } from "@mui/material";
 import { message } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
@@ -14,12 +14,83 @@ import UserDefaultImage from "../../assets/images/UserDefaultImage.png";
 export default function ProfilePage() {
   const navigate = useNavigate();
 
+  const uid = localStorage.getItem("uid");
+  let token = localStorage.getItem("token");
+
   const [user, setUser] = useState({
     name: "유저",
     nickname: "유저닉네임",
     image: UserDefaultImage,
     id: "유저아이디@kakao.com",
   });
+
+  // 유저 정보 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      let url = `https://mango.angrak.cloud/user/uid/${uid}`; // URL 확인
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          const data = await response.json();
+          setUser({
+            ...user,
+            name: data.name,
+            nickname: data.nickname,
+            image: data.image,
+            id: data.id,
+          });
+        } else if (response.status === 404) {
+          console.log("검색 결과가 없습니다.");
+        } else {
+          console.log("서버 오류");
+        }
+      } catch (error) {
+        console.error("데이터 요청 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  const [smileCount, setSmileCount] = useState(0);
+  // 웃음횟수 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      const encodedNickname = encodeURIComponent(user.nickname);
+      const url = `https://mango.angrak.cloud/smile/user/${encodedNickname}`; // URL 확인
+
+      console.log("Encoded URL:", url); // URL 확인
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200) {
+          const data = await response.json();
+          setSmileCount(data.length);
+        } else if (response.status === 404) {
+          console.log("검색 결과가 없습니다.");
+        } else {
+          console.log("서버 오류");
+        }
+      } catch (error) {
+        console.error("데이터 요청 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, [user.nickname]);
 
   const handleLogout = () => {
     const KakaoLogout = async () => {
@@ -76,11 +147,11 @@ export default function ProfilePage() {
       <div className="user-point">
         <div>
           <h2>🏅획득 배지</h2>
-          <p>11</p>
+          <p>0</p>
         </div>
         <div>
           <h2>😊웃은 횟수</h2>
-          <p>100</p>
+          <p>{smileCount}</p>
         </div>
       </div>
 
@@ -90,7 +161,7 @@ export default function ProfilePage() {
         <Link to="/profile/edit" className="user-link">
           <button className="edit-profile-btn">
             <span role="img" aria-label="pencil">
-              📝 나의 회원정보 수정
+              📝 나의 프로필 수정
             </span>
             <div className="move-page-icon">
               <FontAwesomeIcon icon={faChevronRight} />
