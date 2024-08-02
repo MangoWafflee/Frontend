@@ -36,12 +36,13 @@ function App() {
     <Routes>
       <Route element={<IntroductionLayout />}>
         <Route path="/" element={<IntroductionPage />} />
-      </Route>
-      <Route element={<Layout />}>
         <Route
           path="/user/oauth2/code/kakao"
           element={<LoginRedirectPage />}
         />
+      </Route>
+      <Route element={<Layout />}>
+        
         <Route path="/app" element={<MainPage />} />
         <Route
           path="/app/notification"
