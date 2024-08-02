@@ -118,7 +118,6 @@ export default function WeekCalendar() {
             </div>
             <div className="calendar-day">
               {`${date.day}`}
-              {/* <span className="smile">😃</span> */}
             </div>
           </div>
         ))}

@@ -56,9 +56,11 @@ export default function CameraRecognitionPage() {
     if (maxHappyPercentageRef.current > 90) {
       videoRef.current.classList.add('distort-animation');
       const timer = setTimeout(() => {
-        videoRef.current.classList.remove(
-          'distort-animation'
-        );
+        if (videoRef.current) {
+          videoRef.current.classList.remove(
+            'distort-animation'
+          );
+        }
         setVideoVisible(false);
       }, 5000);
       return () => clearTimeout(timer);
@@ -168,6 +170,25 @@ export default function CameraRecognitionPage() {
     }
   }, [modelsLoaded, faceDetected]);
 
+  // url 링크 공유
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Check out this site!',
+          text: 'Here is an awesome site I found:',
+          url: 'https://hahasmile.netlify.app/',
+        });
+        console.log('Successfully shared');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert(
+        'Web Share API is not supported in your browser.'
+      );
+    }
+  };
   return (
     <div className="camera-recognition-container">
       {videoVisible ? (
@@ -226,7 +247,12 @@ export default function CameraRecognitionPage() {
               <path d="M14 27 L22 35 L38 19" />
             </svg>
           </div>
-          <button className="url-button">URL 보내기</button>
+          <button
+            className="url-button"
+            onClick={handleShare}
+          >
+            URL 보내기
+          </button>
         </>
       )}
     </div>
