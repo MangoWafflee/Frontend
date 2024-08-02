@@ -88,7 +88,6 @@ export default function LoginRedirectPage() {
 					},
 				}
 			)
-			.then((response) => console.log("response", response));
 		return response;
 	};
 
