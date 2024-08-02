@@ -1,0 +1,14 @@
+.joke-card {
+  min-width: 360px;
+  max-width: 380px;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  background: none;
+  border: 10px;
+
+  .box {
+    width: 90%;
+    background-color: white;
+    margin: 5px;
+  }
+}

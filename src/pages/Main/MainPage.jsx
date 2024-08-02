@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import WeekCalendar from '../../features/weekCalendar/WeekCalendar';
 import './MainPage.scss';
-import { Progress, Card } from 'antd';
-
+import { Progress, Card, Button } from 'antd';
+import RandomJoke from '../../components/RandomJoke/RandomJoke';
 export default function MainPage() {
   const navigate = useNavigate();
 
@@ -17,24 +17,41 @@ export default function MainPage() {
 
   return (
     <div className="main-page">
-      {/* <h3>ㅇㅇㅇ님 500일째 웃고 계시네요🔥</h3> */}
+      <div className="main-page title">
+        ㅇㅇㅇ님 500일째 웃고 계시네요🔥
+      </div>
       <WeekCalendar />
       <div className="main-menu circular">
         {/* 개인 기록 or 뱃지 */}
-        <div
-          className="record-container circular"
-          onClick={() => navigate('/achievement')}
-        >
-          개인 기록
+        <RandomJoke />
+        <div className="challenge-container circular">
+          <Card
+            title="개인 기록 🚩"
+            extra={
+              <Link to="/profile/achievement/ㅇㅇㅇ">
+                {'More'}
+              </Link>
+            }
+            styles={{
+              body: { padding: 10 },
+            }}
+          >
+            <div className="challenge circular">
+              <span>15일 웃기</span>
+              <Progress
+                percent={60}
+                status="active"
+                style={{ width: '80%' }}
+              />
+            </div>
+          </Card>
         </div>
+
         {/* 챌린지 */}
         <div className="challenge-container circular">
           <Card
             title="챌린지🔥"
             extra={<Link to="/challenge">{'More'}</Link>}
-            style={{
-              width: 180,
-            }}
             styles={{
               body: { padding: 10 },
             }}
@@ -56,11 +73,6 @@ export default function MainPage() {
               />
             </div>
           </Card>
-        </div>
-
-        {/* 미정 */}
-        <div className="ranking-container circular">
-          미정
         </div>
       </div>
     </div>

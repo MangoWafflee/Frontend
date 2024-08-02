@@ -105,16 +105,16 @@ const participatingChallengeList = [
   const participatedChallengeList = [
 	{
 	  id: 5,
-	  title: "[6월] 20일 웃기 챌린지",
-	  subTitle: "이번 달 20일 웃어보세요.",
-	  startDate: "2024-06-01",
-	  endDate: "2024-06-30",
-	  img: challenge_24_07_7,
-	  participating: true,
-	  successStatus: true,
-	  participantCount: 2500,
-	  totalAttempts: 20,
-	  completedAttempts: 20,
+	  title: "[6월] 20일 웃기 챌린지", // 챌린지 타이틀
+	  subTitle: "이번 달 20일 웃어보세요.", // 챌린지 서브 타이틀
+	  startDate: "2024-06-01", //챌린지 시작 날짜
+	  endDate: "2024-06-30", // 챌린지 끝 날짜
+	  img: challenge_24_07_7, // img 정보 > 프론트에 저장
+	  participating: true, // 참여 여부
+	  successStatus: true, // 성공 여부
+	  participantCount: 2500, // 참가자 수
+	  totalAttempts: 20, // 완료까지 수행할 횟수
+	  completedAttempts: 20, // 수행한 횟수
 	},
   ];
   

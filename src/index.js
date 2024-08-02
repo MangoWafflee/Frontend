@@ -9,16 +9,21 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 import { registerPushNotifications } from "./pushNotification";
 import { HelmetProvider } from "react-helmet-async";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <HelmetProvider>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
-  </HelmetProvider>
+	<QueryClientProvider client={queryClient}>
+		<HelmetProvider>
+			<BrowserRouter>
+				<Provider store={store}>
+					<App />
+				</Provider>
+			</BrowserRouter>
+		</HelmetProvider>
+	</QueryClientProvider>
 );
 
 // If you want your app to work offline and load faster, you can change
@@ -27,7 +32,7 @@ root.render(
 
 // 개발환경에서는 서비스 워커 등록 X
 if (process.env.NODE_ENV === "production") {
-  serviceWorkerRegistration.register();
+	serviceWorkerRegistration.register();
 }
 // serviceWorkerRegistration.register();
 // registerPushNotifications();
