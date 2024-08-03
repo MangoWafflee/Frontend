@@ -125,13 +125,13 @@
     width: 30%;
   }
 
-  @media (max-width: $max-width) {
+  @media (min-width: $max-width) {
     .menu {
       width: 100%;
     }
 
     header {
-      width: 100%;
+      min-width: $max-width;
     }
   }
 }

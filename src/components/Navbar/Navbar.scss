@@ -35,3 +35,9 @@
     }
   }
 }
+
+@media (min-width: $max-width) {
+  .nav_bar {
+    min-width: $max-width;
+  }
+}
