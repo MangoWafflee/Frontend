@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
-import { Button, Flex } from 'antd';
 import './CameraRecognitionPage.scss';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../auth/authSlice';
 
 export default function CameraRecognitionPage() {
+  const user = useSelector(selectUser); // user 객체
+  const nickname = user.nickname; // 닉네임 꺼내 쓰기
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const maxHappyPercentageRef = useRef(0); // useRef 초기화
@@ -65,6 +68,36 @@ export default function CameraRecognitionPage() {
       }, 5000);
       return () => clearTimeout(timer);
     }
+    const fetchData = async () => {
+      let url = `https://mango.angrak.cloud/smile/save`; // URL 확인
+      const smileData = {
+        smilePercentage: maxHappyPercentage,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+        nickname: nickname, // 닉네임 확인
+      };
+      console.log(smileData);
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          smileData,
+        });
+
+        if (response.status === 200) {
+          console.log('웃음 저장 성공');
+        } else if (response.status === 404) {
+          console.log('웃음 실패');
+        } else {
+          console.log('서버 오류');
+        }
+      } catch (error) {
+        console.error('데이터 요청 오류:', error);
+      }
+    };
+    fetchData();
   }, [maxHappyPercentage]);
 
   // 비디오 시작
