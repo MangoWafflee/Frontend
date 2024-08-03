@@ -4,9 +4,13 @@ import WeekCalendar from '../../features/weekCalendar/WeekCalendar';
 import './MainPage.scss';
 import { Progress, Card, Button } from 'antd';
 import RandomJoke from '../../components/RandomJoke/RandomJoke';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/auth/authSlice';
+
 export default function MainPage() {
   const navigate = useNavigate();
-
+  const user = useSelector(selectUser); // user 객체
+  const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
   // 로그인 여부 확인해서 로그인 안되어있는데 시도시 소개페이지로 이동
   useEffect(() => {
     if (false) navigate('/');
@@ -15,7 +19,7 @@ export default function MainPage() {
   return (
     <div className="main-page">
       <div className="main-page title">
-        ㅇㅇㅇ님 500일째 웃고 계시네요🔥
+        {nickname}님 500일째 웃고 계시네요🔥
       </div>
       <WeekCalendar />
       <div className="main-menu circular">

@@ -10,7 +10,8 @@ import { selectUser } from '../auth/authSlice';
 export default function WeekCalendar() {
   const navigate = useNavigate();
   const user = useSelector(selectUser); // user 객체
-  const nickname = user.nickname; // 닉네임 꺼내 쓰기
+  const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
+
   const [smileData, setSmileData] = useState([]);
   const [standardDay, setStandardDay] = useState(
     new Date()

@@ -6,7 +6,7 @@ import { selectUser } from '../../features/auth/authSlice';
 
 export default function CameraRecognitionPage() {
   const user = useSelector(selectUser); // user 객체
-  const nickname = user.nickname; // 닉네임 꺼내 쓰기
+  const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const maxHappyPercentageRef = useRef(0); // useRef 초기화
@@ -16,8 +16,6 @@ export default function CameraRecognitionPage() {
     height: 360,
   });
   const [happyPercentage, setHappyPercentage] = useState(0);
-  const [maxHappyPercentage, setMaxHappyPercentage] =
-    useState(0);
   const [videoVisible, setVideoVisible] = useState(true);
   const [faceDetected, setFaceDetected] = useState(false);
   const [animationVisible, setAnimationVisible] =
@@ -50,7 +48,6 @@ export default function CameraRecognitionPage() {
   useEffect(() => {
     if (happyPercentage > maxHappyPercentageRef.current) {
       maxHappyPercentageRef.current = happyPercentage; // useRef로 업데이트
-      setMaxHappyPercentage(happyPercentage);
     }
   }, [happyPercentage]);
 
@@ -60,7 +57,7 @@ export default function CameraRecognitionPage() {
       const fetchData = async () => {
         let url = `https://mango.angrak.cloud/smile/save`; // URL 확인
         const smileData = {
-          smilePercentage: maxHappyPercentage.current,
+          smilePercentage: maxHappyPercentageRef.current,
           date: new Date().toISOString().split('T')[0], // 'YYYY-MM-DD' 형식으로 날짜 변환
           time: new Date().toLocaleTimeString('en-GB', {
             hour: '2-digit',
@@ -104,7 +101,7 @@ export default function CameraRecognitionPage() {
       fetchData();
       return () => clearTimeout(timer);
     }
-  }, [maxHappyPercentage]);
+  }, [maxHappyPercentageRef.current]);
 
   // 비디오 시작
   const startVideo = () => {
@@ -241,7 +238,7 @@ export default function CameraRecognitionPage() {
               className="video-box"
             />
             {animationVisible &&
-              maxHappyPercentage < 90 && (
+              maxHappyPercentageRef.current < 90 && (
                 <svg className="circle-animation">
                   <circle cx="185" cy="180" r="175" />
                 </svg>
@@ -252,7 +249,7 @@ export default function CameraRecognitionPage() {
              {happyPercentage}%
             </div> */}
             <div className="max-happy-percentage">
-              {maxHappyPercentage}%
+              {maxHappyPercentageRef.current}%
             </div>
             {/* <div className="detected-text">
               {faceDetected
@@ -260,13 +257,13 @@ export default function CameraRecognitionPage() {
                 : '얼굴이 인식되지 않았습니다.'}
             </div> */}
             <div className="happy-text">
-              {maxHappyPercentage > 90
+              {maxHappyPercentageRef.current > 90
                 ? '행복한 얼굴이에요!'
-                : maxHappyPercentage > 70
+                : maxHappyPercentageRef.current > 70
                 ? '더 크게 웃어보아요!'
-                : maxHappyPercentage > 50
+                : maxHappyPercentageRef.current > 50
                 ? '입이 찢어지게! 흐하하하!'
-                : maxHappyPercentage > 30
+                : maxHappyPercentageRef.current > 30
                 ? '수줍은 미소네요! 더 크게!'
                 : '오늘도 행복한 하루를 시작하는거에요!'}
             </div>
