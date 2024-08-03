@@ -4,9 +4,14 @@ import './WeekCalendar.scss';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../auth/authSlice';
 
 export default function WeekCalendar() {
   const navigate = useNavigate();
+  const user = useSelector(selectUser); // user 객체
+  const nickname = user.nickname; // 닉네임 꺼내 쓰기
+  const [smileData, setSmileData] = useState([]);
   const [standardDay, setStandardDay] = useState(
     new Date()
   );
@@ -72,6 +77,40 @@ export default function WeekCalendar() {
     setPrevious7Days(getPrevious7Days());
   }, [standardDay]);
 
+  // 유저 웃음 정보 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      let url = `https://mango.angrak.cloud/smile/user/${nickname}`; // URL 확인
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          const data = await response.json();
+          setSmileData({
+            ...data,
+            percentage: data.smilePercentage,
+            date: data.date,
+            time: data.time,
+            nickname: data.nickname,
+          });
+        } else if (response.status === 404) {
+          console.log('검색 결과가 없습니다.');
+        } else {
+          console.log('서버 오류');
+        }
+      } catch (error) {
+        console.error('데이터 요청 오류:', error);
+      }
+    };
+    console.log(nickname);
+    console.log(smileData);
+    fetchData();
+  }, [nickname]);
   const handlers = useSwipeable({
     onSwipedLeft: () => setOneWeekLater(),
     onSwipedRight: () => setOneWeekAgo(),
