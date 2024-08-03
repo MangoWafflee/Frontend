@@ -216,8 +216,8 @@ export default function CameraRecognitionPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Check out this site!',
-          text: 'Here is an awesome site I found:',
+          title: '어때? 한번 웃어볼래?!',
+          text: '',
           url: 'https://hahasmile.netlify.app/',
         });
         console.log('Successfully shared');
