@@ -54,9 +54,44 @@ export default function CameraRecognitionPage() {
     }
   }, [happyPercentage]);
 
-  // 최대 행복 치수 90% 이상일 때 흔들기 애니메이션
+  // 최대 행복 치수 90% 이상일 때 흔들기 애니메이션 && 웃음 정보 저장
   useEffect(() => {
     if (maxHappyPercentageRef.current > 90) {
+      const fetchData = async () => {
+        let url = `https://mango.angrak.cloud/smile/save`; // URL 확인
+        const smileData = {
+          smilePercentage: maxHappyPercentage.current,
+          date: new Date().toISOString().split('T')[0], // 'YYYY-MM-DD' 형식으로 날짜 변환
+          time: new Date().toLocaleTimeString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }), // 'HH:MM:SS' 형식으로 시간 변환
+          nickname: nickname, // 닉네임 확인
+        };
+
+        console.log(smileData);
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(smileData),
+          });
+
+          if (response.status === 201) {
+            console.log('웃음 저장 성공');
+          } else if (response.status === 404) {
+            console.log('웃음 실패');
+          } else {
+            console.log('서버 오류');
+          }
+        } catch (error) {
+          console.error('데이터 요청 오류:', error);
+        }
+      };
+
       videoRef.current.classList.add('distort-animation');
       const timer = setTimeout(() => {
         if (videoRef.current) {
@@ -66,43 +101,9 @@ export default function CameraRecognitionPage() {
         }
         setVideoVisible(false);
       }, 5000);
+      fetchData();
       return () => clearTimeout(timer);
     }
-    const fetchData = async () => {
-      let url = `https://mango.angrak.cloud/smile/save`; // URL 확인
-      const smileData = {
-        smilePercentage: maxHappyPercentage.current,
-        date: new Date().toISOString().split('T')[0], // 'YYYY-MM-DD' 형식으로 날짜 변환
-        time: new Date().toLocaleTimeString('en-GB', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-        }), // 'HH:MM:SS' 형식으로 시간 변환
-        nickname: nickname, // 닉네임 확인
-      };
-
-      console.log(smileData);
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          smileData,
-        });
-
-        if (response.status === 201) {
-          console.log('웃음 저장 성공');
-        } else if (response.status === 404) {
-          console.log('웃음 실패');
-        } else {
-          console.log('서버 오류');
-        }
-      } catch (error) {
-        console.error('데이터 요청 오류:', error);
-      }
-    };
-    fetchData();
   }, [maxHappyPercentage]);
 
   // 비디오 시작

@@ -3,7 +3,7 @@ import { useSwipeable } from 'react-swipeable';
 import './WeekCalendar.scss';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../auth/authSlice';
 
@@ -60,6 +60,7 @@ export default function WeekCalendar() {
           day,
           dayOfWeek,
           isToday: isToday(date),
+          dateString: date.toISOString().split('T')[0], // 'YYYY-MM-DD' 형식의 날짜 문자열 추가
         });
       }
       return dates;
@@ -111,6 +112,7 @@ export default function WeekCalendar() {
     console.log(smileData);
     fetchData();
   }, [nickname]);
+
   const handlers = useSwipeable({
     onSwipedLeft: () => setOneWeekLater(),
     onSwipedRight: () => setOneWeekAgo(),
@@ -156,7 +158,9 @@ export default function WeekCalendar() {
               )}
             </div>
             <div className="calendar-day">
-              {`${date.day}`}
+              {date.dateString === smileData.date
+                ? '😃'
+                : date.day}
             </div>
           </div>
         ))}
