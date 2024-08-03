@@ -11,7 +11,6 @@ export default function WeekCalendar() {
   const navigate = useNavigate();
   const user = useSelector(selectUser); // user 객체
   const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
-
   const [smileData, setSmileData] = useState([]);
   const [standardDay, setStandardDay] = useState(
     new Date()
@@ -85,7 +84,7 @@ export default function WeekCalendar() {
       let url = `https://mango.angrak.cloud/smile/user/${nickname}`; // URL 확인
       try {
         const response = await fetch(url, {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -93,14 +92,8 @@ export default function WeekCalendar() {
 
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data);
-          setSmileData({
-            ...data,
-            percentage: data.smilePercentage,
-            date: data.date,
-            time: data.time,
-            nickname: data.nickname,
-          });
+          console.log(data); // 응답 데이터 출력
+          setSmileData(data); // 응답 데이터를 상태에 저장
         } else if (response.status === 404) {
           console.log('검색 결과가 없습니다.');
         } else {
@@ -110,10 +103,8 @@ export default function WeekCalendar() {
         console.error('데이터 요청 오류:', error);
       }
     };
-    console.log(nickname);
-    console.log(smileData);
     fetchData();
-  }, []);
+  }, [nickname]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setOneWeekLater(),
@@ -160,7 +151,9 @@ export default function WeekCalendar() {
               )}
             </div>
             <div className="calendar-day">
-              {date.dateString === smileData.date
+              {smileData.some(
+                (smile) => smile.date === date.dateString
+              )
                 ? '😃'
                 : date.day}
             </div>
