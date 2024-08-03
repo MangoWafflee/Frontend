@@ -71,7 +71,7 @@ export default function CameraRecognitionPage() {
     const fetchData = async () => {
       let url = `https://mango.angrak.cloud/smile/save`; // URL 확인
       const smileData = {
-        smilePercentage: maxHappyPercentage,
+        smilePercentage: maxHappyPercentage.current,
         date: new Date().toISOString().split('T')[0], // 'YYYY-MM-DD' 형식으로 날짜 변환
         time: new Date().toLocaleTimeString('en-GB', {
           hour: '2-digit',
