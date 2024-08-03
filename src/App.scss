@@ -39,6 +39,7 @@ html {
 $max-width: 400px;
 
 .page {
+  min-width: 100vw;
   max-width: $max-width;
   margin-left: auto;
   margin-right: auto;
