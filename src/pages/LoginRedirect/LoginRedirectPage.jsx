@@ -125,7 +125,15 @@ export default function LoginRedirectPage() {
 			}
 		},
 		onError: (error) => {
-			alert(`인가코드 오류 : ${error}`);
+			console.error("Error details:", error);
+
+			// 에러 메시지 추출
+			const errorMessage =
+				error.response?.data?.message ||
+				error.message ||
+				"Unknown error";
+			alert(`인가코드 오류 : ${errorMessage}`);
+
 			navigate("/");
 		},
 	});
