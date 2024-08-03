@@ -26,8 +26,8 @@ export default function ProfileEditPage() {
   const userId = user ? user.id : 0;
   const uid = user ? user.uid : 0;
   const email = user ? user.email : '';
-  const image = user ? user.image : UserDefaultImage;
-
+  const image =
+    user && user.image ? user.image : UserDefaultImage;
   const [changeImage, setChangeImage] = useState(image);
   const [changeNickname, setChangeNickname] =
     useState(nickname);
@@ -60,7 +60,8 @@ export default function ProfileEditPage() {
         message.error(response.data.message);
         setIsAvailableNickname(false);
       } else if (
-        response.data.message === '사용 가능합니다.'
+        response.data.message ===
+        '닉네임이 성공적으로 저장되었습니다.'
       ) {
         setIsAvailableNickname(true);
         message.success(response.data.message);
@@ -103,7 +104,10 @@ export default function ProfileEditPage() {
     // 닉네임 중복 체크 먼저 수행
     checkNicknameMutation.mutate(searchText, {
       onSuccess: (response) => {
-        if (response.data.message === '사용 가능합니다.') {
+        if (
+          response.data.message ===
+          '닉네임이 성공적으로 저장되었습니다.'
+        ) {
           var formData = new FormData();
           formData.append(
             'userData',
@@ -124,9 +128,7 @@ export default function ProfileEditPage() {
                     image: changeImage,
                   })
                 );
-                message.success(
-                  '닉네임이 성공적으로 저장되었습니다.'
-                );
+
                 navigate('/profile');
                 return response.json();
               }
@@ -176,7 +178,7 @@ export default function ProfileEditPage() {
         <div className="no-input">{name}</div>
 
         <label>로그인 된 아이디</label>
-        <div className="no-input">{userId}</div>
+        <div className="no-input">{email}</div>
 
         <label>닉네임</label>
         <div className="userEdit-nickname">

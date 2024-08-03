@@ -81,11 +81,6 @@ export default function ProfilePage() {
     dispatch(logout()); // Redux 상태 초기화
 
     message.success('로그아웃 되었습니다.');
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    localStorage.removeItem('role');
-    localStorage.removeItem('storeid');
-    localStorage.removeItem('RefreshToken');
 
     navigate('/');
   };
