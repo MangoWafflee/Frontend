@@ -1,114 +1,159 @@
-import React from "react";
-import "./ProfileEditPage.scss";
+import React, { useState } from 'react';
+import './ProfileEditPage.scss';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useNavigate } from 'react-router-dom';
+import UserDefaultImage from '../../assets/images/UserDefaultImage.png';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  selectUser,
+  selectToken,
+  updateProfile,
+} from '../../features/auth/authSlice';
+import { useMutation } from '@tanstack/react-query';
+import axios from '../../app/axios';
+import { Input, message } from 'antd';
 
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import UserDefaultImage from "../../assets/images/UserDefaultImage.png";
-
-// import { message } from "antd";
+const { Search } = Input;
 
 export default function ProfileEditPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const token = useSelector(selectToken);
+  const name = user ? user.name : 'test';
+  const nickname = user ? user.nickname : 'test';
+  const userId = user ? user.id : 0;
+  const uid = user ? user.uid : 0;
+  const email = user ? user.email : '';
+  const image = user ? user.image : UserDefaultImage;
 
-  const uid = localStorage.getItem("uid");
-  let token = localStorage.getItem("token");
+  const [changeImage, setChangeImage] = useState(image);
+  const [changeNickname, setChangeNickname] =
+    useState(nickname);
+  const [previewImage, setPreviewImage] = useState(image);
 
-  const [user, setUser] = useState({
-    name: "유저",
-    nickname: "유저닉네임",
-    image: UserDefaultImage,
-    id: "유저아이디@kakao.com",
-  });
+  const [searchText, setSearchText] = useState('');
+  const [isAvailableNickname, setIsAvailableNickname] =
+    useState(false);
 
-  const [previewImage, setPreviewImage] = useState(UserDefaultImage);
-
-  // 유저 정보 가져오기
-  useEffect(() => {
-    const fetchData = async () => {
-      let url = `https://mango.angrak.cloud/user/uid/${uid}`; // URL 확인
-      try {
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          const data = await response.json();
-          setUser({
-            ...user,
-            name: data.name,
-            nickname: data.nickname,
-            image: data.image,
-            id: data.id,
-          });
-          setPreviewImage(data.image);
-        } else if (response.status === 404) {
-          console.log("검색 결과가 없습니다.");
-        } else {
-          console.log("서버 오류");
-        }
-      } catch (error) {
-        console.error("데이터 요청 오류:", error);
-      }
-    };
-
-    fetchData();
-  }, [token]);
-
-  // form submission handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("submit");
-
-    var formData = new FormData();
-    formData.append("image", user.image); // 이미지
-    console.log(formData);
-
-    // formData에 이미지와 json을 합친
-    for (let value of formData.values()) {
-      if (value instanceof Blob) {
-        var reader = new FileReader();
-        reader.onload = function () {
-          console.log(reader.result); // Blob 내부 데이터를 콘솔에 출력
-        };
-        reader.readAsText(value);
-      } else {
-        console.log(value);
-      }
-    }
-
-    fetch(`https://mango.angrak.cloud/user/user/${uid}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `${token}`,
-      },
-      body: formData,
-    })
-      .then((response) => {
-        if (response.ok) {
-          navigate("/profile"); // 이미지 업로드 완료 후에 페이지 이동
-          return response.json(); // JSON 형식의 응답을 파싱
-        }
-        throw new Error("네트워크 응답이 실패했습니다.");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const handleChange = (e) => {
+    setSearchText(e.target.value);
+    setIsAvailableNickname(false);
   };
 
-  // image change handler
+  const checkNickname = async (nickname) => {
+    const response = await axios.post(
+      `/user/check-nickname`,
+      { nickname }
+    );
+    return response;
+  };
+
+  const checkNicknameMutation = useMutation({
+    mutationFn: checkNickname,
+    onSuccess: (response) => {
+      if (
+        response.data.message ===
+        '해당 닉네임은 존재합니다.'
+      ) {
+        message.error(response.data.message);
+        setIsAvailableNickname(false);
+      } else if (
+        response.data.message === '사용 가능합니다.'
+      ) {
+        setIsAvailableNickname(true);
+        message.success(response.data.message);
+      }
+    },
+    onError: (error) => {
+      console.log(`네트워크를 확인해주세요 : ${error}`);
+      navigate('/');
+    },
+  });
+
+  const registerNickname = async (nickname) => {
+    const response = await axios.post(
+      `/user/nickname/${uid}`,
+      { nickname },
+      {
+        headers: { Authorization: token },
+      }
+    );
+    return response;
+  };
+
+  const registerNicknameMutation = useMutation({
+    mutationFn: registerNickname,
+    onSuccess: (response) => {
+      dispatch(updateProfile({ nickname: searchText }));
+      message.success(
+        '닉네임이 성공적으로 저장되었습니다.'
+      );
+      navigate('/profile');
+    },
+    onError: (error) => {
+      alert(`문제 발생 : ${error}`);
+      navigate('/');
+    },
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // 닉네임 중복 체크 먼저 수행
+    checkNicknameMutation.mutate(searchText, {
+      onSuccess: (response) => {
+        if (response.data.message === '사용 가능합니다.') {
+          var formData = new FormData();
+          formData.append(
+            'userData',
+            JSON.stringify({ nickname: searchText })
+          );
+          formData.append('image', changeImage);
+
+          fetch(`https://mango.angrak.cloud/user/${uid}`, {
+            method: 'PUT',
+            headers: { Authorization: `${token}` },
+            body: formData,
+          })
+            .then((response) => {
+              if (response.ok) {
+                dispatch(
+                  updateProfile({
+                    nickname: searchText,
+                    image: changeImage,
+                  })
+                );
+                message.success(
+                  '닉네임이 성공적으로 저장되었습니다.'
+                );
+                navigate('/profile');
+                return response.json();
+              }
+              throw new Error(
+                '네트워크 응답이 실패했습니다.'
+              );
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          message.error(response.data.message);
+        }
+      },
+      onError: (error) => {
+        console.log(`네트워크를 확인해주세요 : ${error}`);
+        navigate('/');
+      },
+    });
+  };
+
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
-      setUser({
-        ...user,
-        image: e.target.files[0],
-      });
-      setPreviewImage(URL.createObjectURL(e.target.files[0]));
+      setChangeImage(e.target.files[0]);
+      setPreviewImage(
+        URL.createObjectURL(e.target.files[0])
+      );
     }
   };
 
@@ -121,34 +166,32 @@ export default function ProfileEditPage() {
           <input
             type="file"
             onChange={handleImageChange}
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
           />
         </label>
       </div>
 
       <div className="userEdit-info-container">
         <label>이름</label>
-        <div className="no-input">{user.name}</div>
+        <div className="no-input">{name}</div>
 
         <label>로그인 된 아이디</label>
-        <div className="no-input">{user.id}</div>
+        <div className="no-input">{userId}</div>
 
         <label>닉네임</label>
         <div className="userEdit-nickname">
-          <input
-            type="text"
-            value={user.nickname}
-            onChange={(e) =>
-              setUser({
-                ...user,
-                nickname: e.target.value,
-              })
-            }
+          <Input
+            placeholder="닉네임을 입력하세요."
+            size="large"
+            onChange={handleChange}
+            value={searchText}
           />
         </div>
       </div>
       <div className="submit-button-container">
-        <button className="submit-button">저장하기</button>
+        <button className="submit-button" type="submit">
+          저장하기
+        </button>
       </div>
     </form>
   );

@@ -11,7 +11,7 @@ export default function MainPage() {
   const navigate = useNavigate();
   const user = useSelector(selectUser); // user 객체
   const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
-  const userId = user.id; // 유저 아이디
+  const userId = user ? user.id : 0; // 유저 아이디
   // 로그인 여부 확인해서 로그인 안되어있는데 시도시 소개페이지로 이동
   useEffect(() => {
     if (false) navigate('/');
