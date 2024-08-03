@@ -9,13 +9,13 @@ export default function CameraRecognitionPage() {
   const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const happyPercentageRef = useRef(0); // useRef 초기화
   const maxHappyPercentageRef = useRef(0); // useRef 초기화
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [videoDimensions, setVideoDimensions] = useState({
     width: 360,
     height: 360,
   });
-  const [happyPercentage, setHappyPercentage] = useState(0);
   const [videoVisible, setVideoVisible] = useState(true);
   const [faceDetected, setFaceDetected] = useState(false);
   const [animationVisible, setAnimationVisible] =
@@ -46,10 +46,14 @@ export default function CameraRecognitionPage() {
 
   // 실시간 행복 치수 -> 최대 행복 치수 업데이트
   useEffect(() => {
-    if (happyPercentage > maxHappyPercentageRef.current) {
-      maxHappyPercentageRef.current = happyPercentage; // useRef로 업데이트
+    if (
+      happyPercentageRef.current >
+      maxHappyPercentageRef.current
+    ) {
+      maxHappyPercentageRef.current =
+        happyPercentageRef.current; // useRef로 업데이트
     }
-  }, [happyPercentage]);
+  }, [happyPercentageRef.current]);
 
   // 최대 행복 치수 90% 이상일 때 흔들기 애니메이션 && 웃음 정보 저장
   useEffect(() => {
@@ -163,10 +167,11 @@ export default function CameraRecognitionPage() {
           setFaceDetected(true); // 얼굴이 인식됨
           const happy =
             resizedDetections[0].expressions.happy;
-          setHappyPercentage((happy * 100).toFixed(0));
+          happyPercentageRef.current = (
+            happy * 100
+          ).toFixed(0);
         } else {
           setFaceDetected(false); // 얼굴이 인식되지 않음
-          setHappyPercentage(0);
         }
       } catch (error) {
         console.error('얼굴 인식 에러:', error);
