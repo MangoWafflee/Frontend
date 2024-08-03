@@ -84,7 +84,7 @@ export default function WeekCalendar() {
       let url = `https://mango.angrak.cloud/smile/user/${nickname}`; // URL 확인
       try {
         const response = await fetch(url, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
