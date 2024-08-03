@@ -93,6 +93,7 @@ export default function WeekCalendar() {
 
         if (response.status === 200) {
           const data = await response.json();
+          console.log(data);
           setSmileData({
             ...data,
             percentage: data.smilePercentage,
@@ -112,7 +113,7 @@ export default function WeekCalendar() {
     console.log(nickname);
     console.log(smileData);
     fetchData();
-  }, [nickname]);
+  }, []);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setOneWeekLater(),
