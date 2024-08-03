@@ -86,7 +86,7 @@ export default function CameraRecognitionPage() {
           smileData,
         });
 
-        if (response.status === 200) {
+        if (response.status === 201) {
           console.log('웃음 저장 성공');
         } else if (response.status === 404) {
           console.log('웃음 실패');
