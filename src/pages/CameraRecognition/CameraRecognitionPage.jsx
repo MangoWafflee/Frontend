@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 import './CameraRecognitionPage.scss';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../auth/authSlice';
+import { selectUser } from '../../features/auth/authSlice';
 
 export default function CameraRecognitionPage() {
   const user = useSelector(selectUser); // user 객체
