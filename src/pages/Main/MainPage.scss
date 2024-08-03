@@ -2,17 +2,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  h2 {
-    padding: 0px 20px;
-  }
+  margin-top: 20px;
+  margin-bottom: 30px;
 
   .circular {
     border-radius: 10px;
   }
   .title {
-    margin-top: 2rem;
+    color: rgb(59, 59, 59);
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: bold;
   }
   .main-menu {
