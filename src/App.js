@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import './App.scss';
+import { useDispatch } from 'react-redux';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import AchievementPage from './pages/Achievement/AchievementPage';
@@ -14,6 +15,7 @@ import NotificationCenterPage from './pages/NotificationCenter/NotificationCente
 import ProfilePage from './pages/Profile/ProfilePage';
 import ProfileEditPage from './pages/ProfileEdit/ProfileEditPage';
 import SmilePage from './pages/Smile/SmilePage';
+import { loadUserFromLocalStorage } from './utils/authUtils';
 
 const Layout = () => (
   <div className="page">
@@ -32,6 +34,12 @@ const IntroductionLayout = () => (
 );
 
 function App() {
+  const dispatch = useDispatch();
+  // 페이지 새로고침 시 로컬 스토리지에서 유저 정보를 불러옴
+  useEffect(() => {
+    loadUserFromLocalStorage(dispatch);
+  }, [dispatch]);
+
   return (
     <Routes>
       <Route element={<IntroductionLayout />}>
@@ -42,7 +50,6 @@ function App() {
         />
       </Route>
       <Route element={<Layout />}>
-        
         <Route path="/app" element={<MainPage />} />
         <Route
           path="/app/notification"

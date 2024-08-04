@@ -29,17 +29,6 @@ export default function ProfilePage() {
   const [smileCount, setSmileCount] = useState(0);
 
   useEffect(() => {
-    // 페이지 새로고침 시 로컬 스토리지에서 유저 정보를 불러옴
-    const storedUser = JSON.parse(
-      localStorage.getItem('user')
-    );
-    const storedToken = localStorage.getItem('token');
-    if (storedUser && storedToken) {
-      dispatch(
-        login({ user: storedUser, token: storedToken })
-      );
-    }
-
     const fetchData = async () => {
       const encodedNickname = encodeURIComponent(nickname);
       const url = `https://mango.angrak.cloud/smile/user/${encodedNickname}`;
