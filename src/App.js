@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import './App.scss';
 import { useDispatch } from 'react-redux';
