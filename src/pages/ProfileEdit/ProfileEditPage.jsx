@@ -33,7 +33,7 @@ export default function ProfileEditPage() {
     useState(nickname);
   const [previewImage, setPreviewImage] = useState(image);
 
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState(nickname); // 기본값을 현재 닉네임으로 설정
   const [isAvailableNickname, setIsAvailableNickname] =
     useState(false);
 
@@ -61,7 +61,7 @@ export default function ProfileEditPage() {
         setIsAvailableNickname(false);
       } else if (
         response.data.message ===
-        '닉네임이 성공적으로 저장되었습니다.'
+        '사용 가능한 닉네임입니다.'
       ) {
         setIsAvailableNickname(true);
         message.success(response.data.message);
@@ -106,7 +106,7 @@ export default function ProfileEditPage() {
       onSuccess: (response) => {
         if (
           response.data.message ===
-          '닉네임이 성공적으로 저장되었습니다.'
+          '사용 가능한 닉네임입니다.'
         ) {
           var formData = new FormData();
           formData.append(
@@ -127,6 +127,16 @@ export default function ProfileEditPage() {
                     nickname: searchText,
                     image: changeImage,
                   })
+                );
+                // 로컬 스토리지에 업데이트된 유저 정보 저장
+                const updatedUser = {
+                  ...user,
+                  nickname: searchText,
+                  image: changeImage,
+                };
+                localStorage.setItem(
+                  'user',
+                  JSON.stringify(updatedUser)
                 );
 
                 navigate('/profile');

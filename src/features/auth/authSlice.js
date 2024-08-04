@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// 초기값
 const initialState = {
   isLoggedIn: false,
   user: null,
@@ -15,15 +14,29 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.user = action.payload.user;
       state.token = action.payload.token;
+      // 로컬 스토리지에 유저 정보와 토큰 저장
+      localStorage.setItem(
+        'user',
+        JSON.stringify(action.payload.user)
+      );
+      localStorage.setItem('token', action.payload.token);
     },
     logout: (state) => {
       state.isLoggedIn = false;
       state.user = null;
       state.token = null;
+      // 로컬 스토리지에서 유저 정보와 토큰 제거
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
     },
     updateProfile: (state, action) => {
       if (state.user) {
         state.user = { ...state.user, ...action.payload };
+        // 로컬 스토리지에 업데이트된 유저 정보 저장
+        localStorage.setItem(
+          'user',
+          JSON.stringify(state.user)
+        );
       }
     },
   },
@@ -32,10 +45,9 @@ const authSlice = createSlice({
 export const { login, logout, updateProfile } =
   authSlice.actions;
 
-// 상태 선택자 정의
 export const selectIsLoggedIn = (state) =>
-  state.auth.isLoggedIn; // 로그인 여부
-export const selectUser = (state) => state.auth.user; // 유저 정보
-export const selectToken = (state) => state.auth.token; // 토큰 정보
+  state.auth.isLoggedIn;
+export const selectUser = (state) => state.auth.user;
+export const selectToken = (state) => state.auth.token;
 
 export default authSlice.reducer;

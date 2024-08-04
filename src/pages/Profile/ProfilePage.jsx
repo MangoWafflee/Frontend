@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   selectUser,
   logout,
+  login,
 } from '../../features/auth/authSlice';
 
 export default function ProfilePage() {
@@ -28,6 +29,17 @@ export default function ProfilePage() {
   const [smileCount, setSmileCount] = useState(0);
 
   useEffect(() => {
+    // 페이지 새로고침 시 로컬 스토리지에서 유저 정보를 불러옴
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
+      dispatch(
+        login({ user: storedUser, token: storedToken })
+      );
+    }
+
     const fetchData = async () => {
       const encodedNickname = encodeURIComponent(nickname);
       const url = `https://mango.angrak.cloud/smile/user/${encodedNickname}`;
@@ -53,7 +65,7 @@ export default function ProfilePage() {
       }
     };
     fetchData();
-  }, [nickname]);
+  }, [nickname, dispatch]);
 
   const handleLogout = async () => {
     try {
@@ -85,6 +97,10 @@ export default function ProfilePage() {
 
     navigate('/');
   };
+
+  if (!user) {
+    return <div>Loading...</div>; // 또는 다른 로딩 상태 컴포넌트
+  }
 
   return (
     <div id="profile-page">
