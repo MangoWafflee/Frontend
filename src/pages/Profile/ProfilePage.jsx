@@ -111,7 +111,7 @@ export default function ProfilePage() {
         <div className="user-info">
           <h2>{name}</h2>
           <p>{nickname}</p>
-          <p>{userId}</p>
+          <p>{email}</p>
         </div>
       </div>
 
