@@ -1,6 +1,6 @@
 // src/utils/authUtils.js
 
-import { login } from '../authSlice';
+import { login } from './authSlice';
 
 export const loadUserFromLocalStorage = (dispatch) => {
   const storedUser = JSON.parse(

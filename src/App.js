@@ -16,7 +16,6 @@ import ProfilePage from './pages/Profile/ProfilePage';
 import ProfileEditPage from './pages/ProfileEdit/ProfileEditPage';
 import SmilePage from './pages/Smile/SmilePage';
 import { loadUserFromLocalStorage } from './features/auth/authUtils';
-
 const Layout = () => (
   <div className="page">
     <Header />
