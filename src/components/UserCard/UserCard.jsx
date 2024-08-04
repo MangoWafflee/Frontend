@@ -1,8 +1,6 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { selectToken, selectUser } from "../../features/auth/authSlice";
 import "./UserCard.scss";
 
 export default function UserCard({
@@ -14,8 +12,21 @@ export default function UserCard({
   setIsFriendApply, // 부모 컴포넌트에서 상태를 업데이트하기 위해 추가
 }) {
   const navigate = useNavigate();
-  const user = useSelector(selectUser); // 현재 로그인한 유저 정보
-  const token = useSelector(selectToken); // 현재 로그인한 유저의 토큰
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = localStorage.getItem("token");
+    if (storedUser && storedToken) {
+      setUser(storedUser);
+      setToken(storedToken);
+    } else {
+      navigate("/");
+    }
+  }, [navigate]);
+
+  const userId = user ? user.id : 0;
 
   const handleFriendApply = async () => {
     try {
@@ -38,13 +49,15 @@ export default function UserCard({
       const data = await response.json();
       const receiverId = data.id; // The receiver's uid
 
-      console.log("친구 요청을 보낼 유저의 uid:", receiverId);
+      console.log("친구 요청을 보낼 유저의 id:", receiverId);
 
-      // Step 2: Send the friend request using the fetched uid
+      // Step 2: Send the friend request using the fetched id
       const requestPayload = {
-        senderId: user.id, // 현재 로그인한 유저의 id
-        receiverId: receiverId, // 받아온 유저의 uid
+        senderId: userId, // 현재 로그인한 유저의 id
+        receiverId: receiverId, // 받아온 유저의 id
       };
+
+      console.log("보내는 요청 데이터:", requestPayload);
 
       const requestResponse = await fetch(
         `https://mango.angrak.cloud/follow/request`,
@@ -59,6 +72,8 @@ export default function UserCard({
       );
 
       if (!requestResponse.ok) {
+        const errorData = await requestResponse.json();
+        console.error("Error response from server:", errorData);
         throw new Error("Failed to send friend request");
       }
 
