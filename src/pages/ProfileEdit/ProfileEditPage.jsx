@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProfileEditPage.scss';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,7 @@ import {
   selectUser,
   selectToken,
   updateProfile,
+  login,
 } from '../../features/auth/authSlice';
 import { useMutation } from '@tanstack/react-query';
 import axios from '../../app/axios';
@@ -21,17 +22,41 @@ export default function ProfileEditPage() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
-  const name = user ? user.name : 'test';
-  const nickname = user ? user.nickname : 'test';
-  const userId = user ? user.id : 0;
-  const uid = user ? user.uid : 0;
-  const email = user ? user.email : '';
-  const image =
-    user && user.image ? user.image : UserDefaultImage;
-  const [changeImage, setChangeImage] = useState(image);
+  const [name, setName] = useState('test');
+  const [nickname, setNickname] = useState('test');
+  const [userId, setUserId] = useState(0);
+  const [uid, setUid] = useState(0);
+  const [email, setEmail] = useState('');
+  const [image, setImage] = useState(UserDefaultImage);
+  const [changeImage, setChangeImage] = useState(
+    UserDefaultImage
+  );
   const [changeNickname, setChangeNickname] =
-    useState(nickname);
-  const [previewImage, setPreviewImage] = useState(image);
+    useState('test');
+  const [previewImage, setPreviewImage] = useState(
+    UserDefaultImage
+  );
+
+  useEffect(() => {
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
+      dispatch(
+        login({ user: storedUser, token: storedToken })
+      );
+      setName(storedUser.name);
+      setNickname(storedUser.nickname);
+      setUserId(storedUser.id);
+      setUid(storedUser.uid);
+      setEmail(storedUser.email);
+      setImage(storedUser.image || UserDefaultImage);
+      setChangeImage(storedUser.image || UserDefaultImage);
+      setChangeNickname(storedUser.nickname);
+      setPreviewImage(storedUser.image || UserDefaultImage);
+    }
+  }, [dispatch]);
 
   const [searchText, setSearchText] = useState(nickname); // 기본값을 현재 닉네임으로 설정
   const [isAvailableNickname, setIsAvailableNickname] =
