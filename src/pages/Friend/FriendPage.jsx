@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./FriendPage.scss";
 
 import { Avatar, Box, Divider, Typography } from "@mui/material";
-import { useRef } from "react";
+import { message } from "antd"; // antd의 message 컴포넌트 임포트
+import { useSelector } from "react-redux";
 import UserDefaultImage from "../../assets/images/UserDefaultImage.png";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import UserCard from "../../components/UserCard/UserCard";
+import { selectToken, selectUser } from "../../features/auth/authSlice";
 
 export default function FriendPage() {
   const [searchText, setSearchText] = useState(""); // 검색창 값
@@ -19,29 +21,31 @@ export default function FriendPage() {
 
   const [friendList, setFriendList] = useState([
     {
-      userName: "김지후",
-      userNickname: "hu",
-      userImage: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
+      name: "김지후",
+      nickname: "hu",
+      image: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
     },
     {
-      userName: "이상현",
-      userNickname: "sang",
-      //   userImage: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
+      name: "이상현",
+      nickname: "sang",
+      // image: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
     },
     {
-      userName: "김보성",
-      userNickname: "bo",
-      userImage: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
+      name: "김보성",
+      nickname: "bo",
+      image: "https://cdn-icons-png.flaticon.com/512/4715/4715329.png",
     },
   ]);
 
-  const uid = localStorage.getItem("uid");
-  let token = localStorage.getItem("token");
+  const user = useSelector(selectUser);
+  const userId = user ? user.id : 0;
+  const uid = user ? user.uid : 0;
+  const token = useSelector(selectToken);
 
   //API 요청(친구목록 가져오기)
   useEffect(() => {
     let server = `https://mango.angrak.cloud`;
-    let url = `/follow/list/${uid}`; // URL 확인
+    let url = `/follow/list/${userId}`; // URL 확인
 
     const fetchData = async () => {
       const response = await fetch(server + url, {
@@ -69,10 +73,46 @@ export default function FriendPage() {
       }
     };
     fetchData();
-  }, [friendList, token]);
+  }, [token]);
 
   const [isFriendModalOpen, setIsFriendModalOpen] = useState(false); // 친구 모달 열림/닫힘 상태
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false); // 검색 모달 열림/닫힘 상태
+
+  const checkFriendRequestStatus = async (nickname) => {
+    const server = `https://mango.angrak.cloud`;
+    const url = `/follow/received?userId=${userId}`; // API 주소 확인
+
+    try {
+      const response = await fetch(server + url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data);
+
+        const sender = data.find(
+          (request) => request.sender.nickname === nickname
+        );
+
+        if (sender) {
+          setIsFriendApply(sender.status === "PENDING");
+        } else {
+          setIsFriendApply(false);
+        }
+      } else {
+        console.log("친구 요청 상태를 가져오는 데 실패했습니다.");
+        setIsFriendApply(false);
+      }
+    } catch (error) {
+      console.error("친구 요청 상태를 가져오는 중 오류 발생:", error);
+      setIsFriendApply(false);
+    }
+  };
 
   function searchFunction(e) {
     e.preventDefault();
@@ -80,7 +120,7 @@ export default function FriendPage() {
     console.log("검색어:", searchText);
 
     // 닉네임에 해당하는 유저 조회
-    fetch(`https://mango.angrak.cloud/user/user/nickname/${searchText}`, {
+    fetch(`https://mango.angrak.cloud/user/nickname/${searchText}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -88,33 +128,42 @@ export default function FriendPage() {
       },
     })
       .then((response) => {
-        if (response.ok) {
-          const data = response.json();
-          setSearchUserName(data.name);
-
-          if (
-            data.image === undefined ||
-            data.image === null ||
-            data.image === ""
-          ) {
-            setSearchUserImage(UserDefaultImage);
-          } else {
-            setSearchUserImage(data.image);
-          }
-          setSearchUserNickname(data.nickname);
-          setSearchUserId(data.uid);
+        if (!response.ok) {
+          message.error("해당 유저를 찾을 수 없습니다."); // antd 메시지 표시
+          throw new Error("유저를 찾을 수 없습니다.");
         }
-        throw new Error("네트워크 응답이 실패했습니다.");
+        return response.json();
+      })
+      .then((data) => {
+        setSearchUserName(data.name);
+        setSearchUserNickname(data.nickname);
+        setSearchUserId(data.uid);
+
+        if (!data.image) {
+          setSearchUserImage(UserDefaultImage);
+        } else {
+          setSearchUserImage(data.image);
+        }
+
+        // friendList에 있는 nickname인지 확인
+        const isUserFriend = friendList.some(
+          (friend) => friend.nickname === data.nickname
+        );
+        setIsFriend(isUserFriend);
+
+        // 친구 요청 상태 확인
+        checkFriendRequestStatus(data.nickname);
+
+        setIsSearchModalOpen(true); // 검색 결과가 있으면 모달 열기
       })
       .catch((error) => {
         console.error(error);
+        setIsSearchModalOpen(false); // 모달 닫기
       });
 
-    //나중에 존재하는 닉네임인지 확인하는 걸로 바꿔야함
-    if (searchText === null || searchText === "") {
+    // 검색어가 비어 있는지 확인
+    if (!searchText) {
       alert("검색어를 입력해주세요.");
-    } else {
-      setIsSearchModalOpen(!isSearchModalOpen); // 모달 열기/닫기 토글
     }
   }
 
@@ -135,7 +184,7 @@ export default function FriendPage() {
 
   const handleFriendClick = (userNickname, userName, userImage) => {
     setSearchUserName(userName);
-    if (userImage === undefined || userImage === null || userImage === "") {
+    if (!userImage) {
       setSearchUserImage(UserDefaultImage);
     } else {
       setSearchUserImage(userImage);
@@ -175,23 +224,19 @@ export default function FriendPage() {
               className="friend"
               key={index}
               onClick={() =>
-                handleFriendClick(
-                  result.userNickname,
-                  result.userName,
-                  result.userImage
-                )
+                handleFriendClick(result.nickname, result.name, result.image)
               }
             >
               <Box
                 sx={{ display: "flex", alignItems: "center", margin: "0.5rem" }}
               >
                 <Avatar
-                  src={result.userImage}
-                  aria-label={result.userName}
+                  src={result.image}
+                  aria-label={result.name}
                   sx={{ width: 45, height: 45 }}
                 >
                   <Typography sx={{ fontSize: "1rem" }}>
-                    {result.userName[0]}
+                    {result.name[0]}
                   </Typography>
                 </Avatar>
                 <div className="friend-info">
@@ -205,7 +250,7 @@ export default function FriendPage() {
                     }}
                     noWrap
                   >
-                    {result.userName}
+                    {result.name}
                   </Typography>
                   <Typography
                     color="text.secondary"
@@ -216,7 +261,7 @@ export default function FriendPage() {
                     }}
                     noWrap
                   >
-                    {result.userNickname}
+                    {result.nickname}
                   </Typography>
                 </div>
               </Box>
@@ -234,7 +279,8 @@ export default function FriendPage() {
                 userNickname={searchUserNickname}
                 isFriend={true}
                 isFriendApply={isFriendApply}
-              ></UserCard>
+                setIsFriendApply={setIsFriendApply} // 상태 업데이트 함수 전달
+              />
             </div>
           </div>
         </div>
@@ -247,9 +293,10 @@ export default function FriendPage() {
                 userName={searchUserName}
                 userImage={searchUserImage}
                 userNickname={searchUserNickname}
-                isFriend={false}
+                isFriend={isFriend}
                 isFriendApply={isFriendApply}
-              ></UserCard>
+                setIsFriendApply={setIsFriendApply} // 상태 업데이트 함수 전달
+              />
             </div>
           </div>
         </div>
