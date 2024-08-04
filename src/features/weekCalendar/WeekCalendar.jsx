@@ -9,8 +9,19 @@ import { selectUser } from '../auth/authSlice';
 
 export default function WeekCalendar() {
   const navigate = useNavigate();
-  const user = useSelector(selectUser); // user 객체
-  const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
+  const [user, setUser] = useState(null);
+  const [nickname, setNickname] = useState('');
+  useEffect(() => {
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    if (storedUser) {
+      setUser(storedUser);
+      setNickname(storedUser.nickname);
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
   const [smileData, setSmileData] = useState([]);
   const [standardDay, setStandardDay] = useState(
     new Date()
