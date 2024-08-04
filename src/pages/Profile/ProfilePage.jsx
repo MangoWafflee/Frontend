@@ -54,7 +54,7 @@ export default function ProfilePage() {
       }
     };
     fetchData();
-  }, [nickname, dispatch]);
+  }, [nickname]);
 
   const handleLogout = async () => {
     try {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfileEditPage.scss';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,31 +9,27 @@ import {
   selectUser,
   selectToken,
   updateProfile,
+  login,
 } from '../../features/auth/authSlice';
 import { useMutation } from '@tanstack/react-query';
 import axios from '../../app/axios';
 import { Input, message } from 'antd';
-
-const { Search } = Input;
 
 export default function ProfileEditPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
-  const name = user ? user.name : 'test';
-  const nickname = user ? user.nickname : 'test';
-  const userId = user ? user.id : 0;
-  const uid = user ? user.uid : 0;
-  const email = user ? user.email : '';
-  const image =
-    user && user.image ? user.image : UserDefaultImage;
-  const [changeImage, setChangeImage] = useState(image);
-  const [changeNickname, setChangeNickname] =
-    useState(nickname);
-  const [previewImage, setPreviewImage] = useState(image);
 
-  const [searchText, setSearchText] = useState(nickname); // 기본값을 현재 닉네임으로 설정
+  const name = user?.name || 'test';
+  const nickname = user?.nickname || 'test';
+  const uid = user?.uid || 0;
+  const email = user?.email || '';
+  const image = user?.image || UserDefaultImage;
+
+  const [changeImage, setChangeImage] = useState(null);
+  const [searchText, setSearchText] = useState(nickname);
+  const [previewImage, setPreviewImage] = useState(image);
   const [isAvailableNickname, setIsAvailableNickname] =
     useState(false);
 
@@ -44,7 +40,7 @@ export default function ProfileEditPage() {
 
   const checkNickname = async (nickname) => {
     const response = await axios.post(
-      `/user/check-nickname`,
+      '/user/check-nickname',
       { nickname }
     );
     return response;
@@ -73,53 +69,38 @@ export default function ProfileEditPage() {
     },
   });
 
-  const registerNickname = async (nickname) => {
-    const response = await axios.post(
-      `/user/nickname/${uid}`,
-      { nickname },
-      {
-        headers: { Authorization: token },
-      }
-    );
-    return response;
-  };
-
-  const registerNicknameMutation = useMutation({
-    mutationFn: registerNickname,
-    onSuccess: (response) => {
-      dispatch(updateProfile({ nickname: searchText }));
-      message.success(
-        '닉네임이 성공적으로 저장되었습니다.'
-      );
-      navigate('/profile');
-    },
-    onError: (error) => {
-      alert(`문제 발생 : ${error}`);
-      navigate('/');
-    },
-  });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 닉네임 중복 체크 먼저 수행
+
+    if (searchText !== user.nickname) {
+      updateImageData();
+    } else {
+      updateNickname();
+      updateImageData();
+    }
+  };
+
+  const updateNickname = async () => {
+    // 닉네임이 변경되지 않았으면 중복 체크 생략
     checkNicknameMutation.mutate(searchText, {
       onSuccess: (response) => {
         if (
           response.data.message ===
           '사용 가능한 닉네임입니다.'
         ) {
-          var formData = new FormData();
-          formData.append(
-            'userData',
-            JSON.stringify({ nickname: searchText })
-          );
-          formData.append('image', changeImage);
-
-          fetch(`https://mango.angrak.cloud/user/${uid}`, {
-            method: 'PUT',
-            headers: { Authorization: `${token}` },
-            body: formData,
-          })
+          fetch(
+            `https://mango.angrak.cloud/user/nickname/${uid}`,
+            {
+              method: 'POST',
+              headers: {
+                Authorization: `${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                nickname: searchText,
+              }),
+            }
+          )
             .then((response) => {
               if (response.ok) {
                 dispatch(
@@ -127,16 +108,6 @@ export default function ProfileEditPage() {
                     nickname: searchText,
                     image: changeImage,
                   })
-                );
-                // 로컬 스토리지에 업데이트된 유저 정보 저장
-                const updatedUser = {
-                  ...user,
-                  nickname: searchText,
-                  image: changeImage,
-                };
-                localStorage.setItem(
-                  'user',
-                  JSON.stringify(updatedUser)
                 );
 
                 navigate('/profile');
@@ -158,6 +129,46 @@ export default function ProfileEditPage() {
         navigate('/');
       },
     });
+  };
+
+  const updateImageData = async () => {
+    const formData = new FormData();
+
+    if (changeImage) {
+      formData.append('image', changeImage);
+    }
+
+    try {
+      const response = await fetch(
+        `https://mango.angrak.cloud/user/${uid}`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `${token}` },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const updatedUser = {
+          ...user,
+          nickname: searchText,
+          image: changeImage || user.image,
+        };
+        dispatch(updateProfile(updatedUser));
+        localStorage.setItem(
+          'user',
+          JSON.stringify(updatedUser)
+        );
+        message.success(
+          '프로필이 성공적으로 업데이트되었습니다.'
+        );
+        navigate('/profile');
+      } else {
+        throw new Error('네트워크 응답이 실패했습니다.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleImageChange = (e) => {
