@@ -46,7 +46,7 @@ export default function ChallengePage() {
 	});
 
 	// 해당 유저의 참여중인 챌린지/참여했던 챌린지 정보 받아오는 api Query
-	const fetchUserChallenges = async () => {
+	const getUserChallenges = async () => {
 		const userId = user.uid;
 		const { data } = await axios.get(`/challenge/userchallenge/${userId}`);
 		const categorizedChallenges = {
@@ -87,7 +87,7 @@ export default function ChallengePage() {
 		isLoading: isUserChallengesLoading,
 	} = useQuery({
 		queryKey: ["userChallenges", user.uid],
-		queryFn: fetchUserChallenges,
+		queryFn: getUserChallenges,
 	});
 
 	// getUserChallenges가 완료된 후에만 getOngoingChallenges를 호출하도록 설정
