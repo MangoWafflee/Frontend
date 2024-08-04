@@ -1,16 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 import './CameraRecognitionPage.scss';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../features/auth/authSlice';
 
 export default function CameraRecognitionPage() {
-  const user = useSelector(selectUser); // user 객체
-  const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
+  const [user, setUser] = useState(null);
+  const [nickname, setNickname] = useState('test');
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const happyPercentageRef = useRef(0); // useRef 초기화
-  const maxHappyPercentageRef = useRef(0); // useRef 초기화
+  const happyPercentageRef = useRef(0);
+  const maxHappyPercentageRef = useRef(0);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [videoDimensions, setVideoDimensions] = useState({
     width: 360,
@@ -21,7 +19,16 @@ export default function CameraRecognitionPage() {
   const [animationVisible, setAnimationVisible] =
     useState(false);
 
-  // face-api 모델 로드 및 초기화 하는 거
+  useEffect(() => {
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    if (storedUser) {
+      setUser(storedUser);
+      setNickname(storedUser.nickname);
+    }
+  }, []);
+
   useEffect(() => {
     const loadModels = async () => {
       const MODEL_URL = process.env.PUBLIC_URL + '/models';
@@ -44,31 +51,29 @@ export default function CameraRecognitionPage() {
     loadModels();
   }, []);
 
-  // 실시간 행복 치수 -> 최대 행복 치수 업데이트
   useEffect(() => {
     if (
       happyPercentageRef.current >
       maxHappyPercentageRef.current
     ) {
       maxHappyPercentageRef.current =
-        happyPercentageRef.current; // useRef로 업데이트
+        happyPercentageRef.current;
     }
   }, [happyPercentageRef.current]);
 
-  // 최대 행복 치수 90% 이상일 때 흔들기 애니메이션 && 웃음 정보 저장
   useEffect(() => {
     if (maxHappyPercentageRef.current > 90) {
       const fetchData = async () => {
-        let url = `https://mango.angrak.cloud/smile/save`; // URL 확인
+        let url = `https://mango.angrak.cloud/smile/save`;
         const smileData = {
           smilePercentage: maxHappyPercentageRef.current,
-          date: new Date().toISOString().split('T')[0], // 'YYYY-MM-DD' 형식으로 날짜 변환
+          date: new Date().toISOString().split('T')[0],
           time: new Date().toLocaleTimeString('en-GB', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
-          }), // 'HH:MM:SS' 형식으로 시간 변환
-          nickname: nickname, // 닉네임 확인
+          }),
+          nickname: nickname,
         };
 
         console.log(smileData);
@@ -107,7 +112,6 @@ export default function CameraRecognitionPage() {
     }
   }, [maxHappyPercentageRef.current]);
 
-  // 비디오 시작
   const startVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video: {} })
@@ -117,8 +121,8 @@ export default function CameraRecognitionPage() {
           'loadedmetadata',
           () => {
             setVideoDimensions({
-              width: 360, // 고정된 너비
-              height: 360, // 고정된 높이
+              width: 360,
+              height: 360,
             });
           }
         );
@@ -128,7 +132,6 @@ export default function CameraRecognitionPage() {
       );
   };
 
-  // 비디오 재생 시 얼굴 인식
   const handleVideoOnPlay = async () => {
     if (!videoRef.current) return;
 
@@ -164,27 +167,25 @@ export default function CameraRecognitionPage() {
         );
 
         if (resizedDetections.length > 0) {
-          setFaceDetected(true); // 얼굴이 인식됨
+          setFaceDetected(true);
           const happy =
             resizedDetections[0].expressions.happy;
           happyPercentageRef.current = (
             happy * 100
           ).toFixed(0);
         } else {
-          setFaceDetected(false); // 얼굴이 인식되지 않음
+          setFaceDetected(false);
         }
       } catch (error) {
         console.error('얼굴 인식 에러:', error);
       }
     };
-    // 0.5초마다 얼굴 인식
+
     const intervalId = setInterval(detectFaces, 500);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
   };
 
-  // 모델 로드 후 비디오 시작 및 얼굴 인식 시작
   useEffect(() => {
     if (modelsLoaded) {
       startVideo();
@@ -195,7 +196,6 @@ export default function CameraRecognitionPage() {
     }
   }, [modelsLoaded]);
 
-  // 얼굴 감지 시 비디오 주변 원 생성 애니메이션 추가
   useEffect(() => {
     if (modelsLoaded && faceDetected) {
       setAnimationVisible(true);
@@ -211,7 +211,6 @@ export default function CameraRecognitionPage() {
     }
   }, [modelsLoaded, faceDetected]);
 
-  // url 링크 공유
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -230,6 +229,7 @@ export default function CameraRecognitionPage() {
       );
     }
   };
+
   return (
     <div className="camera-recognition-container">
       {videoVisible ? (
@@ -250,17 +250,9 @@ export default function CameraRecognitionPage() {
               )}
           </div>
           <div className="emotion-display">
-            {/* <div className="happy-percentage">
-             {happyPercentage}%
-            </div> */}
             <div className="max-happy-percentage">
               {maxHappyPercentageRef.current}%
             </div>
-            {/* <div className="detected-text">
-              {faceDetected
-                ? '얼굴이 인식되었습니다.'
-                : '얼굴이 인식되지 않았습니다.'}
-            </div> */}
             <div className="happy-text">
               {maxHappyPercentageRef.current > 90
                 ? '행복한 얼굴이에요!'

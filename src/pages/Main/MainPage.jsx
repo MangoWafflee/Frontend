@@ -2,23 +2,32 @@ import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import WeekCalendar from '../../features/weekCalendar/WeekCalendar';
 import './MainPage.scss';
-import { Progress, Card, Button } from 'antd';
+import { Progress, Card } from 'antd';
 import RandomJoke from '../../components/RandomJoke/RandomJoke';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../features/auth/authSlice';
 
 export default function MainPage() {
   const navigate = useNavigate();
-  const user = useSelector(selectUser); // user 객체
+  const [user, setUser] = React.useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
+      setUser(storedUser);
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
   const nickname = user ? user.nickname : 'test'; // 닉네임 꺼내 쓰기
   const userId = user ? user.id : 0; // 유저 아이디
-  // 로그인 여부 확인해서 로그인 안되어있는데 시도시 소개페이지로 이동
-  useEffect(() => {
-    if (false) navigate('/');
-  }, [navigate]);
 
   // 유저 개인기록 뱃지 조회
   useEffect(() => {
+    if (!user) return;
+
     const fetchData = async () => {
       let url = `https://mango.angrak.cloud/userbadge/${userId}`; // URL 확인
       try {
@@ -42,7 +51,8 @@ export default function MainPage() {
       }
     };
     fetchData();
-  }, [nickname]);
+  }, [user, userId]);
+
   return (
     <div className="main-page">
       <WeekCalendar />
@@ -53,7 +63,7 @@ export default function MainPage() {
           <Card
             title="개인 기록 🚩"
             extra={
-              <Link to="/profile/achievement/ㅇㅇㅇ">
+              <Link to={`/profile/achievement/${nickname}`}>
                 {'More'}
               </Link>
             }

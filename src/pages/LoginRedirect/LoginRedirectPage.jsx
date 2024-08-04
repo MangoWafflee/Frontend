@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../app/axios';
-import {
-  useMutation,
-  useQuery,
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import './LoginRedirectPage.scss';
 import Loading from '../../components/Loading/Loading';
 import { Input, Button, message } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  login,
-  selectUser,
-  selectIsLoggedIn,
-  selectToken,
-} from '../../features/auth/authSlice';
 
 const { Search } = Input;
 
 export default function LoginRedirectPage() {
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  const user = useSelector(selectUser);
-  const token = useSelector(selectToken);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [hasNickname, setHasNickname] = useState(true); // 유저의 닉네임 여부
   const [searchText, setSearchText] = useState(''); // 닉네임칸에 적는 텍스트
   const [isAvailableNickname, setIsAvailableNickname] =
     useState(false); // 사용 가능한 닉네임 여부
+
+  const getUserFromLocalStorage = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+    return { user, token };
+  };
+
+  const saveUserToLocalStorage = (user, token) => {
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
+  };
 
   // 닉네임 중복 체크 버튼 클릭 시
   const handleSearch = () => {
@@ -84,16 +81,13 @@ export default function LoginRedirectPage() {
 
   // 닉네임 등록 api
   const registerNickname = async (nickname) => {
+    const { user, token } = getUserFromLocalStorage();
     const uid = user.uid;
     const response = await axios.post(
       `/user/nickname/${uid}`,
+      { nickname: nickname },
       {
-        nickname: nickname,
-      },
-      {
-        headers: {
-          Authorization: token,
-        },
+        headers: { Authorization: token },
       }
     );
     return response;
@@ -103,6 +97,9 @@ export default function LoginRedirectPage() {
   const registerNicknameMutation = useMutation({
     mutationFn: registerNickname,
     onSuccess: (response) => {
+      const { user, token } = getUserFromLocalStorage();
+      user.nickname = searchText;
+      saveUserToLocalStorage(user, token);
       console.log(response);
       navigate('/app');
     },
@@ -116,9 +113,7 @@ export default function LoginRedirectPage() {
   const getTokenAndUserData = async (code) => {
     const response = await axios.post(
       `/user/oauth2/code/kakao`,
-      {
-        code: code,
-      }
+      { code: code }
     );
     return response;
   };
@@ -129,9 +124,10 @@ export default function LoginRedirectPage() {
     onSuccess: (response) => {
       console.log(response);
       // 유저 정보 저장
-      dispatch(login(response.data));
+      const { user, token } = response.data;
+      saveUserToLocalStorage(user, token);
       // 닉네임 null 이면 닉네임 설정 창 띄우기
-      if (response.data.user.nickname === null) {
+      if (user.nickname === null) {
         setHasNickname(false);
       }
       // null이 아니면 메인 페이지로

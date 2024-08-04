@@ -7,17 +7,23 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import UserDefaultImage from '../../assets/images/UserDefaultImage.png';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  selectUser,
-  logout,
-  login,
-} from '../../features/auth/authSlice';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
+  const [user, setUser] = useState(null);
+  const [smileCount, setSmileCount] = useState(0);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    if (storedUser) {
+      setUser(storedUser);
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
   const name = user ? user.name : 'test';
   const nickname = user ? user.nickname : 'test';
   const userId = user ? user.id : 0;
@@ -25,8 +31,6 @@ export default function ProfilePage() {
   const email = user ? user.email : '';
   const image =
     user && user.image ? user.image : UserDefaultImage;
-
-  const [smileCount, setSmileCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +84,9 @@ export default function ProfilePage() {
       console.error('카카오 로그아웃 오류:', error);
     }
 
-    dispatch(logout()); // Redux 상태 초기화
+    // Redux 상태 초기화
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
 
     message.success('로그아웃 되었습니다.');
 

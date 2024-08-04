@@ -4,22 +4,27 @@ import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import UserDefaultImage from '../../assets/images/UserDefaultImage.png';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  selectUser,
-  selectToken,
-  updateProfile,
-  login,
-} from '../../features/auth/authSlice';
+import { Input, message } from 'antd';
 import { useMutation } from '@tanstack/react-query';
 import axios from '../../app/axios';
-import { Input, message } from 'antd';
 
 export default function ProfileEditPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
-  const token = useSelector(selectToken);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
+      setUser(storedUser);
+      setToken(storedToken);
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const name = user?.name || 'test';
   const nickname = user?.nickname || 'test';
@@ -93,7 +98,6 @@ export default function ProfileEditPage() {
   };
 
   const updateNickname = async () => {
-    // 닉네임이 변경되지 않았으면 중복 체크 생략
     checkNicknameMutation.mutate(searchText, {
       onSuccess: (response) => {
         if (response.data.message === '사용 가능합니다.') {
@@ -116,7 +120,11 @@ export default function ProfileEditPage() {
                   ...user,
                   nickname: searchText,
                 };
-                dispatch(updateProfile(updatedUser));
+                setUser(updatedUser);
+                localStorage.setItem(
+                  'user',
+                  JSON.stringify(updatedUser)
+                );
                 message.success(
                   '닉네임이 성공적으로 업데이트되었습니다.'
                 );
@@ -163,8 +171,11 @@ export default function ProfileEditPage() {
           ...user,
           image: changeImage || user.image,
         };
-        dispatch(updateProfile(updatedUser));
-
+        setUser(updatedUser);
+        localStorage.setItem(
+          'user',
+          JSON.stringify(updatedUser)
+        );
         message.success(
           '프로필이 성공적으로 업데이트되었습니다.'
         );
@@ -179,12 +190,9 @@ export default function ProfileEditPage() {
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
-      setChangeImage(
-        URL.createObjectURL(e.target.files[0])
-      );
-      setPreviewImage(
-        URL.createObjectURL(e.target.files[0])
-      );
+      const file = e.target.files[0];
+      setChangeImage(file);
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
