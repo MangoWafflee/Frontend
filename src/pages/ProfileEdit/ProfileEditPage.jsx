@@ -72,9 +72,21 @@ export default function ProfileEditPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (
+      searchText === user.nickname &&
+      (changeImage === null || changeImage === user.image)
+    ) {
+      message.error('변경된 사항이 없습니다.');
+      return;
+    }
     if (searchText !== user.nickname) {
+      updateNickname();
+    } else if (changeImage !== user.image) {
       updateImageData();
-    } else {
+    } else if (
+      searchText !== user.nickname &&
+      changeImage !== user.image
+    ) {
       updateNickname();
       updateImageData();
     }
@@ -84,10 +96,7 @@ export default function ProfileEditPage() {
     // 닉네임이 변경되지 않았으면 중복 체크 생략
     checkNicknameMutation.mutate(searchText, {
       onSuccess: (response) => {
-        if (
-          response.data.message ===
-          '사용 가능한 닉네임입니다.'
-        ) {
+        if (response.data.message === '사용 가능합니다.') {
           fetch(
             `https://mango.angrak.cloud/user/nickname/${uid}`,
             {
@@ -103,13 +112,14 @@ export default function ProfileEditPage() {
           )
             .then((response) => {
               if (response.ok) {
-                dispatch(
-                  updateProfile({
-                    nickname: searchText,
-                    image: changeImage,
-                  })
+                const updatedUser = {
+                  ...user,
+                  nickname: searchText,
+                };
+                dispatch(updateProfile(updatedUser));
+                message.success(
+                  '닉네임이 성공적으로 업데이트되었습니다.'
                 );
-
                 navigate('/profile');
                 return response.json();
               }
@@ -151,14 +161,10 @@ export default function ProfileEditPage() {
       if (response.ok) {
         const updatedUser = {
           ...user,
-          nickname: searchText,
           image: changeImage || user.image,
         };
         dispatch(updateProfile(updatedUser));
-        localStorage.setItem(
-          'user',
-          JSON.stringify(updatedUser)
-        );
+
         message.success(
           '프로필이 성공적으로 업데이트되었습니다.'
         );
@@ -173,7 +179,9 @@ export default function ProfileEditPage() {
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
-      setChangeImage(e.target.files[0]);
+      setChangeImage(
+        URL.createObjectURL(e.target.files[0])
+      );
       setPreviewImage(
         URL.createObjectURL(e.target.files[0])
       );
