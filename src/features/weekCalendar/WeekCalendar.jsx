@@ -4,8 +4,6 @@ import './WeekCalendar.scss';
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../auth/authSlice';
 
 export default function WeekCalendar() {
   const navigate = useNavigate();
