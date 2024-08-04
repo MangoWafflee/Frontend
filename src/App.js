@@ -35,23 +35,6 @@ const IntroductionLayout = () => (
 );
 
 function App() {
-  const dispatch = useDispatch();
-  const reduxUser = useSelector(selectUser);
-
-  useEffect(() => {
-    loadUserFromLocalStorage(dispatch);
-  }, [dispatch]);
-
-  useEffect(() => {
-    const localStorageUser = JSON.parse(
-      localStorage.getItem('user')
-    );
-    const storedToken = localStorage.getItem('token');
-    console.log('Local Storage User:', localStorageUser);
-    console.log('Local Storage Token:', storedToken);
-    console.log('Redux User:', reduxUser);
-  }, [reduxUser]);
-
   return (
     <Routes>
       <Route element={<IntroductionLayout />}>

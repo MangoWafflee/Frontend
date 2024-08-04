@@ -13,6 +13,20 @@ export default function ProfileEditPage() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
 
+  const [name, setName] = useState('test');
+  const [nickname, setNickname] = useState('test');
+  const [uid, setUid] = useState(0);
+  const [email, setEmail] = useState('');
+  const [image, setImage] = useState(UserDefaultImage);
+
+  const [changeImage, setChangeImage] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [previewImage, setPreviewImage] = useState(
+    UserDefaultImage
+  );
+  const [isAvailableNickname, setIsAvailableNickname] =
+    useState(false);
+
   useEffect(() => {
     const storedUser = JSON.parse(
       localStorage.getItem('user')
@@ -21,22 +35,17 @@ export default function ProfileEditPage() {
     if (storedUser && storedToken) {
       setUser(storedUser);
       setToken(storedToken);
+      setName(storedUser.name || 'test');
+      setNickname(storedUser.nickname || 'test');
+      setUid(storedUser.uid || 0);
+      setEmail(storedUser.email || '');
+      setImage(storedUser.image || UserDefaultImage);
+      setPreviewImage(storedUser.image || UserDefaultImage);
+      setSearchText(storedUser.nickname || '');
     } else {
       navigate('/');
     }
   }, [navigate]);
-
-  const name = user?.name || 'test';
-  const nickname = user?.nickname || 'test';
-  const uid = user?.uid || 0;
-  const email = user?.email || '';
-  const image = user?.image || UserDefaultImage;
-
-  const [changeImage, setChangeImage] = useState(null);
-  const [searchText, setSearchText] = useState(nickname);
-  const [previewImage, setPreviewImage] = useState(image);
-  const [isAvailableNickname, setIsAvailableNickname] =
-    useState(false);
 
   const handleChange = (e) => {
     setSearchText(e.target.value);
