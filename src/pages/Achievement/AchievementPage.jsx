@@ -84,11 +84,13 @@ export default function AchievementPage() {
                     ...badge,
                     isAchieved: userBadge.isAchieved,
                     achievedAt: userBadge.achievedAt,
+                    userBadgeId: userBadge.id,
                   }
                 : {
                     ...badge,
-                    isAchieved: '미획득',
+                    isAchieved: '미진행',
                     achievedAt: null,
+                    userBadgeId: null,
                   };
             }
           );
@@ -105,6 +107,32 @@ export default function AchievementPage() {
     };
     fetchData();
   }, [user]);
+
+  // 뱃지 진행중으로 바꾸기~
+  const handleBadgeClick = async (userBadgeId) => {
+    let url = `https://mango.angrak.cloud/badge/userbadge/${userBadgeId}`;
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isAchieved: '진행중' }),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data); // 응답 데이터 출력
+        // 필요시 상태 업데이트
+      } else if (response.status === 404) {
+        console.log('검색 결과가 없습니다.');
+      } else {
+        console.log('서버 오류');
+      }
+    } catch (error) {
+      console.error('데이터 요청 오류:', error);
+    }
+  };
 
   const badgeImages = [
     level1,
@@ -125,6 +153,7 @@ export default function AchievementPage() {
       title: badge.title,
       isAchieved: badge.isAchieved,
       achievedAt: badge.achievedAt,
+      userBadgeId: badge.userBadgeId,
       img: badgeImages[index % badgeImages.length],
     })
   );
@@ -173,6 +202,10 @@ export default function AchievementPage() {
             <div
               className="badge"
               key={`individual-${record.id}`}
+              onClick={() =>
+                record.isAchieved === null &&
+                handleBadgeClick(record.userBadgeId)
+              }
             >
               <img
                 src={record.img}
