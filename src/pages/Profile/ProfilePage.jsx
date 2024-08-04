@@ -23,7 +23,7 @@ export default function ProfilePage() {
   const uid = user ? user.uid : 0;
   const email = user ? user.email : '';
   const image =
-    user.image == null ? UserDefaultImage : user.images;
+    user && user.image ? user.image : UserDefaultImage;
 
   const [smileCount, setSmileCount] = useState(0);
 
