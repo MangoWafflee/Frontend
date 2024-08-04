@@ -106,6 +106,33 @@ export default function WeekCalendar() {
     fetchData();
   }, [nickname]);
 
+  const getSmileCountByDate = (dateString) => {
+    return smileData.filter(
+      (smile) => smile.date === dateString
+    ).length;
+  };
+
+  const getSmileEmoji = (count) => {
+    switch (count) {
+      case 1:
+        return '🙂';
+      case 2:
+        return '😊';
+      case 3:
+        return '🤭';
+      case 4:
+        return '😄';
+      case 5:
+        return '😁';
+      case 6:
+        return '😂';
+      case 7:
+        return '🤣';
+      default:
+        return count > 7 ? '😎' : ''; // count가 8 이상일 때 '😎' 반환
+    }
+  };
+
   const handlers = useSwipeable({
     onSwipedLeft: () => setOneWeekLater(),
     onSwipedRight: () => setOneWeekAgo(),
@@ -151,11 +178,15 @@ export default function WeekCalendar() {
               )}
             </div>
             <div className="calendar-day">
-              {smileData.some(
-                (smile) => smile.date === date.dateString
-              )
-                ? '😃'
-                : date.day}
+              {getSmileCountByDate(date.dateString) > 0 ? (
+                <div>
+                  {getSmileEmoji(
+                    getSmileCountByDate(date.dateString)
+                  )}
+                </div>
+              ) : (
+                date.day
+              )}
             </div>
           </div>
         ))}
