@@ -120,7 +120,7 @@ export default function MainPage() {
                   <Progress
                     percent={progressPercent}
                     status="active"
-                    style={{ width: '60%', marginLeft: 10 }}
+                    className="badge-progress"
                   />
                 </div>
               </div>
