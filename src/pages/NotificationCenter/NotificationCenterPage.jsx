@@ -12,11 +12,8 @@ const getRelativeTime = (dateString) => {
 
   // Convert to Korean time zone
   const requestDate = new Date(dateString);
-  const koreanTime = new Date(
-    requestDate.toLocaleString("en-US", { timeZone: "Asia/Seoul" })
-  );
 
-  const diffInSeconds = Math.floor((now - koreanTime) / 1000);
+  const diffInSeconds = Math.floor((now - requestDate) / 1000);
 
   const secondsInMinute = 60;
   const secondsInHour = secondsInMinute * 60;
@@ -158,7 +155,9 @@ export default function NotificationCenter() {
     const newSmileNotifications = [];
 
     for (const friend of friends) {
+      console.log(`Fetching smile data for friend: ${friend.nickname}`);
       const smileData = await fetchSmileData(friend.nickname);
+      console.log(`Smile data for ${friend.nickname}: `, smileData);
       if (smileData.length > 0) {
         newSmileNotifications.push(
           ...smileData.map((smile) => ({
@@ -171,25 +170,9 @@ export default function NotificationCenter() {
       }
     }
 
-    const existingNotificationKeys = new Set(
-      smileNotifications.map(
-        (notif) => `${notif.friendNickname}-${notif.date}-${notif.time}`
-      )
-    );
-
-    const uniqueNewSmileNotifications = newSmileNotifications.filter(
-      (notif) =>
-        !existingNotificationKeys.has(
-          `${notif.friendNickname}-${notif.date}-${notif.time}`
-        )
-    );
-
-    if (uniqueNewSmileNotifications.length > 0) {
-      console.log("New Smile Notifications: ", uniqueNewSmileNotifications);
-      setSmileNotifications((prev) => [
-        ...prev,
-        ...uniqueNewSmileNotifications,
-      ]);
+    if (newSmileNotifications.length > 0) {
+      console.log("New Smile Notifications: ", newSmileNotifications);
+      setSmileNotifications((prev) => [...prev, ...newSmileNotifications]);
     }
   };
 
