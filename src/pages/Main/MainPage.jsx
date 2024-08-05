@@ -99,7 +99,7 @@ export default function MainPage() {
             title="개인 기록 🚩"
             extra={
               <Link to={`/profile/achievement/${nickname}`}>
-                {'More'}
+                {'더보기'}
               </Link>
             }
             styles={{ body: { padding: 10 } }}
@@ -137,7 +137,7 @@ export default function MainPage() {
         <div className="challenge-container circular">
           <Card
             title="챌린지🔥"
-            extra={<Link to="/challenge">{'More'}</Link>}
+            extra={<Link to="/challenge">{'더보기'}</Link>}
             styles={{ body: { padding: 10 } }}
           >
             {isUserChallengesLoading ? (
