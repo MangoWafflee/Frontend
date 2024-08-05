@@ -89,6 +89,7 @@ export default function NotificationCenter() {
       }
 
       const data = await response.json();
+      console.log("Notifications: ", data);
       setNotifications(data);
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -116,6 +117,7 @@ export default function NotificationCenter() {
       }
 
       const data = await response.json();
+      console.log("Friends: ", data);
       setFriends(data);
     } catch (error) {
       console.error("Error fetching friends:", error);
@@ -157,7 +159,7 @@ export default function NotificationCenter() {
             ...smile,
             friendName: friend.name,
             friendNickname: friend.nickname,
-            friendImage: friend.image, // 친구 이미지 추가
+            friendImage: friend.image,
           }))
         );
       }
@@ -177,6 +179,7 @@ export default function NotificationCenter() {
     );
 
     if (uniqueNewSmileNotifications.length > 0) {
+      console.log("Smile Notifications: ", uniqueNewSmileNotifications);
       setSmileNotifications((prev) => [
         ...prev,
         ...uniqueNewSmileNotifications,
@@ -207,6 +210,8 @@ export default function NotificationCenter() {
 
       if (response.ok) {
         message.success("친구가 되었어요!");
+        await fetchFriends(); // 친구 목록 갱신
+        await updateSmileNotifications(); // 웃음 알림 갱신
 
         setNotifications((prevNotifications) =>
           prevNotifications.filter(
