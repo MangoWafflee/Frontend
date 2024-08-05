@@ -168,7 +168,7 @@ export default function MainPage() {
                         {challenge.challenge.title}
                       </span>
                       <Progress
-                        percent={
+                        percent={challenge.completedAttempts ===0 ? 0 :
                           Math.floor((challenge.challenge.totalAttempts / challenge.completedAttempts) * 100)
                         }
                         status="active"
