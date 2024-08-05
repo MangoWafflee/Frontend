@@ -6,55 +6,71 @@ main {
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 0.5rem;
 
-  hr {
-    margin: 5px 0px;
+  .notifications-empty {
+    text-align: center; /* 텍스트를 가운데로 정렬합니다. */
+    color: #888; /* 연한 색으로 색상을 변경합니다. */
+    position: absolute; /* 위치를 절대적으로 설정합니다. */
+    top: 30%; /* 부모 요소의 상단을 기준으로 30% 위치로 이동합니다. */
+    left: 50%; /* 부모 요소의 왼쪽을 기준으로 50% 위치로 이동합니다. */
+    transform: translate(
+      -50%,
+      -100%
+    ); /* 요소의 가로 세로 중앙으로 이동합니다. */
   }
 
   .notification {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px; /* 요소들 사이에 10px의 간격을 추가합니다 */
+    margin-bottom: 0.3rem; /* 알림들 사이에 간격을 추가합니다 */
+    padding: 0.3rem; /* 알림 내부에 패딩을 추가합니다 */
 
     .user-info {
       display: flex;
       align-items: center;
-
-      img {
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-      }
-
-      .timestamp {
-        font-size: 12px;
-        color: gray;
-      }
-
-      .friend-request-info {
-        display: flex;
-        flex-direction: column;
-        margin-right: 0.3em;
-
-        span:first-child {
-          font-size: 16px;
-        }
-
-        span:nth-child(2) {
-          font-size: 12px;
-          color: gray;
-        }
-      }
     }
 
     .button-container {
+      display: flex;
+      align-items: center;
+      gap: 10px; /* 버튼들 사이에 10px의 간격을 추가합니다 */
+
+      .timestamp {
+        font-size: 0.8rem;
+        color: gray;
+      }
+
       .accept-button {
-        padding: 5px;
-        background-color: blue;
-        color: white;
+        background-image: linear-gradient(
+          to right top,
+          hsl(244, 100%, 50%),
+          #9554ff
+        );
+        color: white; /* 텍스트 색상을 흰색으로 변경합니다 */
+        border: none;
+        border-radius: 10px;
+        padding: 10px 5px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.1s ease;
+        font-size: 0.8rem; /* 텍스트 크기를 약간 증가시킵니다 */
       }
 
       .reject-button {
+        background-color: #e7e7e7; /* 배경색을 밝은 회색으로 설정합니다 */
+        color: rgb(
+          122,
+          122,
+          122
+        ); /* 텍스트 색상을 어두운 회색으로 설정합니다 */
+        border: none;
+        border-radius: 10px;
+        padding: 10px 7px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.1s ease;
+        font-size: 0.8rem; /* 텍스트 크기를 약간 증가시킵니다 */
       }
     }
   }

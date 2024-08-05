@@ -1,4 +1,5 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./UserCard.scss";
@@ -77,6 +78,7 @@ export default function UserCard({
         throw new Error("Failed to send friend request");
       }
 
+      message.success("친구가 요청을 보냈어요!");
       console.log("친구 요청을 보냈습니다.");
       setIsFriendApply(true); // 친구 요청을 보낸 후 상태 업데이트
     } catch (error) {
