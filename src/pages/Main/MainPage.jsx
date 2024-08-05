@@ -30,7 +30,7 @@ export default function MainPage() {
     }
   }, [navigate]);
 
-  const { badgeList, smilecount, error } =
+  const { badgeList, smilecount, badgeImages, error } =
     useFetchUserBadges(uid, token);
 
   // 진행 중인 배지 중 가장 작은 requiredSmileCount를 가진 배지 찾기
@@ -40,6 +40,7 @@ export default function MainPage() {
       (a, b) => a.requiredSmileCount - b.requiredSmileCount
     )[0];
 
+  // 현재 진행중인 배지의 진행률 계산
   const progressPercent = inProgressBadge
     ? Math.min(
         (smilecount / inProgressBadge.requiredSmileCount) *
@@ -47,6 +48,11 @@ export default function MainPage() {
         100
       )
     : 0;
+
+  // 현재 진행중인 배지의 이미지
+  const badgeImage = inProgressBadge
+    ? badgeImages[inProgressBadge.id % badgeImages.length]
+    : null;
 
   // 해당 유저의 참여중인 챌린지/참여했던 챌린지 정보 받아오는 api Query
   const getUserChallenges = async () => {
@@ -99,15 +105,26 @@ export default function MainPage() {
             {inProgressBadge ? (
               <div className="challenge circular">
                 <span>{inProgressBadge.title}</span>
+                {/* 뱃지 이미지 넣기 */}
+                {badgeImage && (
+                  <img
+                    src={badgeImage}
+                    alt="badge"
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                    }}
+                  />
+                )}
                 <Progress
                   percent={progressPercent}
                   status="active"
-                  style={{ width: '80%' }}
+                  style={{ width: '50%', marginLeft: 20 }}
                 />
               </div>
             ) : (
               <div className="challenge">
-                진행 중인 배지가 없습니다.
+                😎 모든 기록을 완료했습니다! 😎
               </div>
             )}
           </Card>
