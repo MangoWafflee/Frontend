@@ -85,7 +85,7 @@ export default function ChallengePage() {
 			// userChallenges.participatingChallengeList에 포함되지 않는 항목만 남기기
 			return !userChallenges.participatingChallengeList.some(
 				(participatingChallenge) =>
-					participatingChallenge.id === challenge.challenge.id
+					participatingChallenge.challenge.id === challenge.id
 			);
 		});
 
