@@ -5,48 +5,24 @@ import { useNavigate } from "react-router-dom";
 import UserDefaultImage from "../../assets/images/UserDefaultImage.png";
 import "./NotificationCenterPage.scss";
 
+import dayjs from "dayjs";
+import "dayjs/locale/ko"; // Import Korean locale for Day.js
+import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+import "./NotificationCenterPage.scss";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+// Initialize Day.js plugins
+dayjs.extend(relativeTime);
+dayjs.extend(timezone);
+dayjs.extend(utc);
+dayjs.locale("ko"); // Set Day.js locale to Korean
+
 const getRelativeTime = (dateString) => {
-  const now = new Date();
-
-  // Convert to Korean time zone
-  const requestDate = new Date(dateString);
-
-  const diffInSeconds = Math.floor((now - requestDate) / 1000);
-
-  const secondsInMinute = 60;
-  const secondsInHour = secondsInMinute * 60;
-  const secondsInDay = secondsInHour * 24;
-  const secondsInWeek = secondsInDay * 7;
-  const secondsInMonth = secondsInDay * 30;
-  const secondsInYear = secondsInDay * 365;
-
-  let result;
-
-  if (diffInSeconds < secondsInMinute) {
-    result = "방금 전";
-  } else if (diffInSeconds < secondsInHour) {
-    const minutes = Math.floor(diffInSeconds / secondsInMinute);
-    result = `${minutes}분 전`;
-  } else if (diffInSeconds < secondsInDay) {
-    const hours = Math.floor(diffInSeconds / secondsInHour);
-    result = `${hours}시간 전`;
-  } else if (diffInSeconds < secondsInWeek) {
-    const days = Math.floor(diffInSeconds / secondsInDay);
-    result = `${days}일 전`;
-  } else if (diffInSeconds < secondsInMonth) {
-    const weeks = Math.floor(diffInSeconds / secondsInWeek);
-    result = `${weeks}주 전`;
-  } else if (diffInSeconds < secondsInYear) {
-    const months = Math.floor(diffInSeconds / secondsInMonth);
-    result = `${months}개월 전`;
-  } else {
-    const years = Math.floor(diffInSeconds / secondsInYear);
-    result = `${years}년 전`;
-  }
-
-  return result;
+  const koreanTime = dayjs(dateString).tz("Asia/Seoul");
+  return koreanTime.fromNow();
 };
 
 export default function NotificationCenter() {
