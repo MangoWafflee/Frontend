@@ -83,7 +83,7 @@ export default function ChallengePage() {
 		const { data } = await axios.get("/challenge/going");
 		const ongoingChallenges = data.filter((challenge) => {
 			// userChallenges.participatingChallengeList에 포함되지 않는 항목만 남기기
-			return !userChallenges.participatingChallengeList.some(
+			return userChallenges.participatingChallengeList.some(
 				(participatingChallenge) =>
 					participatingChallenge.id === challenge.id
 			);
