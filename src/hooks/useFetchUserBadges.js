@@ -30,6 +30,7 @@ const useFetchUserBadges = (uid, token) => {
           setError('검색 결과가 없습니다.');
         } else {
           console.log('서버 오류');
+          console.log(response.status);
           setError('서버 오류가 발생했습니다.');
         }
       } catch (error) {
