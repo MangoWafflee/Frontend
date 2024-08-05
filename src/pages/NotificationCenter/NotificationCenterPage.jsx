@@ -242,69 +242,103 @@ export default function NotificationCenter() {
     }
   }, [userId, token]);
 
+  // 알림 병합 및 정렬
+  const combinedNotifications = [
+    ...notifications.map((notif) => ({ ...notif, type: "follow" })),
+    ...smileNotifications.map((notif) => ({ ...notif, type: "smile" })),
+  ].sort(
+    (a, b) =>
+      new Date(b.requestDate || `${b.date}T${b.time}`) -
+      new Date(a.requestDate || `${a.date}T${a.time}`)
+  );
+
   return (
     <div>
       <main>
-        {notifications.length === 0 && smileNotifications.length === 0 ? (
+        {combinedNotifications.length === 0 ? (
           <div className="notifications-empty">
             <h3>아직 알림이 없어요!</h3>
           </div>
         ) : (
-          <>
-            {notifications
-              .slice()
-              .reverse()
-              .map((notification) => (
-                <div className="notification" key={notification.id}>
-                  <div className="user-info">
-                    <Box
+          combinedNotifications.map((notification, index) => (
+            <div className="notification" key={index}>
+              <div className="user-info">
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    margin: "0.5rem",
+                  }}
+                >
+                  <Avatar
+                    src={
+                      notification.sender?.image ||
+                      notification.friendImage ||
+                      UserDefaultImage
+                    }
+                    aria-label={
+                      notification.sender?.name || notification.friendName
+                    }
+                    sx={{ width: 45, height: 45 }}
+                  >
+                    <Typography sx={{ fontSize: "1rem" }}>
+                      {
+                        (notification.sender?.name ||
+                          notification.friendName)[0]
+                      }
+                    </Typography>
+                  </Avatar>
+                  <div className="friend-info">
+                    <Typography
+                      color="text.primary"
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        margin: "0.5rem",
+                        fontSize: "1rem",
+                        textAlign: "left",
+                        marginLeft: "1rem",
+                        fontWeight: "bold",
                       }}
+                      noWrap
                     >
-                      <Avatar
-                        src={notification.sender.image || UserDefaultImage}
-                        aria-label={notification.sender.name}
-                        sx={{ width: 45, height: 45 }}
-                      >
-                        <Typography sx={{ fontSize: "1rem" }}>
-                          {notification.sender.name[0]}
-                        </Typography>
-                      </Avatar>
-                      <div className="friend-info">
-                        <Typography
-                          color="text.primary"
-                          sx={{
-                            fontSize: "1rem",
-                            textAlign: "left",
-                            marginLeft: "1rem",
-                            fontWeight: "bold",
-                          }}
-                          noWrap
-                        >
-                          {notification.sender.name}
-                        </Typography>
-                        <Typography
-                          color="text.secondary"
-                          sx={{
-                            fontSize: "0.8rem",
-                            textAlign: "left",
-                            marginLeft: "1.5rem",
-                          }}
-                          noWrap
-                        >
-                          {notification.sender.nickname}
-                        </Typography>
-                      </div>
-                    </Box>
+                      {notification.sender?.name || notification.friendName}
+                    </Typography>
+                    <Typography
+                      color="text.secondary"
+                      sx={{
+                        fontSize: "0.8rem",
+                        textAlign: "left",
+                        marginLeft: "1.5rem",
+                      }}
+                      noWrap
+                    >
+                      {notification.sender?.nickname ||
+                        notification.friendNickname}
+                    </Typography>
                   </div>
+                </Box>
+                {notification.type === "smile" && (
+                  <Typography
+                    color="text.secondary"
+                    sx={{
+                      fontSize: "0.8rem",
+                      textAlign: "left",
+                      marginLeft: "1.5rem",
+                    }}
+                    noWrap
+                  >
+                    친구가 웃었어요!
+                  </Typography>
+                )}
+              </div>
 
-                  <div className="button-container">
-                    <div className="timestamp">
-                      {getRelativeTime(notification.requestDate)}
-                    </div>
+              <div className="button-container">
+                <div className="timestamp">
+                  {getRelativeTime(
+                    notification.requestDate ||
+                      `${notification.date}T${notification.time}`
+                  )}
+                </div>
+                {notification.type === "follow" && (
+                  <>
                     <button
                       className="accept-button"
                       onClick={() => handleAcceptRequest(notification.id)}
@@ -319,81 +353,11 @@ export default function NotificationCenter() {
                     >
                       거절
                     </button>
-                  </div>
-                </div>
-              ))}
-
-            {smileNotifications
-              .slice()
-              .reverse()
-              .map((smileNotification, index) => (
-                <div className="notification" key={index}>
-                  <div className="user-info">
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        margin: "0.5rem",
-                      }}
-                    >
-                      <Avatar
-                        src={smileNotification.friendImage || UserDefaultImage}
-                        aria-label={smileNotification.friendName}
-                        sx={{ width: 45, height: 45 }}
-                      >
-                        <Typography sx={{ fontSize: "1rem" }}>
-                          {smileNotification.friendName[0]}
-                        </Typography>
-                      </Avatar>
-                      <div className="friend-info">
-                        <Typography
-                          color="text.primary"
-                          sx={{
-                            fontSize: "1rem",
-                            textAlign: "left",
-                            marginLeft: "1rem",
-                            fontWeight: "bold",
-                          }}
-                          noWrap
-                        >
-                          {smileNotification.friendName}
-                        </Typography>
-                        <Typography
-                          color="text.secondary"
-                          sx={{
-                            fontSize: "0.8rem",
-                            textAlign: "left",
-                            marginLeft: "1.5rem",
-                          }}
-                          noWrap
-                        >
-                          {smileNotification.friendNickname}
-                        </Typography>
-                      </div>
-                    </Box>
-                    <Typography
-                      color="text.secondary"
-                      sx={{
-                        fontSize: "0.8rem",
-                        textAlign: "left",
-                        marginLeft: "1.5rem",
-                      }}
-                      noWrap
-                    >
-                      친구가 웃었어요!
-                    </Typography>
-                  </div>
-
-                  <div className="button-container">
-                    <div className="timestamp">
-                      {getRelativeTime(
-                        `${smileNotification.date}T${smileNotification.time}`
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-          </>
+                  </>
+                )}
+              </div>
+            </div>
+          ))
         )}
       </main>
     </div>
