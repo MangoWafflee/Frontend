@@ -9,9 +9,14 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const getRelativeTime = (dateString) => {
   const now = new Date();
-  const requestDate = new Date(dateString);
 
-  const diffInSeconds = Math.floor((now - requestDate) / 1000);
+  // Convert to Korean time zone
+  const requestDate = new Date(dateString);
+  const koreanTime = new Date(
+    requestDate.toLocaleString("en-US", { timeZone: "Asia/Seoul" })
+  );
+
+  const diffInSeconds = Math.floor((now - koreanTime) / 1000);
 
   const secondsInMinute = 60;
   const secondsInHour = secondsInMinute * 60;
@@ -141,6 +146,7 @@ export default function NotificationCenter() {
       }
 
       const data = await response.json();
+      console.log(`Smile data for ${nickname}: `, data);
       return data;
     } catch (error) {
       console.error(`Error fetching smile data for ${nickname}:`, error);
@@ -167,19 +173,19 @@ export default function NotificationCenter() {
 
     const existingNotificationKeys = new Set(
       smileNotifications.map(
-        (notif) => `${notif.nickname}-${notif.date}-${notif.time}`
+        (notif) => `${notif.friendNickname}-${notif.date}-${notif.time}`
       )
     );
 
     const uniqueNewSmileNotifications = newSmileNotifications.filter(
       (notif) =>
         !existingNotificationKeys.has(
-          `${notif.nickname}-${notif.date}-${notif.time}`
+          `${notif.friendNickname}-${notif.date}-${notif.time}`
         )
     );
 
     if (uniqueNewSmileNotifications.length > 0) {
-      console.log("Smile Notifications: ", uniqueNewSmileNotifications);
+      console.log("New Smile Notifications: ", uniqueNewSmileNotifications);
       setSmileNotifications((prev) => [
         ...prev,
         ...uniqueNewSmileNotifications,
