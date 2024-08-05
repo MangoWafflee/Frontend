@@ -255,34 +255,34 @@ export default function ChallengePage() {
 					<div>
 						<div className="background-badge">
 							<img
-								src={selectedChallenge.img}
+								src={selectedChallenge.challenge.img}
 								alt="challenge-image"
 							/>
 						</div>
-						<h3>{selectedChallenge.title}</h3>
+						<h3>{selectedChallenge.challenge.title}</h3>
 						<br />
-						<p>{selectedChallenge.subTitle}</p>
+						<p>{selectedChallenge.challenge.subTitle}</p>
 						<br />
-						<p>{selectedChallenge.content}</p>
+						<p>{selectedChallenge.challenge.content}</p>
 						<br />
 						<div className="challenge-info">
 							<p>
 								<span>기간</span>
-								<span>{` ~ ${selectedChallenge.endDate}`}</span>
+								<span>{` ~ ${selectedChallenge.challenge.endDate}`}</span>
 							</p>
 							<p>
 								<span>참가자</span>
-								<span>{`${selectedChallenge.count}`}</span>
+								<span>{`${selectedChallenge.challenge.count}`}</span>
 							</p>
-							{selectedChallenge.participating ? (
+							{selectedChallenge.participating ==="참여" ? (
 								<p>
 									<span>진행</span>
-									<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.totalAttempts}`}</span>
+									<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.challenge.totalAttempts}`}</span>
 								</p>
 							) : (
 								<p>
 									<span>횟수</span>
-									<span>{`${selectedChallenge.totalAttempts}`}</span>
+									<span>{`${selectedChallenge.challenge.totalAttempts}`}</span>
 								</p>
 							)}
 						</div>
