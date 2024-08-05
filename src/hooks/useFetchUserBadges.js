@@ -2,10 +2,8 @@
 import { useEffect, useState } from 'react';
 
 const useFetchUserBadges = (uid) => {
-  const [userBadges, setUserBadges] = useState({
-    smilecount: 0,
-    badges: [],
-  });
+  const [badgeList, setBadgeList] = useState([]);
+  const [smilecount, setSmilecount] = useState(0); // smilecount 추가
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -24,10 +22,8 @@ const useFetchUserBadges = (uid) => {
         if (response.status === 200) {
           const data = await response.json();
           console.log(data); // 응답 데이터 출력
-          setUserBadges({
-            smilecount: data.smilecount,
-            badges: data.badges,
-          });
+          setBadgeList(data.badges); // 뱃지에 대한 배열 데이터만 저장
+          setSmilecount(data.smilecount); // smilecount 저장
         } else if (response.status === 404) {
           console.log('검색 결과가 없습니다.');
           setError('검색 결과가 없습니다.');
@@ -44,7 +40,7 @@ const useFetchUserBadges = (uid) => {
     fetchData();
   }, [uid]);
 
-  return { userBadges, error };
+  return { badgeList, smilecount, error };
 };
 
 export default useFetchUserBadges;

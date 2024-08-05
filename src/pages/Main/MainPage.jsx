@@ -30,9 +30,11 @@ export default function MainPage() {
     }
   }, [navigate]);
 
-  const { badgeList, error } = useFetchUserBadges(uid);
+  const { badgeList, smilecount, error } =
+    useFetchUserBadges(uid);
+
   // 진행 중인 배지 중 가장 작은 requiredSmileCount를 가진 배지 찾기
-  const inProgressBadge = badgeList.badges
+  const inProgressBadge = badgeList
     .filter((badge) => badge.isAchieved === '진행중')
     .sort(
       (a, b) => a.requiredSmileCount - b.requiredSmileCount
@@ -40,8 +42,7 @@ export default function MainPage() {
 
   const progressPercent = inProgressBadge
     ? Math.min(
-        (badgeList.smilecount /
-          inProgressBadge.requiredSmileCount) *
+        (smilecount / inProgressBadge.requiredSmileCount) *
           100,
         100
       )
@@ -93,18 +94,22 @@ export default function MainPage() {
                 {'More'}
               </Link>
             }
-            styles={{
-              body: { padding: 10 },
-            }}
+            styles={{ body: { padding: 10 } }}
           >
-            <div className="challenge circular">
-              <span>{inProgressBadge.title}</span>
-              <Progress
-                percent={progressPercent}
-                status="active"
-                style={{ width: '80%' }}
-              />
-            </div>
+            {inProgressBadge ? (
+              <div className="challenge circular">
+                <span>{inProgressBadge.title}</span>
+                <Progress
+                  percent={progressPercent}
+                  status="active"
+                  style={{ width: '80%' }}
+                />
+              </div>
+            ) : (
+              <div className="challenge">
+                진행 중인 배지가 없습니다.
+              </div>
+            )}
           </Card>
         </div>
 
@@ -113,9 +118,7 @@ export default function MainPage() {
           <Card
             title="챌린지🔥"
             extra={<Link to="/challenge">{'More'}</Link>}
-            styles={{
-              body: { padding: 10 },
-            }}
+            styles={{ body: { padding: 10 } }}
           >
             {isUserChallengesLoading ? (
               <div>Loading...</div>
