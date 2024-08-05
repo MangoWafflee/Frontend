@@ -132,13 +132,13 @@ export default function MainPage() {
 							<div>Loading...</div>
 						) : userChallengesError ? (
 							<div>Error: {userChallengesError.message}</div>
-						) : userChallenges.participatingChallengeList.length ===
-						  0 ? (
+						) : userChallenges?.participatingChallengeList
+								?.length === 0 ? (
 							<div className="challenge">
 								참여중인 챌린지가 없습니다.
 							</div>
 						) : (
-							userChallenges.participatingChallengeList.map(
+							userChallenges?.participatingChallengeList?.map(
 								(challenge) => (
 									<div
 										className="challenge circular"
