@@ -14,7 +14,6 @@ export default function MainPage() {
 	const [uid, setUid] = useState("");
 	const [nickname, setNickname] = useState("");
 	const [userId, setUserId] = useState(null);
-  const user = JSON.parse(localStorage.getItem("user")); // localStorage에서 user 정보 가져오기
 
 	useEffect(() => {
 		const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -44,9 +43,8 @@ export default function MainPage() {
 	// 현재 진행중인 배지의 이미지
 	const badgeImage = inProgressBadge ? inProgressBadge.image : null;
 
-	// 해당 유저의 참여중인 챌린지/참여했던 챌린지 정보 받아오는 api Query
+	// 유저의 챌린지 정보를 가져오는 함수
 	const getUserChallenges = async () => {
-    const userId = user.id;
 		const { data } = await axios.get(`/challenge/userchallenge/${userId}`);
 		const categorizedChallenges = {
 			// 참여중인 챌린지 데이터
@@ -59,18 +57,18 @@ export default function MainPage() {
 		return categorizedChallenges;
 	};
 
-	// useQuery 훅으로 유저의 참여중인 챌린지/참여했던 챌린지 정보 가져오기
+	// useEffect를 사용하여 userId가 설정된 후에 쿼리 실행
 	const {
 		data: userChallenges,
 		error: userChallengesError,
 		isLoading: isUserChallengesLoading,
 	} = useQuery({
-		queryKey: ["mainPageUserChallenges"],
+		queryKey: ["mainPageUserChallenges", userId],
 		queryFn: getUserChallenges,
-    enabled: !!userId,
+		enabled: !!userId,
 	});
 
-  // useEffect를 사용하여 userChallenges와 ongoingChallenges를 콘솔에 출력
+	// useEffect를 사용하여 userChallenges와 ongoingChallenges를 콘솔에 출력
 	useEffect(() => {
 		if (userChallenges) {
 			console.log("진행중인 챌린지:", userChallenges);
