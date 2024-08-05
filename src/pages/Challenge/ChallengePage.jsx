@@ -10,6 +10,8 @@ import Loading from "../../components/Loading/Loading";
 export default function ChallengePage() {
 	const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태 여부
 	const [selectedChallenge, setSelectedChallenge] = useState(null); // 선택된 챌린지
+	const [isParticipatingChallenge, setIsParticipatingChallenge] =
+		useState(null);
 	const user = JSON.parse(localStorage.getItem("user")); // localStorage에서 user 정보 가져오기
 	console.log("로컬 유저 정보", user);
 
@@ -25,16 +27,19 @@ export default function ChallengePage() {
 
 	// 챌린지 참여 api
 	const participateChallenge = async () => {
-		console.log("유저 id",user.id);
-		console.log("선택한 챌린지 id",selectedChallenge.id);
-		const response = await axios.post("/challenge/userchallenge/participate", {
-			user: {
-				id:user.id
-			},
-			challenge : {
-				id:selectedChallenge.id
+		console.log("유저 id", user.id);
+		console.log("선택한 챌린지 id", selectedChallenge.id);
+		const response = await axios.post(
+			"/challenge/userchallenge/participate",
+			{
+				user: {
+					id: user.id,
+				},
+				challenge: {
+					id: selectedChallenge.id,
+				},
 			}
-		});
+		);
 		return response;
 	};
 
@@ -162,12 +167,16 @@ export default function ChallengePage() {
 					<div
 						className="challenge"
 						onClick={() => {
+							setIsParticipatingChallenge(true);
 							setSelectedChallenge(challenge);
 							setIsModalOpen(true);
 						}}
 						key={challenge.challenge.id}
 					>
-						<img src={challenge.challenge.img} alt="challenge-image" />
+						<img
+							src={challenge.challenge.img}
+							alt="challenge-image"
+						/>
 						<div className="column">
 							<h4>{challenge.challenge.title}</h4>
 							<p>{challenge.challenge.subTitle}</p>
@@ -192,6 +201,7 @@ export default function ChallengePage() {
 					<div
 						className="challenge"
 						onClick={() => {
+							setIsParticipatingChallenge(false);
 							setSelectedChallenge(challenge);
 							setIsModalOpen(true);
 						}}
@@ -223,12 +233,16 @@ export default function ChallengePage() {
 					<div
 						className="challenge"
 						onClick={() => {
+							setIsParticipatingChallenge(true);
 							setSelectedChallenge(challenge);
 							setIsModalOpen(true);
 						}}
 						key={challenge.challenge.id}
 					>
-						<img src={challenge.challenge.img} alt="challenge-image" />
+						<img
+							src={challenge.challenge.img}
+							alt="challenge-image"
+						/>
 						<div className="column">
 							<h4>{challenge.challenge.title}</h4>
 							<p>{challenge.challenge.subTitle}</p>
@@ -251,7 +265,41 @@ export default function ChallengePage() {
 					body: { padding: 0, margin: 0 },
 				}}
 			>
-				{selectedChallenge && (
+				{selectedChallenge && isParticipatingChallenge ? 
+				// 참여중이거나 참여했던 챌린지
+				(
+					<div>
+						<div className="background-badge">
+							<img
+								src={selectedChallenge.challenge.img}
+								alt="challenge-image"
+							/>
+						</div>
+						<h3>{selectedChallenge.challenge.title}</h3>
+						<br />
+						<p>{selectedChallenge.challenge.subTitle}</p>
+						<br />
+						<p>{selectedChallenge.challenge.content}</p>
+						<br />
+						<div className="challenge-info">
+							<p>
+								<span>기간</span>
+								<span>{` ~ ${selectedChallenge.challenge.endDate}`}</span>
+							</p>
+							<p>
+								<span>참가자</span>
+								<span>{`${selectedChallenge.challenge.count}`}</span>
+							</p>
+
+							<p>
+								<span>진행</span>
+								<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.challenge.totalAttempts}`}</span>
+							</p>
+						</div>
+					</div>
+				) : 
+				// 진행중이고 참여하지 않은 챌린지
+				(
 					<div>
 						<div className="background-badge">
 							<img
@@ -274,7 +322,7 @@ export default function ChallengePage() {
 								<span>참가자</span>
 								<span>{`${selectedChallenge.count}`}</span>
 							</p>
-							{selectedChallenge.participating ==="참여" ? (
+							{selectedChallenge.participating === "참여" ? (
 								<p>
 									<span>진행</span>
 									<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.totalAttempts}`}</span>
