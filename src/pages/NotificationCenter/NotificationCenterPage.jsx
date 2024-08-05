@@ -186,16 +186,15 @@ export default function NotificationCenter() {
       if (response.ok) {
         message.success("친구가 되었어요!");
         await fetchFriends(); // 친구 목록 갱신
-        await updateSmileNotifications(); // 웃음 알림 갱신
-
-        setNotifications((prevNotifications) =>
-          prevNotifications.filter(
-            (notification) => notification.id !== requestId
-          )
-        );
       } else {
         console.error("Unexpected response body:", responseBody);
       }
+
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter(
+          (notification) => notification.id !== requestId
+        )
+      );
     } catch (error) {
       console.error("Error accepting follow request:", error);
     } finally {
@@ -242,16 +241,14 @@ export default function NotificationCenter() {
     if (userId && token) {
       fetchNotifications();
       fetchFriends();
-      updateSmileNotifications();
-
-      const intervalId = setInterval(() => {
-        fetchNotifications();
-        updateSmileNotifications();
-      }, 5000);
-
-      return () => clearInterval(intervalId);
     }
   }, [userId, token]);
+
+  useEffect(() => {
+    if (friends.length > 0) {
+      updateSmileNotifications();
+    }
+  }, [friends]);
 
   // 알림 병합 및 정렬
   const combinedNotifications = [
