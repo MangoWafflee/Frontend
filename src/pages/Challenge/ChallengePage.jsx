@@ -265,90 +265,89 @@ export default function ChallengePage() {
 					body: { padding: 0, margin: 0 },
 				}}
 			>
-				{selectedChallenge && isParticipatingChallenge ? 
-				// 참여중이거나 참여했던 챌린지
-				(
-					<div>
-						<div className="background-badge">
-							<img
-								src={selectedChallenge.challenge.img}
-								alt="challenge-image"
-							/>
-						</div>
-						<h3>{selectedChallenge.challenge.title}</h3>
-						<br />
-						<p>{selectedChallenge.challenge.subTitle}</p>
-						<br />
-						<p>{selectedChallenge.challenge.content}</p>
-						<br />
-						<div className="challenge-info">
-							<p>
-								<span>기간</span>
-								<span>{` ~ ${selectedChallenge.challenge.endDate}`}</span>
-							</p>
-							<p>
-								<span>참가자</span>
-								<span>{`${selectedChallenge.challenge.count}`}</span>
-							</p>
+				{selectedChallenge &&
+					(isParticipatingChallenge ? (
+						// 참여중이거나 참여했던 챌린지
+						<div>
+							<div className="background-badge">
+								<img
+									src={selectedChallenge.challenge.img}
+									alt="challenge-image"
+								/>
+							</div>
+							<h3>{selectedChallenge.challenge.title}</h3>
+							<br />
+							<p>{selectedChallenge.challenge.subTitle}</p>
+							<br />
+							<p>{selectedChallenge.challenge.content}</p>
+							<br />
+							<div className="challenge-info">
+								<p>
+									<span>기간</span>
+									<span>{` ~ ${selectedChallenge.challenge.endDate}`}</span>
+								</p>
+								<p>
+									<span>참가자</span>
+									<span>{`${selectedChallenge.challenge.count}`}</span>
+								</p>
 
-							<p>
-								<span>진행</span>
-								<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.challenge.totalAttempts}`}</span>
-							</p>
-						</div>
-					</div>
-				) : 
-				// 진행중이고 참여하지 않은 챌린지
-				(
-					<div>
-						<div className="background-badge">
-							<img
-								src={selectedChallenge.img}
-								alt="challenge-image"
-							/>
-						</div>
-						<h3>{selectedChallenge.title}</h3>
-						<br />
-						<p>{selectedChallenge.subTitle}</p>
-						<br />
-						<p>{selectedChallenge.content}</p>
-						<br />
-						<div className="challenge-info">
-							<p>
-								<span>기간</span>
-								<span>{` ~ ${selectedChallenge.endDate}`}</span>
-							</p>
-							<p>
-								<span>참가자</span>
-								<span>{`${selectedChallenge.count}`}</span>
-							</p>
-							{selectedChallenge.participating === "참여" ? (
 								<p>
 									<span>진행</span>
-									<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.totalAttempts}`}</span>
+									<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.challenge.totalAttempts}`}</span>
 								</p>
-							) : (
+							</div>
+						</div>
+					) : (
+						// 진행중이고 참여하지 않은 챌린지
+						<div>
+							<div className="background-badge">
+								<img
+									src={selectedChallenge.img}
+									alt="challenge-image"
+								/>
+							</div>
+							<h3>{selectedChallenge.title}</h3>
+							<br />
+							<p>{selectedChallenge.subTitle}</p>
+							<br />
+							<p>{selectedChallenge.content}</p>
+							<br />
+							<div className="challenge-info">
 								<p>
-									<span>횟수</span>
-									<span>{`${selectedChallenge.totalAttempts}`}</span>
+									<span>기간</span>
+									<span>{` ~ ${selectedChallenge.endDate}`}</span>
 								</p>
+								<p>
+									<span>참가자</span>
+									<span>{`${selectedChallenge.count}`}</span>
+								</p>
+								{selectedChallenge.participating === "참여" ? (
+									<p>
+										<span>진행</span>
+										<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.totalAttempts}`}</span>
+									</p>
+								) : (
+									<p>
+										<span>횟수</span>
+										<span>{`${selectedChallenge.totalAttempts}`}</span>
+									</p>
+								)}
+							</div>
+
+							{!selectedChallenge.participating && (
+								<button
+									className="modal-bottom-button"
+									onClick={() => {
+										// 챌린지 참가 API
+										handleParticipate();
+										setIsModalOpen(false);
+									}}
+								>
+									챌린지 참여하기
+								</button>
 							)}
 						</div>
-
-						{!selectedChallenge.participating && (
-							<button
-								className="modal-bottom-button"
-								onClick={() => {
-									// 챌린지 참가 API
-									handleParticipate();
-									setIsModalOpen(false);
-								}}
-							>
-								챌린지 참여하기
-							</button>
-						)}
-					</div>
-				)}
+					))}
 			</Modal>
 		</div>
 	);
