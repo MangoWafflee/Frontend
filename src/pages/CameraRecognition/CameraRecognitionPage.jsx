@@ -173,6 +173,15 @@ export default function CameraRecognitionPage() {
           happyPercentageRef.current = (
             happy * 100
           ).toFixed(0);
+
+          // maxHappyPercentage 업데이트 로직 추가
+          if (
+            parseFloat(happyPercentageRef.current) >
+            parseFloat(maxHappyPercentageRef.current)
+          ) {
+            maxHappyPercentageRef.current =
+              happyPercentageRef.current;
+          }
         } else {
           setFaceDetected(false);
         }
