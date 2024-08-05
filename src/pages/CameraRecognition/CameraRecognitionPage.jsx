@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import * as faceapi from 'face-api.js';
 import './CameraRecognitionPage.scss';
-import { useCameraStatus } from '../../components/Contexts/CameraStatusContext';
 
 export default function CameraRecognitionPage() {
   const [user, setUser] = useState(null);
@@ -20,7 +20,7 @@ export default function CameraRecognitionPage() {
   const [animationVisible, setAnimationVisible] =
     useState(false);
 
-  const { isCameraActive } = useCameraStatus();
+  const location = useLocation();
 
   useEffect(() => {
     const storedUser = JSON.parse(
@@ -56,8 +56,8 @@ export default function CameraRecognitionPage() {
 
   useEffect(() => {
     if (
-      parseFloat(happyPercentageRef.current) >
-      parseFloat(maxHappyPercentageRef.current)
+      happyPercentageRef.current >
+      maxHappyPercentageRef.current
     ) {
       maxHappyPercentageRef.current =
         happyPercentageRef.current;
@@ -79,6 +79,7 @@ export default function CameraRecognitionPage() {
           }),
           nickname: nickname,
         };
+
         console.log(smileData);
         try {
           const response = await fetch(url, {
@@ -190,7 +191,7 @@ export default function CameraRecognitionPage() {
   };
 
   useEffect(() => {
-    if (modelsLoaded && isCameraActive) {
+    if (modelsLoaded) {
       startVideo();
       videoRef.current.addEventListener(
         'play',
@@ -204,10 +205,9 @@ export default function CameraRecognitionPage() {
         const tracks = stream.getTracks();
 
         tracks.forEach((track) => track.stop());
-        videoRef.current.srcObject = null;
       }
     };
-  }, [modelsLoaded, isCameraActive]);
+  }, [modelsLoaded]);
 
   useEffect(() => {
     if (modelsLoaded && faceDetected) {
@@ -223,6 +223,18 @@ export default function CameraRecognitionPage() {
       videoRef.current.classList.remove('animate');
     }
   }, [modelsLoaded, faceDetected]);
+
+  // location 변경 시 카메라 스트림 정리
+  useEffect(() => {
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject;
+        const tracks = stream.getTracks();
+
+        tracks.forEach((track) => track.stop());
+      }
+    };
+  }, [location]);
 
   const handleShare = async () => {
     if (navigator.share) {
