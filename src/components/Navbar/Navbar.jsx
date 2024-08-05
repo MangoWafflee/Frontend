@@ -9,7 +9,7 @@ import {
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import './Navbar.scss';
-import { useCameraStatus } from '../../contexts/CameraStatusContext';
+import { useCameraStatus } from '../Contexts/CameraStatusContext';
 
 export default function Navbar() {
   const location = useLocation();

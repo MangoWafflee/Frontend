@@ -71,14 +71,14 @@ export default function CameraRecognitionPage() {
         const smileData = {
           smilePercentage: maxHappyPercentageRef.current,
           date: new Date().toISOString().split('T')[0],
-          time: new Date().toLocaleTimeString('en-GB', {
+          time: new Date().toLocaleTimeString('ko-KR', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
+            timeZone: 'Asia/Seoul',
           }),
           nickname: nickname,
         };
-
         console.log(smileData);
         try {
           const response = await fetch(url, {
