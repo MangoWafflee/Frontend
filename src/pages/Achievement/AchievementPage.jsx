@@ -2,17 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Divider } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './AchievementPage.scss';
-import level1 from '../../assets/badges/level1.png';
-import level2 from '../../assets/badges/level2.png';
-import level3 from '../../assets/badges/level3.png';
-import level4 from '../../assets/badges/level4.png';
-import level5 from '../../assets/badges/level5.png';
-import level6 from '../../assets/badges/level6.png';
-import level7 from '../../assets/badges/level7.png';
-import level8 from '../../assets/badges/level8.png';
-import level9 from '../../assets/badges/level9.png';
-import challenge_24_07_7 from '../../assets/challenges/challenge_24_07_7.png';
 import useFetchUserBadges from '../../hooks/useFetchUserBadges';
+import challenge_24_07_7 from '../../assets/challenges/challenge_24_07_7.png';
 
 export default function AchievementPage() {
   const navigate = useNavigate();
@@ -22,6 +13,7 @@ export default function AchievementPage() {
     uid,
     token
   );
+
   useEffect(() => {
     const storedUser = JSON.parse(
       localStorage.getItem('user')
@@ -35,28 +27,14 @@ export default function AchievementPage() {
     }
   }, [navigate]);
 
-  const badgeImages = [
-    level1,
-    level2,
-    level3,
-    level4,
-    level5,
-    level6,
-    level7,
-    level8,
-    level9,
-  ];
-
   // 개인 기록
-  const individualRecordList = badgeList.map(
-    (badge, index) => ({
-      id: badge.id,
-      title: badge.title,
-      isAchieved: badge.isAchieved,
-      achievedAt: badge.achievedAt,
-      img: badgeImages[index % badgeImages.length],
-    })
-  );
+  const individualRecordList = badgeList.map((badge) => ({
+    id: badge.id,
+    title: badge.title,
+    isAchieved: badge.isAchieved,
+    achievedAt: badge.achievedAt,
+    img: badge.image,
+  }));
 
   // 챌린지 기록
   const challengeRecordList = [
@@ -98,7 +76,7 @@ export default function AchievementPage() {
         individualRecordList === null ? (
           <div>참여중인 챌린지가 없습니다.</div>
         ) : (
-          individualRecordList.map((record, index) => (
+          individualRecordList.map((record) => (
             <div
               className="badge"
               key={`individual-${record.id}`}
@@ -107,7 +85,7 @@ export default function AchievementPage() {
                 src={record.img}
                 alt="challenge-image"
                 className={
-                  record.isAchieved == '성공'
+                  record.isAchieved === '성공'
                     ? ''
                     : 'grayscale'
                 }
@@ -115,7 +93,7 @@ export default function AchievementPage() {
               <div className="column">
                 <p>{record.title}</p>
                 {record.isAchieved && (
-                  <p>{record.createdAt}</p>
+                  <p>{record.achievedAt}</p>
                 )}
               </div>
             </div>

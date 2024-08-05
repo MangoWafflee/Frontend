@@ -1,4 +1,3 @@
-// src/hooks/useFetchUserBadges.js
 import { useEffect, useState } from 'react';
 import level1 from '../assets/badges/level1.png';
 import level2 from '../assets/badges/level2.png';
@@ -44,7 +43,17 @@ const useFetchUserBadges = (uid, token) => {
         if (response.status === 200) {
           const data = await response.json();
           console.log(data); // 응답 데이터 출력
-          setBadgeList(data.badges); // 뱃지에 대한 배열 데이터만 저장
+
+          // badgeList에 이미지를 추가
+          const badgesWithImages = data.badges.map(
+            (badge, index) => ({
+              ...badge,
+              image:
+                badgeImages[index % badgeImages.length],
+            })
+          );
+
+          setBadgeList(badgesWithImages); // 뱃지에 대한 배열 데이터만 저장
           setSmilecount(data.smilecount); // smilecount 저장
         } else if (response.status === 404) {
           console.log('검색 결과가 없습니다.');
@@ -62,7 +71,7 @@ const useFetchUserBadges = (uid, token) => {
     fetchData();
   }, [uid, token]);
 
-  return { badgeList, smilecount, badgeImages, error };
+  return { badgeList, smilecount, error };
 };
 
 export default useFetchUserBadges;

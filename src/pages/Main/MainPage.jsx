@@ -30,7 +30,7 @@ export default function MainPage() {
     }
   }, [navigate]);
 
-  const { badgeList, smilecount, badgeImages, error } =
+  const { badgeList, smilecount, error } =
     useFetchUserBadges(uid, token);
 
   // 진행 중인 배지 중 가장 작은 requiredSmileCount를 가진 배지 찾기
@@ -51,7 +51,7 @@ export default function MainPage() {
 
   // 현재 진행중인 배지의 이미지
   const badgeImage = inProgressBadge
-    ? badgeImages[inProgressBadge.id % badgeImages.length]
+    ? inProgressBadge.image
     : null;
 
   // 해당 유저의 참여중인 챌린지/참여했던 챌린지 정보 받아오는 api Query
@@ -113,13 +113,14 @@ export default function MainPage() {
                     style={{
                       width: '50px',
                       height: '50px',
+                      marginLeft: 20,
                     }}
                   />
                 )}
                 <Progress
                   percent={progressPercent}
                   status="active"
-                  style={{ width: '50%', marginLeft: 20 }}
+                  style={{ width: '60%', marginLeft: 20 }}
                 />
               </div>
             ) : (
