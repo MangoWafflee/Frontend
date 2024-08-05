@@ -67,6 +67,13 @@ export default function MainPage() {
 		queryFn: getUserChallenges,
 	});
 
+  // useEffect를 사용하여 userChallenges와 ongoingChallenges를 콘솔에 출력
+	useEffect(() => {
+		if (userChallenges) {
+			console.log("진행중인 챌린지:", userChallenges);
+		}
+	}, [userChallenges]);
+
 	return (
 		<div className="main-page">
 			<WeekCalendar />
