@@ -14,6 +14,7 @@ export default function MainPage() {
 	const [uid, setUid] = useState("");
 	const [nickname, setNickname] = useState("");
 	const [userId, setUserId] = useState(null);
+  const user = JSON.parse(localStorage.getItem("user")); // localStorage에서 user 정보 가져오기
 
 	useEffect(() => {
 		const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -45,6 +46,7 @@ export default function MainPage() {
 
 	// 해당 유저의 참여중인 챌린지/참여했던 챌린지 정보 받아오는 api Query
 	const getUserChallenges = async () => {
+    const userId = user.id;
 		const { data } = await axios.get(`/challenge/userchallenge/${userId}`);
 		const categorizedChallenges = {
 			// 참여중인 챌린지 데이터
