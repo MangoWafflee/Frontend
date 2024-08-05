@@ -232,6 +232,7 @@ export default function NotificationCenter() {
     if (userId && token) {
       fetchNotifications();
       fetchFriends();
+      updateSmileNotifications();
 
       const intervalId = setInterval(() => {
         fetchNotifications();
