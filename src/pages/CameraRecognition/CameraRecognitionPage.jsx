@@ -71,12 +71,12 @@ export default function CameraRecognitionPage() {
         const smileData = {
           smilePercentage: maxHappyPercentageRef.current,
           date: new Date().toISOString().split('T')[0],
-          time: new Date().toLocaleTimeString('ko-KR', {
+          time: new Intl.DateTimeFormat('ko-KR', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
-            timeZone: 'Asia/Seoul',
-          }),
+            hour12: false,
+          }).format(new Date()),
           nickname: nickname,
         };
 
