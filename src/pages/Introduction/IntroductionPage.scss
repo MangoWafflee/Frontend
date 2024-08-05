@@ -38,7 +38,8 @@
   .menu {
     position: fixed;
     top: 0;
-    width: $max-width;
+    width: 100%;
+    max-width: $max-width;
     height: 20%;
     background-color: white;
     z-index: 10;

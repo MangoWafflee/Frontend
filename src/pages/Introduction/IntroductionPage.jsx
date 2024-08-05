@@ -49,25 +49,6 @@ export default function IntroductionPage() {
 
   return (
     <div className="introduction_page">
-      <Helmet>
-        <meta property="og:site_name" content="힣히힣" />
-        <meta
-          property="og:title"
-          content="웃어보자 타이틀"
-        />
-        <meta
-          property="og:url"
-          content="https://hahasmile.netlify.app/"
-        />
-        <meta
-          property="og:description"
-          content="웃음을 기록해보아요"
-        />
-        <meta
-          property="og:image"
-          content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVgFjrG_0zAzNLWLo6OULuFynY2haCp9RgrQ&s"
-        />
-      </Helmet>
       {/* 메뉴바 */}
       {isMenuOpen && (
         <div className="menu">
