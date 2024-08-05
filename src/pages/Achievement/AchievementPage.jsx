@@ -12,127 +12,25 @@ import level7 from '../../assets/badges/level7.png';
 import level8 from '../../assets/badges/level8.png';
 import level9 from '../../assets/badges/level9.png';
 import challenge_24_07_7 from '../../assets/challenges/challenge_24_07_7.png';
+import useFetchUserBadges from '../../hooks/useFetchUserBadges';
 
 export default function AchievementPage() {
   const navigate = useNavigate();
-  const [badgeList, setBadgeList] = useState([]);
+
   const [user, setUser] = useState(null);
-  const [userId, setUserId] = useState('');
+  const [uid, setUid] = useState('');
+  const { badgeList, error } = useFetchUserBadges(uid);
   useEffect(() => {
     const storedUser = JSON.parse(
       localStorage.getItem('user')
     );
     if (storedUser) {
       setUser(storedUser);
-      setUserId(storedUser.id);
+      setUid(storedUser.uid);
     } else {
       navigate('/');
     }
   }, [navigate]);
-
-  // 뱃지 전체 정보 가져오기
-  useEffect(() => {
-    const fetchData = async () => {
-      let url = `https://mango.angrak.cloud/badge`; // URL 확인
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.status === 200) {
-          const data = await response.json();
-          console.log(data); // 응답 데이터 출력
-          setBadgeList(data);
-        } else if (response.status === 404) {
-          console.log('검색 결과가 없습니다.');
-        } else {
-          console.log('서버 오류');
-        }
-      } catch (error) {
-        console.error('데이터 요청 오류:', error);
-      }
-    };
-    fetchData();
-  }, [user]);
-
-  // 해당 유저 전체 뱃지 조회
-  useEffect(() => {
-    console.log(userId);
-    const fetchData = async () => {
-      let url = `https://mango.angrak.cloud/badge/userbadges/${userId}`; // URL 확인
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (response.status === 200) {
-          const data = await response.json();
-          console.log(data); // 응답 데이터 출력
-          const updatedBadgeList = badgeList.map(
-            (badge) => {
-              const userBadge = data.find(
-                (ub) => ub.badge.id === badge.id
-              );
-              return userBadge
-                ? {
-                    ...badge,
-                    isAchieved: userBadge.isAchieved,
-                    achievedAt: userBadge.achievedAt,
-                    userBadgeId: userBadge.id,
-                  }
-                : {
-                    ...badge,
-                    isAchieved: '미진행',
-                    achievedAt: null,
-                    userBadgeId: null,
-                  };
-            }
-          );
-          setBadgeList(updatedBadgeList);
-          console.log(badgeList);
-        } else if (response.status === 404) {
-          console.log('검색 결과가 없습니다.');
-        } else {
-          console.log('서버 오류');
-        }
-      } catch (error) {
-        console.error('데이터 요청 오류:', error);
-      }
-    };
-    fetchData();
-  }, [user]);
-
-  // 뱃지 진행중으로 바꾸기~
-  const handleBadgeClick = async (userBadgeId) => {
-    let url = `https://mango.angrak.cloud/badge/userbadge/${userBadgeId}`;
-    try {
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ isAchieved: '진행중' }),
-      });
-
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log(data); // 응답 데이터 출력
-        // 필요시 상태 업데이트
-      } else if (response.status === 404) {
-        console.log('검색 결과가 없습니다.');
-      } else {
-        console.log('서버 오류');
-      }
-    } catch (error) {
-      console.error('데이터 요청 오류:', error);
-    }
-  };
 
   const badgeImages = [
     level1,
@@ -153,7 +51,6 @@ export default function AchievementPage() {
       title: badge.title,
       isAchieved: badge.isAchieved,
       achievedAt: badge.achievedAt,
-      userBadgeId: badge.userBadgeId,
       img: badgeImages[index % badgeImages.length],
     })
   );
@@ -202,16 +99,12 @@ export default function AchievementPage() {
             <div
               className="badge"
               key={`individual-${record.id}`}
-              onClick={() =>
-                record.isAchieved === null &&
-                handleBadgeClick(record.userBadgeId)
-              }
             >
               <img
                 src={record.img}
                 alt="challenge-image"
                 className={
-                  record.isAchieved == '진행중'
+                  record.isAchieved == '성공'
                     ? ''
                     : 'grayscale'
                 }
