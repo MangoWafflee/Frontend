@@ -1,7 +1,7 @@
 // src/hooks/useFetchUserBadges.js
 import { useEffect, useState } from 'react';
 
-const useFetchUserBadges = (uid) => {
+const useFetchUserBadges = (uid, token) => {
   const [badgeList, setBadgeList] = useState([]);
   const [smilecount, setSmilecount] = useState(0); // smilecount 추가
   const [error, setError] = useState(null);
@@ -16,6 +16,7 @@ const useFetchUserBadges = (uid) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `${token}`,
           },
         });
 

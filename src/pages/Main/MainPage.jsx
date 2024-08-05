@@ -10,7 +10,7 @@ import useFetchUserBadges from '../../hooks/useFetchUserBadges';
 
 export default function MainPage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState('');
   const [uid, setUid] = useState('');
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState(0);
@@ -21,7 +21,7 @@ export default function MainPage() {
     );
     const storedToken = localStorage.getItem('token');
     if (storedUser && storedToken) {
-      setUser(storedUser);
+      setToken(storedToken);
       setUid(storedUser.uid);
       setNickname(storedUser.nickname);
       setUserId(storedUser.id);
@@ -31,7 +31,7 @@ export default function MainPage() {
   }, [navigate]);
 
   const { badgeList, smilecount, error } =
-    useFetchUserBadges(uid);
+    useFetchUserBadges(uid, token);
 
   // 진행 중인 배지 중 가장 작은 requiredSmileCount를 가진 배지 찾기
   const inProgressBadge = badgeList
