@@ -30,7 +30,6 @@ export default function AchievementPage() {
     if (storedUser) {
       setUid(storedUser.uid);
       setToken(storedToken);
-      set;
     } else {
       navigate('/');
     }
