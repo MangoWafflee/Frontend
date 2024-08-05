@@ -104,8 +104,6 @@ export default function MainPage() {
           >
             {inProgressBadge ? (
               <div className="challenge circular">
-                <span>{inProgressBadge.title}</span>
-                {/* 뱃지 이미지 넣기 */}
                 {badgeImage && (
                   <img
                     src={badgeImage}
@@ -113,14 +111,16 @@ export default function MainPage() {
                     style={{
                       width: '50px',
                       height: '50px',
-                      marginLeft: 20,
                     }}
                   />
                 )}
+                <span>{inProgressBadge.title}</span>
+                {/* 뱃지 이미지 넣기 */}
+
                 <Progress
                   percent={progressPercent}
                   status="active"
-                  style={{ width: '60%', marginLeft: 20 }}
+                  style={{ width: '60%', marginLeft: 10 }}
                 />
               </div>
             ) : (
