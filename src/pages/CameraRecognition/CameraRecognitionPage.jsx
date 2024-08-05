@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 import './CameraRecognitionPage.scss';
-import { useCameraStatus } from '../../contexts/CameraStatusContext';
+import { useCameraStatus } from '../../components/Contexts/CameraStatusContext';
 
 export default function CameraRecognitionPage() {
   const [user, setUser] = useState(null);
