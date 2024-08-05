@@ -132,10 +132,7 @@ export default function CameraRecognitionPage() {
         videoRef.current.addEventListener(
           'loadedmetadata',
           () => {
-            setVideoDimensions({
-              width: 360,
-              height: 360,
-            });
+            setVideoDimensions({ width: 360, height: 360 });
           }
         );
       })
@@ -198,6 +195,15 @@ export default function CameraRecognitionPage() {
     return () => clearInterval(intervalId);
   };
 
+  const stopVideoStream = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject;
+      const tracks = stream.getTracks();
+      tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
+
   useEffect(() => {
     if (modelsLoaded) {
       startVideo();
@@ -208,12 +214,7 @@ export default function CameraRecognitionPage() {
     }
 
     return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject;
-        const tracks = stream.getTracks();
-
-        tracks.forEach((track) => track.stop());
-      }
+      stopVideoStream();
     };
   }, [modelsLoaded]);
 
@@ -235,12 +236,7 @@ export default function CameraRecognitionPage() {
   // location 변경 시 카메라 스트림 정리
   useEffect(() => {
     return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject;
-        const tracks = stream.getTracks();
-
-        tracks.forEach((track) => track.stop());
-      }
+      stopVideoStream();
     };
   }, [location]);
 
