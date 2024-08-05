@@ -10,7 +10,6 @@ import "dayjs/locale/ko"; // Import Korean locale for Day.js
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import "./NotificationCenterPage.scss";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -105,6 +104,7 @@ export default function NotificationCenter() {
   };
 
   const fetchSmileData = async (nickname) => {
+    console.log(`Fetching smile data for ${nickname}`);
     try {
       const url = `${BACKEND_URL}/smile/user/${nickname}`;
       const response = await fetch(url, {
@@ -128,20 +128,28 @@ export default function NotificationCenter() {
   };
 
   const updateSmileNotifications = async () => {
+    console.log("Updating smile notifications...");
     const newSmileNotifications = [];
 
     for (const friend of friends) {
       console.log(`Fetching smile data for friend: ${friend.nickname}`);
-      const smileData = await fetchSmileData(friend.nickname);
-      console.log(`Smile data for ${friend.nickname}: `, smileData);
-      if (smileData.length > 0) {
-        newSmileNotifications.push(
-          ...smileData.map((smile) => ({
-            ...smile,
-            friendName: friend.name,
-            friendNickname: friend.nickname,
-            friendImage: friend.image,
-          }))
+      try {
+        const smileData = await fetchSmileData(friend.nickname);
+        console.log(`Smile data for ${friend.nickname}: `, smileData);
+        if (smileData.length > 0) {
+          newSmileNotifications.push(
+            ...smileData.map((smile) => ({
+              ...smile,
+              friendName: friend.name,
+              friendNickname: friend.nickname,
+              friendImage: friend.image,
+            }))
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Error updating smile notifications for ${friend.nickname}:`,
+          error
         );
       }
     }
@@ -149,6 +157,8 @@ export default function NotificationCenter() {
     if (newSmileNotifications.length > 0) {
       console.log("New Smile Notifications: ", newSmileNotifications);
       setSmileNotifications((prev) => [...prev, ...newSmileNotifications]);
+    } else {
+      console.log("No new smile notifications.");
     }
   };
 
