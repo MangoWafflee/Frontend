@@ -45,7 +45,7 @@ export default function MainPage() {
 
 	// 해당 유저의 참여중인 챌린지/참여했던 챌린지 정보 받아오는 api Query
 	const getUserChallenges = async () => {
-		const { data } = await axios.get(`/challenge/userchallenge/${uid}`);
+		const { data } = await axios.get(`/challenge/userchallenge/${userId}`);
 		const categorizedChallenges = {
 			// 참여중인 챌린지 데이터
 			participatingChallengeList: data.filter(
