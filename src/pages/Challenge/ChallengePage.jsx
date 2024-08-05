@@ -25,7 +25,7 @@ export default function ChallengePage() {
 
 	// 챌린지 참여 api
 	const participateChallenge = async () => {
-		const response = await axios.post("/userchallenge/participate", {
+		const response = await axios.post("/challenge/userchallenge/participate", {
 			uid: user.uid,
 		});
 		return response;
