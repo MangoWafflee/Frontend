@@ -70,7 +70,15 @@ export default function CameraRecognitionPage() {
         let url = `https://mango.angrak.cloud/smile/save`;
         const smileData = {
           smilePercentage: maxHappyPercentageRef.current,
-          date: new Date().toISOString().split('T')[0],
+          date: new Date()
+            .toLocaleDateString('ko-KR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            })
+            .replace(/. /g, '-')
+            .replace('.', '')
+            .replace('.', ''),
           time: new Intl.DateTimeFormat('ko-KR', {
             hour: '2-digit',
             minute: '2-digit',
