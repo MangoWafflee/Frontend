@@ -16,17 +16,21 @@ import useFetchUserBadges from '../../hooks/useFetchUserBadges';
 
 export default function AchievementPage() {
   const navigate = useNavigate();
-
-  const [user, setUser] = useState(null);
   const [uid, setUid] = useState('');
-  const { badgeList, error } = useFetchUserBadges(uid);
+  const [token, setToken] = useState('');
+  const { badgeList, error } = useFetchUserBadges(
+    uid,
+    token
+  );
   useEffect(() => {
     const storedUser = JSON.parse(
       localStorage.getItem('user')
     );
+    const storedToken = localStorage.getItem('token');
     if (storedUser) {
-      setUser(storedUser);
       setUid(storedUser.uid);
+      setToken(storedToken);
+      set;
     } else {
       navigate('/');
     }
