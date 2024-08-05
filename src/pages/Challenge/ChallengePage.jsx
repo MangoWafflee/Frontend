@@ -75,7 +75,7 @@ export default function ChallengePage() {
 
 	// 진행중인 챌린지 정보 받아오기
 	const getOngoingChallenges = async (userChallenges) => {
-		const { data } = await axios.get("/challenge");
+		const { data } = await axios.get("/challenge/going");
 		const ongoingChallenges = data.filter((challenge) => {
 			// userChallenges.participatingChallengeList에 포함되지 않는 항목만 남기기
 			return !userChallenges.participatingChallengeList.some(
@@ -255,34 +255,34 @@ export default function ChallengePage() {
 					<div>
 						<div className="background-badge">
 							<img
-								src={selectedChallenge.challenge.img}
+								src={selectedChallenge.img}
 								alt="challenge-image"
 							/>
 						</div>
-						<h3>{selectedChallenge.challenge.title}</h3>
+						<h3>{selectedChallenge.title}</h3>
 						<br />
-						<p>{selectedChallenge.challenge.subTitle}</p>
+						<p>{selectedChallenge.subTitle}</p>
 						<br />
-						<p>{selectedChallenge.challenge.content}</p>
+						<p>{selectedChallenge.content}</p>
 						<br />
 						<div className="challenge-info">
 							<p>
 								<span>기간</span>
-								<span>{` ~ ${selectedChallenge.challenge.endDate}`}</span>
+								<span>{` ~ ${selectedChallenge.endDate}`}</span>
 							</p>
 							<p>
 								<span>참가자</span>
-								<span>{`${selectedChallenge.challenge.count}`}</span>
+								<span>{`${selectedChallenge.count}`}</span>
 							</p>
 							{selectedChallenge.participating ==="참여" ? (
 								<p>
 									<span>진행</span>
-									<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.challenge.totalAttempts}`}</span>
+									<span>{`${selectedChallenge.completedAttempts} / ${selectedChallenge.totalAttempts}`}</span>
 								</p>
 							) : (
 								<p>
 									<span>횟수</span>
-									<span>{`${selectedChallenge.challenge.totalAttempts}`}</span>
+									<span>{`${selectedChallenge.totalAttempts}`}</span>
 								</p>
 							)}
 						</div>
