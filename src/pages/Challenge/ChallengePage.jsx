@@ -138,7 +138,7 @@ export default function ChallengePage() {
 	// 로딩 중 화면
 	if (isUserChallengesLoading || isOngoingChallengesLoading) {
 		return (
-			<div>
+			<div className="center">
 				<Loading />
 			</div>
 		);
