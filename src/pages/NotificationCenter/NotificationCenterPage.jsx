@@ -11,12 +11,7 @@ const getRelativeTime = (dateString) => {
   const now = new Date();
   const requestDate = new Date(dateString);
 
-  // 한국 시간(KST)으로 변환
-  const localRequestDate = new Date(
-    requestDate.toLocaleString("en-US", { timeZone: "Asia/Seoul" })
-  );
-
-  const diffInSeconds = Math.floor((now - localRequestDate) / 1000);
+  const diffInSeconds = Math.floor((now - requestDate) / 1000);
 
   const secondsInMinute = 60;
   const secondsInHour = secondsInMinute * 60;
@@ -54,6 +49,8 @@ const getRelativeTime = (dateString) => {
 
 export default function NotificationCenter() {
   const [notifications, setNotifications] = useState([]);
+  const [smileNotifications, setSmileNotifications] = useState([]);
+  const [friends, setFriends] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -73,21 +70,19 @@ export default function NotificationCenter() {
 
   const userId = user ? user.id : 0;
 
-  // 친구요청 리스트 가져오기
   const fetchNotifications = async () => {
-    if (!userId || !token) return; // userId와 token이 없으면 함수 종료
+    if (!userId || !token) return;
 
     setIsLoading(true);
     try {
       const url = `${BACKEND_URL}/follow/received?userId=${userId}`;
-      console.log("Fetch URL:", url);
-
       const response = await fetch(url, {
+        method: "GET",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `${token}`,
         },
       });
-      console.log("Fetch response status:", response.status);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -102,7 +97,93 @@ export default function NotificationCenter() {
     }
   };
 
-  // 친구 요청 수락
+  const fetchFriends = async () => {
+    if (!userId || !token) return;
+
+    setIsLoading(true);
+    try {
+      const url = `${BACKEND_URL}/follow/list/${userId}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setFriends(data);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchSmileData = async (nickname) => {
+    try {
+      const url = `${BACKEND_URL}/smile/user/${nickname}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(`Error fetching smile data for ${nickname}:`, error);
+      return [];
+    }
+  };
+
+  const updateSmileNotifications = async () => {
+    const newSmileNotifications = [];
+
+    for (const friend of friends) {
+      const smileData = await fetchSmileData(friend.nickname);
+      if (smileData.length > 0) {
+        newSmileNotifications.push(
+          ...smileData.map((smile) => ({
+            ...smile,
+            friendName: friend.name,
+            friendNickname: friend.nickname,
+            friendImage: friend.image, // 친구 이미지 추가
+          }))
+        );
+      }
+    }
+
+    const existingNotificationKeys = new Set(
+      smileNotifications.map(
+        (notif) => `${notif.nickname}-${notif.date}-${notif.time}`
+      )
+    );
+
+    const uniqueNewSmileNotifications = newSmileNotifications.filter(
+      (notif) =>
+        !existingNotificationKeys.has(
+          `${notif.nickname}-${notif.date}-${notif.time}`
+        )
+    );
+
+    if (uniqueNewSmileNotifications.length > 0) {
+      setSmileNotifications((prev) => [
+        ...prev,
+        ...uniqueNewSmileNotifications,
+      ]);
+    }
+  };
+
   const handleAcceptRequest = async (requestId) => {
     setIsLoading(true);
     try {
@@ -125,7 +206,6 @@ export default function NotificationCenter() {
       const responseBody = await response.text();
 
       if (response.ok) {
-        // 알림 리스트 갱신
         message.success("친구가 되었어요!");
 
         setNotifications((prevNotifications) =>
@@ -143,7 +223,6 @@ export default function NotificationCenter() {
     }
   };
 
-  // 친구 요청 거절
   const handleRejectRequest = async (requestId) => {
     setIsLoading(true);
     try {
@@ -159,9 +238,7 @@ export default function NotificationCenter() {
         }),
       });
 
-      console.log(`Response status: ${response.status}`);
       const responseBody = await response.text();
-      console.log(`Response body: ${responseBody}`);
 
       if (!response.ok) {
         throw new Error("API 요청 실패");
@@ -169,7 +246,6 @@ export default function NotificationCenter() {
 
       message.error("팔로우 요청을 거절했어요!");
 
-      // 요청 성공 시 알림 리스트 갱신
       setNotifications((prevNotifications) =>
         prevNotifications.filter(
           (notification) => notification.id !== requestId
@@ -182,95 +258,172 @@ export default function NotificationCenter() {
     }
   };
 
-  // useEffect 훅
   useEffect(() => {
     if (userId && token) {
-      fetchNotifications(); // 컴포넌트 마운트 시 데이터 가져오기
-      const intervalId = setInterval(fetchNotifications, 5000); // 5초마다 폴링
+      fetchNotifications();
+      fetchFriends();
 
-      return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 클린업
+      const intervalId = setInterval(() => {
+        fetchNotifications();
+        updateSmileNotifications();
+      }, 5000);
+
+      return () => clearInterval(intervalId);
     }
   }, [userId, token]);
 
   return (
     <div>
       <main>
-        {notifications.length === 0 || notifications === null ? (
+        {notifications.length === 0 && smileNotifications.length === 0 ? (
           <div className="notifications-empty">
             <h3>아직 알림이 없어요!</h3>
           </div>
         ) : (
-          notifications
-            .slice()
-            .reverse()
-            .map((notification) => (
-              <div className="notification" key={notification.id}>
-                <div className="user-info">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      margin: "0.5rem",
-                    }}
-                  >
-                    <Avatar
-                      src={notification.sender.image || UserDefaultImage}
-                      aria-label={notification.sender.name}
-                      sx={{ width: 45, height: 45 }}
+          <>
+            {notifications
+              .slice()
+              .reverse()
+              .map((notification) => (
+                <div className="notification" key={notification.id}>
+                  <div className="user-info">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        margin: "0.5rem",
+                      }}
                     >
-                      <Typography sx={{ fontSize: "1rem" }}>
-                        {notification.sender.name[0]}
-                      </Typography>
-                    </Avatar>
-                    <div className="friend-info">
-                      <Typography
-                        color="text.primary"
-                        sx={{
-                          fontSize: "1rem",
-                          textAlign: "left",
-                          marginLeft: "1rem",
-                          fontWeight: "bold",
-                        }}
-                        noWrap
+                      <Avatar
+                        src={notification.sender.image || UserDefaultImage}
+                        aria-label={notification.sender.name}
+                        sx={{ width: 45, height: 45 }}
                       >
-                        {notification.sender.name}
-                      </Typography>
-                      <Typography
-                        color="text.secondary"
-                        sx={{
-                          fontSize: "0.8rem",
-                          textAlign: "left",
-                          marginLeft: "1.5rem",
-                        }}
-                        noWrap
-                      >
-                        {notification.sender.nickname}
-                      </Typography>
-                    </div>
-                  </Box>
-                </div>
-
-                <div className="button-container">
-                  <div className="timestamp">
-                    {getRelativeTime(notification.requestDate)}
+                        <Typography sx={{ fontSize: "1rem" }}>
+                          {notification.sender.name[0]}
+                        </Typography>
+                      </Avatar>
+                      <div className="friend-info">
+                        <Typography
+                          color="text.primary"
+                          sx={{
+                            fontSize: "1rem",
+                            textAlign: "left",
+                            marginLeft: "1rem",
+                            fontWeight: "bold",
+                          }}
+                          noWrap
+                        >
+                          {notification.sender.name}
+                        </Typography>
+                        <Typography
+                          color="text.secondary"
+                          sx={{
+                            fontSize: "0.8rem",
+                            textAlign: "left",
+                            marginLeft: "1.5rem",
+                          }}
+                          noWrap
+                        >
+                          {notification.sender.nickname}
+                        </Typography>
+                      </div>
+                    </Box>
                   </div>
-                  <button
-                    className="accept-button"
-                    onClick={() => handleAcceptRequest(notification.id)}
-                    disabled={isLoading}
-                  >
-                    팔로우 수락
-                  </button>{" "}
-                  <button
-                    className="reject-button"
-                    onClick={() => handleRejectRequest(notification.id)}
-                    disabled={isLoading}
-                  >
-                    거절
-                  </button>
+
+                  <div className="button-container">
+                    <div className="timestamp">
+                      {getRelativeTime(notification.requestDate)}
+                    </div>
+                    <button
+                      className="accept-button"
+                      onClick={() => handleAcceptRequest(notification.id)}
+                      disabled={isLoading}
+                    >
+                      팔로우 수락
+                    </button>{" "}
+                    <button
+                      className="reject-button"
+                      onClick={() => handleRejectRequest(notification.id)}
+                      disabled={isLoading}
+                    >
+                      거절
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              ))}
+
+            {smileNotifications
+              .slice()
+              .reverse()
+              .map((smileNotification, index) => (
+                <div className="notification" key={index}>
+                  <div className="user-info">
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        margin: "0.5rem",
+                      }}
+                    >
+                      <Avatar
+                        src={smileNotification.friendImage || UserDefaultImage}
+                        aria-label={smileNotification.friendName}
+                        sx={{ width: 45, height: 45 }}
+                      >
+                        <Typography sx={{ fontSize: "1rem" }}>
+                          {smileNotification.friendName[0]}
+                        </Typography>
+                      </Avatar>
+                      <div className="friend-info">
+                        <Typography
+                          color="text.primary"
+                          sx={{
+                            fontSize: "1rem",
+                            textAlign: "left",
+                            marginLeft: "1rem",
+                            fontWeight: "bold",
+                          }}
+                          noWrap
+                        >
+                          {smileNotification.friendName}
+                        </Typography>
+                        <Typography
+                          color="text.secondary"
+                          sx={{
+                            fontSize: "0.8rem",
+                            textAlign: "left",
+                            marginLeft: "1.5rem",
+                          }}
+                          noWrap
+                        >
+                          {smileNotification.friendNickname}
+                        </Typography>
+                      </div>
+                    </Box>
+                    <Typography
+                      color="text.secondary"
+                      sx={{
+                        fontSize: "0.8rem",
+                        textAlign: "left",
+                        marginLeft: "1.5rem",
+                      }}
+                      noWrap
+                    >
+                      친구가 웃었어요!
+                    </Typography>
+                  </div>
+
+                  <div className="button-container">
+                    <div className="timestamp">
+                      {getRelativeTime(
+                        `${smileNotification.date}T${smileNotification.time}`
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </>
         )}
       </main>
     </div>
