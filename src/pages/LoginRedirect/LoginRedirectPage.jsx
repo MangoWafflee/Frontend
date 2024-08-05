@@ -177,6 +177,7 @@ export default function LoginRedirectPage() {
               <Search
                 placeholder="닉네임을 입력하세요."
                 enterButton="중복 확인"
+                maxLength={12}
                 size="large"
                 onSearch={handleSearch}
                 onChange={handleChange}

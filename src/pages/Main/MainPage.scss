@@ -8,12 +8,14 @@
   .circular {
     border-radius: 10px;
   }
+
   .title {
     color: rgb(59, 59, 59);
     text-align: center;
     font-size: 1.35rem;
     font-weight: bold;
   }
+
   .main-menu {
     width: 100%;
     display: flex;
@@ -42,25 +44,35 @@
         display: flex;
         flex-direction: row;
         gap: 1rem;
+
+        img {
+          width: 70px;
+          height: 90px;
+        }
       }
     }
+
     .badge-image {
       width: 4rem;
       height: 4rem;
     }
+
     .flex-column {
       display: flex;
       flex-direction: column;
       gap: 1.1rem;
+
       span {
         font-size: 1rem;
         font-weight: bold;
         margin-left: 10px;
       }
+
       .badge-progress {
         width: 4rem;
       }
     }
+
     .ranking-container {
       grid-area: ranking;
       background-color: gainsboro;
