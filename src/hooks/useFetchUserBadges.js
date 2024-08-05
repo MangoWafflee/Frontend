@@ -10,6 +10,7 @@ const useFetchUserBadges = (uid, token) => {
     if (!uid) return;
 
     const fetchData = async () => {
+      console.log('uid : ', uid, 'token : ', token);
       let url = `https://mango.angrak.cloud/user/uid/${uid}`; // URL 확인
       try {
         const response = await fetch(url, {
