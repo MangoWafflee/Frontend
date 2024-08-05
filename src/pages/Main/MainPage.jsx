@@ -104,24 +104,25 @@ export default function MainPage() {
           >
             {inProgressBadge ? (
               <div className="challenge circular">
-                {badgeImage && (
-                  <img
-                    src={badgeImage}
-                    alt="badge"
-                    style={{
-                      width: '50px',
-                      height: '50px',
-                    }}
-                  />
-                )}
-                <span>{inProgressBadge.title}</span>
-                {/* 뱃지 이미지 넣기 */}
+                <>
+                  {badgeImage && (
+                    <img
+                      src={badgeImage}
+                      alt="badge"
+                      className="badge-image"
+                    />
+                  )}
+                </>
+                <div className="flex-column">
+                  <span>{inProgressBadge.title}</span>
+                  {/* 뱃지 이미지 넣기 */}
 
-                <Progress
-                  percent={progressPercent}
-                  status="active"
-                  style={{ width: '60%', marginLeft: 10 }}
-                />
+                  <Progress
+                    percent={progressPercent}
+                    status="active"
+                    style={{ width: '60%', marginLeft: 10 }}
+                  />
+                </div>
               </div>
             ) : (
               <div className="challenge">
