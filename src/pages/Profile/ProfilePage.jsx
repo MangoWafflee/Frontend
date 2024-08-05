@@ -47,6 +47,7 @@ export default function ProfilePage() {
 
         if (response.status === 200) {
           const data = await response.json();
+          console.log(data);
           setSmileCount(data.length);
         } else if (response.status === 404) {
           console.log('검색 결과가 없습니다.');
