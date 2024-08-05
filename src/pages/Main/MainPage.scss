@@ -45,7 +45,7 @@
         flex-direction: row;
         gap: 1rem;
 
-        img {
+        .challenge-image {
           width: 70px;
           height: 90px;
         }
@@ -53,24 +53,14 @@
     }
 
     .badge-image {
-      width: 4rem;
-      height: 4rem;
+      width: 100px;
+      height: 100px;
     }
 
     .flex-column {
       display: flex;
       flex-direction: column;
       gap: 1.1rem;
-
-      span {
-        font-size: 1rem;
-        font-weight: bold;
-        margin-left: 10px;
-      }
-
-      .badge-progress {
-        width: 4rem;
-      }
     }
 
     .ranking-container {
