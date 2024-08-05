@@ -53,8 +53,8 @@ export default function CameraRecognitionPage() {
 
   useEffect(() => {
     if (
-      happyPercentageRef.current >
-      maxHappyPercentageRef.current
+      parseFloat(happyPercentageRef.current) >
+      parseFloat(maxHappyPercentageRef.current)
     ) {
       maxHappyPercentageRef.current =
         happyPercentageRef.current;
@@ -173,15 +173,6 @@ export default function CameraRecognitionPage() {
           happyPercentageRef.current = (
             happy * 100
           ).toFixed(0);
-
-          // maxHappyPercentage 업데이트 로직 추가
-          if (
-            parseFloat(happyPercentageRef.current) >
-            parseFloat(maxHappyPercentageRef.current)
-          ) {
-            maxHappyPercentageRef.current =
-              happyPercentageRef.current;
-          }
         } else {
           setFaceDetected(false);
         }
@@ -210,6 +201,7 @@ export default function CameraRecognitionPage() {
         const tracks = stream.getTracks();
 
         tracks.forEach((track) => track.stop());
+        videoRef.current.srcObject = null;
       }
     };
   }, [modelsLoaded]);
