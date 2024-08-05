@@ -194,6 +194,15 @@ export default function CameraRecognitionPage() {
         handleVideoOnPlay
       );
     }
+
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject;
+        const tracks = stream.getTracks();
+
+        tracks.forEach((track) => track.stop());
+      }
+    };
   }, [modelsLoaded]);
 
   useEffect(() => {
