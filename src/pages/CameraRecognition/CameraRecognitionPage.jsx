@@ -11,16 +11,12 @@ export default function CameraRecognitionPage() {
   const happyPercentageRef = useRef(0);
   const maxHappyPercentageRef = useRef(0);
   const [modelsLoaded, setModelsLoaded] = useState(false);
-  const [videoDimensions, setVideoDimensions] = useState({
-    width: 360,
-    height: 360,
-  });
   const [videoVisible, setVideoVisible] = useState(true);
   const [faceDetected, setFaceDetected] = useState(false);
   const [animationVisible, setAnimationVisible] =
     useState(false);
-
   const location = useLocation();
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(
@@ -132,7 +128,7 @@ export default function CameraRecognitionPage() {
         videoRef.current.addEventListener(
           'loadedmetadata',
           () => {
-            setVideoDimensions({ width: 360, height: 360 });
+            videoRef.current.play();
           }
         );
       })
@@ -149,8 +145,8 @@ export default function CameraRecognitionPage() {
     );
     canvasRef.current = canvas;
     const displaySize = {
-      width: videoDimensions.width,
-      height: videoDimensions.height,
+      width: videoRef.current.videoWidth,
+      height: videoRef.current.videoHeight,
     };
     faceapi.matchDimensions(canvas, displaySize);
 
@@ -190,17 +186,30 @@ export default function CameraRecognitionPage() {
       }
     };
 
-    const intervalId = setInterval(detectFaces, 500);
-
-    return () => clearInterval(intervalId);
+    intervalRef.current = setInterval(detectFaces, 500);
   };
 
-  const stopVideoStream = () => {
+  const stopFaceApiAndStream = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject;
       const tracks = stream.getTracks();
       tracks.forEach((track) => track.stop());
       videoRef.current.srcObject = null;
+    }
+
+    if (canvasRef.current) {
+      const context = canvasRef.current.getContext('2d');
+      context.clearRect(
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
     }
   };
 
@@ -214,7 +223,7 @@ export default function CameraRecognitionPage() {
     }
 
     return () => {
-      stopVideoStream();
+      stopFaceApiAndStream();
     };
   }, [modelsLoaded]);
 
@@ -236,7 +245,7 @@ export default function CameraRecognitionPage() {
   // location 변경 시 카메라 스트림 정리
   useEffect(() => {
     return () => {
-      stopVideoStream();
+      stopFaceApiAndStream();
     };
   }, [location]);
 
