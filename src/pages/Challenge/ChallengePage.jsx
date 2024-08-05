@@ -26,7 +26,12 @@ export default function ChallengePage() {
 	// 챌린지 참여 api
 	const participateChallenge = async () => {
 		const response = await axios.post("/challenge/userchallenge/participate", {
-			uid: user.uid,
+			uid: {
+				id:user.id
+			},
+			challenge : {
+				id:selectedChallenge.id
+			}
 		});
 		return response;
 	};
@@ -47,20 +52,20 @@ export default function ChallengePage() {
 
 	// 해당 유저의 참여중인 챌린지/참여했던 챌린지 정보 받아오는 api Query
 	const getUserChallenges = async () => {
-		const userId = user.uid;
+		const userId = user.id;
 		const { data } = await axios.get(`/challenge/userchallenge/${userId}`);
 		const categorizedChallenges = {
 			// 참여중인 챌린지 데이터
 			participatingChallengeList: data.filter(
 				(challenge) =>
-					challenge.participating === true &&
-					challenge.success_status === null
+					challenge.participating === "참여" &&
+					challenge.successStatus === null
 			),
 			// 참여했던 챌린지 데이터
 			participatedChallengeList: data.filter(
 				(challenge) =>
-					challenge.participating === true &&
-					challenge.success_status !== null
+					challenge.participating === "참여" &&
+					challenge.successStatus !== null
 			),
 		};
 		return categorizedChallenges;
@@ -145,6 +150,7 @@ export default function ChallengePage() {
 	// api 정상적으로 작동 시 화면
 	return (
 		<div className="challenge-page">
+			{/* 현재 유저가 참여하고 있는 챌린지들 */}
 			<h2>나의 챌린지</h2>
 			{userChallenges.participatingChallengeList === null ||
 			userChallenges.participatingChallengeList.length === 0 ? (
@@ -157,14 +163,14 @@ export default function ChallengePage() {
 							setSelectedChallenge(challenge);
 							setIsModalOpen(true);
 						}}
-						key={challenge.id}
+						key={challenge.challenge.id}
 					>
-						<img src={challenge.img} alt="challenge-image" />
+						<img src={challenge.challenge.img} alt="challenge-image" />
 						<div className="column">
-							<h4>{challenge.title}</h4>
-							<p>{challenge.subTitle}</p>
+							<h4>{challenge.challenge.title}</h4>
+							<p>{challenge.challenge.subTitle}</p>
 							<p>{`${calculateDateDifference(
-								challenge.endDate
+								challenge.challenge.endDate
 							)}일 남음`}</p>
 						</div>
 						<div className="icon-detail">
@@ -175,6 +181,7 @@ export default function ChallengePage() {
 			)}
 
 			<Divider />
+			{/* 진행중인 챌린지 중에 참여 안한 것들 */}
 			<h2>챌린지 참여하기</h2>
 			{ongoingChallenges === null || ongoingChallenges.length === 0 ? (
 				<div className="challenge">진행중인 챌린지가 없습니다.</div>
@@ -204,6 +211,7 @@ export default function ChallengePage() {
 			)}
 
 			<Divider />
+			{/* 유저가 참여했던 챌린지 중 기간이 지난 것 */}
 			<h2>이전 챌린지</h2>
 			{userChallenges.participatedChallengeList === null ||
 			userChallenges.participatedChallengeList.length === 0 ? (
@@ -216,13 +224,13 @@ export default function ChallengePage() {
 							setSelectedChallenge(challenge);
 							setIsModalOpen(true);
 						}}
-						key={challenge.id}
+						key={challenge.challenge.id}
 					>
-						<img src={challenge.img} alt="challenge-image" />
+						<img src={challenge.challenge.img} alt="challenge-image" />
 						<div className="column">
-							<h4>{challenge.title}</h4>
-							<p>{challenge.subTitle}</p>
-							<p>{challenge.successStatus ? "성공" : "실패"}</p>
+							<h4>{challenge.challenge.title}</h4>
+							<p>{challenge.challenge.subTitle}</p>
+							<p>{challenge.successStatus}</p>
 						</div>
 						<div className="icon-detail">
 							<FontAwesomeIcon icon={faAngleRight} size={"xl"} />
