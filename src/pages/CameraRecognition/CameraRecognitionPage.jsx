@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 import './CameraRecognitionPage.scss';
+import { useCameraStatus } from '../../components/Contexts/CameraStatusContext';
 
 export default function CameraRecognitionPage() {
   const [user, setUser] = useState(null);
@@ -18,6 +19,8 @@ export default function CameraRecognitionPage() {
   const [faceDetected, setFaceDetected] = useState(false);
   const [animationVisible, setAnimationVisible] =
     useState(false);
+
+  const { isCameraActive } = useCameraStatus();
 
   useEffect(() => {
     const storedUser = JSON.parse(
@@ -68,14 +71,14 @@ export default function CameraRecognitionPage() {
         const smileData = {
           smilePercentage: maxHappyPercentageRef.current,
           date: new Date().toISOString().split('T')[0],
-          time: new Date().toLocaleTimeString('en-GB', {
+          time: new Date().toLocaleTimeString('ko-KR', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
+            timeZone: 'Asia/Seoul',
           }),
           nickname: nickname,
         };
-
         console.log(smileData);
         try {
           const response = await fetch(url, {
@@ -187,7 +190,7 @@ export default function CameraRecognitionPage() {
   };
 
   useEffect(() => {
-    if (modelsLoaded) {
+    if (modelsLoaded && isCameraActive) {
       startVideo();
       videoRef.current.addEventListener(
         'play',
@@ -204,7 +207,7 @@ export default function CameraRecognitionPage() {
         videoRef.current.srcObject = null;
       }
     };
-  }, [modelsLoaded]);
+  }, [modelsLoaded, isCameraActive]);
 
   useEffect(() => {
     if (modelsLoaded && faceDetected) {

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import './App.scss';
-import { useDispatch, useSelector } from 'react-redux';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import AchievementPage from './pages/Achievement/AchievementPage';
@@ -15,8 +14,6 @@ import NotificationCenterPage from './pages/NotificationCenter/NotificationCente
 import ProfilePage from './pages/Profile/ProfilePage';
 import ProfileEditPage from './pages/ProfileEdit/ProfileEditPage';
 import SmilePage from './pages/Smile/SmilePage';
-import { loadUserFromLocalStorage } from './features/auth/authUtils';
-import { selectUser } from './features/auth/authSlice';
 
 const Layout = () => (
   <div className="page">
