@@ -24,8 +24,6 @@ export default function ProfileEditPage() {
   const [previewImage, setPreviewImage] = useState(
     UserDefaultImage
   );
-  const [isAvailableNickname, setIsAvailableNickname] =
-    useState(false);
 
   useEffect(() => {
     const storedUser = JSON.parse(
@@ -48,8 +46,11 @@ export default function ProfileEditPage() {
   }, [navigate]);
 
   const handleChange = (e) => {
-    setSearchText(e.target.value);
-    setIsAvailableNickname(false);
+    if (e.target.value.length <= 12) {
+      setSearchText(e.target.value);
+    } else{
+      message.warning("닉네임은 최대 12자까지 가능합니다.")
+    }
   };
 
   const checkNickname = async (nickname) => {
@@ -68,12 +69,10 @@ export default function ProfileEditPage() {
         '해당 닉네임은 존재합니다.'
       ) {
         message.error(response.data.message);
-        setIsAvailableNickname(false);
       } else if (
         response.data.message ===
         '사용 가능한 닉네임입니다.'
       ) {
-        setIsAvailableNickname(true);
         message.success(response.data.message);
       }
     },

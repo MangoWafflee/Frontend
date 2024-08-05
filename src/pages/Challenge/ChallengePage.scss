@@ -49,11 +49,14 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    background-color: skyblue;
+    background-image: linear-gradient(to right bottom,
+            #ff5c5c,
+            #ad6dfc);
     color: white;
     padding: 15px 0px;
     margin: 15px 0px;
     border-radius: 20px;
+    font-size: 1.2rem;
 }
 
 .challenge-info {

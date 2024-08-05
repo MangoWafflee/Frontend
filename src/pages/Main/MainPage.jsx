@@ -163,7 +163,7 @@ export default function MainPage() {
                       alt="challenge-image"
                       className="challenge-image"
                     />
-                    <div>
+                    <div className='flex-column'>
                       <span>
                         {challenge.challenge.title}
                       </span>

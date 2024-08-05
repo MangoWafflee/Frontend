@@ -343,7 +343,7 @@ export default function ChallengePage() {
 										setIsModalOpen(false);
 									}}
 								>
-									챌린지 참여하기
+									<strong>챌린지 참여하기</strong>
 								</button>
 							)}
 						</div>
