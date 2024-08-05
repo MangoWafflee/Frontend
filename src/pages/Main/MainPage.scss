@@ -38,11 +38,9 @@
         width: 90%;
         background-color: white;
         margin: 20px 5px;
-
-        justify-content: center;
-        align-items: center;
         display: flex;
-        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
 
         .challenge-image {
           width: 70px;
