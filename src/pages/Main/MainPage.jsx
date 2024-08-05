@@ -13,7 +13,7 @@ export default function MainPage() {
 	const [token, setToken] = useState("");
 	const [uid, setUid] = useState("");
 	const [nickname, setNickname] = useState("");
-	const [userId, setUserId] = useState(0);
+	const [userId, setUserId] = useState(null);
 
 	useEffect(() => {
 		const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -63,8 +63,9 @@ export default function MainPage() {
 		error: userChallengesError,
 		isLoading: isUserChallengesLoading,
 	} = useQuery({
-		queryKey: ["userChallenges"],
+		queryKey: ["mainPageUserChallenges"],
 		queryFn: getUserChallenges,
+    enabled: !!userId,
 	});
 
   // useEffect를 사용하여 userChallenges와 ongoingChallenges를 콘솔에 출력
