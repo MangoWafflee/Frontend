@@ -34,7 +34,7 @@ export default function IntroductionPage() {
   const kakaoRestApiKey =
     process.env.REACT_APP_REST_API_KEY;
 
-  const loginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoRestApiKey}&redirect_uri=${kakaoRedirectURI}&response_type=code&scope=account_email`;
+  const loginUrl = `https://mango.angrak.cloud/oauth2/authorization/kakao`;
 
   // 카카오 로그인 버튼 누를 시
   const handleLogin = async () => {
