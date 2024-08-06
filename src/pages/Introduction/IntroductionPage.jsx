@@ -82,7 +82,7 @@ export default function IntroductionPage() {
       {isMenuOpen && <div className="overlay"></div>}
       {/* 상단바 */}
       <header>
-        <span>SmileHub</span>
+        <span>😆SmileHub</span>
         <FontAwesomeIcon
           icon={faBars}
           style={{ cursor: 'pointer' }}
