@@ -167,7 +167,7 @@ export default function ProfileEditPage() {
     const formData = new FormData();
     let imageUrl;
     if (changeImage.startsWith('blob:')) {
-      imageUrl = imageUrl.slice(5); // 'blob:' 접두사를 제거
+      imageUrl = changeImage.slice(5); // 'blob:' 접두사를 제거
       formData.append('image', imageUrl);
       console.log(imageUrl);
     }
