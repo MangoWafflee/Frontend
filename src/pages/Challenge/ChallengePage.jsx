@@ -4,7 +4,7 @@ import "./ChallengePage.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../app/axios";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../components/Loading/Loading";
 
 export default function ChallengePage() {
@@ -13,7 +13,8 @@ export default function ChallengePage() {
 	const [isParticipatingChallenge, setIsParticipatingChallenge] =
 		useState(null);
 	const user = JSON.parse(localStorage.getItem("user")); // localStorage에서 user 정보 가져오기
-	console.log("로컬 유저 정보", user);
+	const token = JSON.parse(localStorage.getItem("token")); // localStorage에서 token 정보 가져오기
+	const queryClient = useQueryClient(); // react-query queryClient 생성
 
 	// 챌린지 모달 창 제거
 	const handleCancel = () => {
@@ -38,6 +39,9 @@ export default function ChallengePage() {
 				challenge: {
 					id: selectedChallenge.id,
 				},
+			},
+			{
+				headers: { Authorization: token },
 			}
 		);
 		return response;
@@ -49,7 +53,8 @@ export default function ChallengePage() {
 		onSuccess: (response) => {
 			console.log(response);
 			message.success("챌린지에 참가되었습니다.");
-			window.location.reload();
+			queryClient.invalidateQueries(["userChallenges", user.uid]); // 참여한 챌린지 목록 업데이트
+			queryClient.invalidateQueries(["ongoingChallenges"]); // 진행중인 챌린지 목록 업데이트
 		},
 		onError: (error) => {
 			console.log(error);
