@@ -164,8 +164,8 @@ export default function ProfileEditPage() {
 
   const updateImageData = async () => {
     const formData = new FormData();
-    formData.append('image', changeImage);
-    console.log('변화 이미지', changeImage);
+    formData.append('image', previewImage);
+    console.log('변화 이미지', previewImage);
     try {
       const response = await fetch(
         `https://mango.angrak.cloud/user/${uid}`,
@@ -179,7 +179,7 @@ export default function ProfileEditPage() {
       if (response.ok) {
         const updatedUser = {
           ...user,
-          image: changeImage, // 서버에서 반환된 실제 이미지 URL 사용
+          image: previewImage, // 서버에서 반환된 실제 이미지 URL 사용
         };
         setUser(updatedUser);
         localStorage.setItem(
