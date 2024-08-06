@@ -125,6 +125,7 @@ export default function LoginRedirectPage() {
       console.log(response);
       // 유저 정보 저장
       const { user, token } = response.data;
+      console.log('로그인 정보', user, token);
       saveUserToLocalStorage(user, token);
       // 닉네임 null 이면 닉네임 설정 창 띄우기
       if (user.nickname === null) {
