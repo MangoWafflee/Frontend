@@ -202,7 +202,7 @@ export default function ProfileEditPage() {
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const file = e.target.files[0];
-      setChangeImage(file);
+      setChangeImage(URL.createObjectURL(file));
       setPreviewImage(URL.createObjectURL(file));
     }
   };
