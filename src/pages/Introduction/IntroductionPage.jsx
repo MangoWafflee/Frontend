@@ -10,7 +10,7 @@ import notificationImage from "../../assets/images/소개_알림기능.png";
 import smileCalendarImage from "../../assets/images/소개_웃음달력.png";
 import challengeImage from "../../assets/images/소개_챌린지.png";
 import friendImage from "../../assets/images/소개_친구기능.png";
-import introduceVideo from '../../assets/videos/소개_영상.mp4';
+import introduceVideo from "../../assets/videos/소개_영상.mp4";
 
 export default function IntroductionPage() {
 	const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function IntroductionPage() {
 	const kakaoRedirectURI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
 	const kakaoRestApiKey = process.env.REACT_APP_REST_API_KEY;
 
-  const loginUrl = `https://mango.angrak.cloud/oauth2/authorization/kakao`;
+	const loginUrl = `https://mango.angrak.cloud/oauth2/authorization/kakao`;
 
 	// 카카오 로그인 버튼 누를 시
 	const handleLogin = async () => {
@@ -90,12 +90,13 @@ export default function IntroductionPage() {
 			<div className="empty"></div>
 			{/* 소개 메인 */}
 			<section>
-				<div className="container"></div>
 				<h2>스마일 허브</h2>
 				<h2 className="gradient-text">웃음을 기록하다</h2>
-				<video width="340" height="360" autoPlay muted loop>
-					<source src={introduceVideo} type="video/mp4" />
-				</video>
+				<div className="introduce-video">
+					<video width="380" height="364" autoPlay muted loop>
+						<source src={introduceVideo} type="video/mp4" />
+					</video>
+				</div>
 			</section>
 			{/* 앱 기능 소개 */}
 			<section id="app-functions">
