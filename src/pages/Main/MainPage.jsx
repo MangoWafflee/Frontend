@@ -22,13 +22,6 @@ export default function MainPage() {
     );
     const storedToken = localStorage.getItem('token');
     if (storedUser && storedToken) {
-      if (storedUser.image == null) {
-        storedUser.image = UserDefaultImage;
-        localStorage.setItem(
-          'user',
-          JSON.stringify(storedUser)
-        );
-      }
       setToken(storedToken);
       setUid(storedUser.uid);
       setNickname(storedUser.nickname);

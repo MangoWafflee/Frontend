@@ -37,8 +37,14 @@ export default function ProfileEditPage() {
       setNickname(storedUser.nickname || 'test');
       setUid(storedUser.uid || 0);
       setEmail(storedUser.email || '');
-      setImage(storedUser.image);
-      setPreviewImage(storedUser.image || UserDefaultImage);
+      if (storedUser.image == null) {
+        setImage(UserDefaultImage);
+        setPreviewImage(UserDefaultImage);
+      } else {
+        setImage(storedUser.image);
+        setPreviewImage(storedUser.image);
+      }
+
       setSearchText(storedUser.nickname || '');
     } else {
       navigate('/');

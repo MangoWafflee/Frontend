@@ -26,7 +26,11 @@ export default function ProfilePage() {
       setName(storedUser.name);
       setNickname(storedUser.nickname);
       setEmail(storedUser.email);
-      setImage(storedUser.image);
+      if (storedUser.image == null) {
+        setImage(UserDefaultImage);
+      } else {
+        setImage(storedUser.image);
+      }
       console.log(storedUser);
     }
   }, []);
@@ -99,7 +103,10 @@ export default function ProfilePage() {
     <div id="profile-page">
       <div className="profile-section">
         <div className="profile-image">
-          <img src={image && UserDefaultImage} alt="프로필 사진" />
+          <img
+            src={image && UserDefaultImage}
+            alt="프로필 사진"
+          />
         </div>
         <div className="user-info">
           <h2>{name}</h2>
