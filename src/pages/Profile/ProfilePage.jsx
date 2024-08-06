@@ -99,7 +99,7 @@ export default function ProfilePage() {
     <div id="profile-page">
       <div className="profile-section">
         <div className="profile-image">
-          <img src={image} alt="프로필 사진" />
+          <img src={image && UserDefaultImage} alt="프로필 사진" />
         </div>
         <div className="user-info">
           <h2>{name}</h2>
