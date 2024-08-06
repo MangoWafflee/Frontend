@@ -165,7 +165,7 @@ export default function ProfileEditPage() {
   const updateImageData = async () => {
     const formData = new FormData();
     formData.append('image', previewImage);
-    console.log('변화 이미지', previewImage);
+
     try {
       const response = await fetch(
         `https://mango.angrak.cloud/user/${uid}`,

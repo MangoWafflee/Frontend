@@ -31,16 +31,13 @@ export default function ProfilePage() {
       } else {
         setImage(storedUser.image);
       }
-      console.log('user', user);
-      console.log('stored', storedUser);
     }
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
       const url = `https://mango.angrak.cloud/smile/user/${nickname}`;
-      console.log('프로필 페이지1', user.image);
-      console.log('프로필 페이지2', image);
+
       try {
         const response = await fetch(url, {
           method: 'GET',
