@@ -69,7 +69,7 @@ export default function NotificationCenter() {
       return data;
     } catch (error) {
       console.error(
-        `Error fetching sender data for ${uid}:`,
+        `Error fetching sender data for ${id}:`,
         error
       );
       return null;
