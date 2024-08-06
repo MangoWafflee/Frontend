@@ -74,6 +74,7 @@ export default function ChallengePage() {
 	const getUserChallenges = async () => {
 		const userId = user.id;
 		const { data } = await axios.get(`/challenge/userchallenge/${userId}`);
+		console.log(data);
 		const categorizedChallenges = {
 			// 참여중인 챌린지 데이터
 			participatingChallengeList: data.filter(
@@ -84,7 +85,7 @@ export default function ChallengePage() {
 			// 참여했던 챌린지 데이터
 			participatedChallengeList: data.filter(
 				(challenge) =>
-					challenge.participating === "참여" &&
+					challenge.participating === "진행완료" &&
 					challenge.successStatus !== null
 			),
 		};

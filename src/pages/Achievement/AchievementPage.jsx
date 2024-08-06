@@ -41,7 +41,7 @@ export default function AchievementPage() {
 			// 참여했던 챌린지 데이터
 			participatedChallengeList: data.filter(
 				(challenge) =>
-					challenge.participating === "참여" &&
+					challenge.participating === "진행완료" &&
 					challenge.successStatus === "성공"
 			),
 		};
