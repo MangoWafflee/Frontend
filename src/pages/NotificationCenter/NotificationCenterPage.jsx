@@ -66,6 +66,7 @@ export default function NotificationCenter() {
       return data;
     } catch (error) {
       console.error(`Error fetching sender data for ${id}:`, error);
+
       return null;
     }
   };
@@ -283,8 +284,14 @@ export default function NotificationCenter() {
 
   // 알림 병합 및 정렬
   const combinedNotifications = [
-    ...notifications.map((notif) => ({ ...notif, type: "follow" })),
-    ...smileNotifications.map((notif) => ({ ...notif, type: "smile" })),
+    ...notifications.map((notif) => ({
+      ...notif,
+      type: "follow",
+    })),
+    ...smileNotifications.map((notif) => ({
+      ...notif,
+      type: "smile",
+    })),
   ].sort(
     (a, b) =>
       new Date(b.requestDate || `${b.date}T${b.time}`) -

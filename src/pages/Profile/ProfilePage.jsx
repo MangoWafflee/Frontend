@@ -12,6 +12,10 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [smileCount, setSmileCount] = useState(0);
+  const [name, setName] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
+  const [image, setImage] = useState(UserDefaultImage);
 
   useEffect(() => {
     const storedUser = JSON.parse(
@@ -19,18 +23,14 @@ export default function ProfilePage() {
     );
     if (storedUser) {
       setUser(storedUser);
+      setName(storedUser.name);
+      setNickname(storedUser.nickname);
+      setEmail(storedUser.email);
+      setImage(storedUser.image);
     } else {
       navigate('/');
     }
   }, [navigate]);
-
-  const name = user ? user.name : 'test';
-  const nickname = user ? user.nickname : 'test';
-  const userId = user ? user.id : 0;
-  const uid = user ? user.uid : 0;
-  const email = user ? user.email : '';
-  const image =
-    user && user.image ? user.image : UserDefaultImage;
 
   useEffect(() => {
     const fetchData = async () => {
