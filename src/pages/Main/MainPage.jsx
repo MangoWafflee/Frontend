@@ -15,7 +15,7 @@ export default function MainPage() {
   const [uid, setUid] = useState('');
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState(null);
-
+  const [image, setImage] = useState('');
   useEffect(() => {
     const storedUser = JSON.parse(
       localStorage.getItem('user')
@@ -27,6 +27,7 @@ export default function MainPage() {
       setUid(storedUser.uid);
       setNickname(storedUser.nickname);
       setUserId(storedUser.id);
+      setImage(storedUser.image);
     } else {
       navigate('/');
     }
@@ -90,6 +91,7 @@ export default function MainPage() {
 
   // useEffect를 사용하여 userChallenges와 ongoingChallenges를 콘솔에 출력
   useEffect(() => {
+    console.log('메인페이지', image);
     if (userChallenges) {
       console.log('진행중인 챌린지:', userChallenges);
     }
