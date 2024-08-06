@@ -1,8 +1,13 @@
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { message } from "antd";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./UserCard.scss";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material';
+import { message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './UserCard.scss';
 
 export default function UserCard({
   userName,
@@ -17,13 +22,15 @@ export default function UserCard({
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const storedToken = localStorage.getItem("token");
+    const storedUser = JSON.parse(
+      localStorage.getItem('user')
+    );
+    const storedToken = localStorage.getItem('token');
     if (storedUser && storedToken) {
       setUser(storedUser);
       setToken(storedToken);
     } else {
-      navigate("/");
+      navigate('/');
     }
   }, [navigate]);
 
@@ -35,9 +42,9 @@ export default function UserCard({
       const response = await fetch(
         `https://mango.angrak.cloud/user/nickname/${userNickname}`,
         {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `${token}`,
           },
         }
@@ -50,7 +57,10 @@ export default function UserCard({
       const data = await response.json();
       const receiverId = data.id; // The receiver's uid
 
-      console.log("친구 요청을 보낼 유저의 id:", receiverId);
+      console.log(
+        '친구 요청을 보낼 유저의 id:',
+        receiverId
+      );
 
       // Step 2: Send the friend request using the fetched id
       const requestPayload = {
@@ -58,14 +68,14 @@ export default function UserCard({
         receiverId: receiverId, // 받아온 유저의 id
       };
 
-      console.log("보내는 요청 데이터:", requestPayload);
+      console.log('보내는 요청 데이터:', requestPayload);
 
       const requestResponse = await fetch(
         `https://mango.angrak.cloud/follow/request`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `${token}`,
           },
           body: JSON.stringify(requestPayload),
@@ -74,21 +84,24 @@ export default function UserCard({
 
       if (!requestResponse.ok) {
         const errorData = await requestResponse.json();
-        console.error("Error response from server:", errorData);
-        throw new Error("Failed to send friend request");
+        console.error(
+          'Error response from server:',
+          errorData
+        );
+        throw new Error('Failed to send friend request');
       }
 
-      message.success("친구가 요청을 보냈어요!");
-      console.log("친구 요청을 보냈습니다.");
+      message.success('친구가 요청을 보냈어요!');
+      console.log('친구 요청을 보냈습니다.');
       setIsFriendApply(true); // 친구 요청을 보낸 후 상태 업데이트
     } catch (error) {
-      console.error("친구 요청 중 오류 발생:", error);
+      console.error('친구 요청 중 오류 발생:', error);
     }
   };
 
   const handleSmileWatch = () => {
     // 웃음 보기 로직을 구현합니다.
-    console.log("웃음 보기를 눌렀습니다.");
+    console.log('웃음 보기를 눌렀습니다.');
     navigate(`/profile/smile/${userNickname}`); // 지정된 주소로 이동
   };
 
@@ -106,10 +119,10 @@ export default function UserCard({
             <Typography
               color="text.primary"
               sx={{
-                fontSize: "1.1rem",
-                textAlign: "left",
+                fontSize: '1.1rem',
+                textAlign: 'left',
                 //   marginLeft: "1rem",
-                fontWeight: "bold",
+                fontWeight: 'bold',
               }}
               noWrap
             >
@@ -118,10 +131,10 @@ export default function UserCard({
             <Typography
               color="text.secondary"
               sx={{
-                fontSize: "0.9rem",
-                textAlign: "left",
-                marginLeft: "1rem",
-                fontWeight: "bold",
+                fontSize: '0.9rem',
+                textAlign: 'left',
+                marginLeft: '1rem',
+                fontWeight: 'bold',
               }}
               noWrap
             >
@@ -130,19 +143,22 @@ export default function UserCard({
           </div>
           <div className="user-card-button">
             {isFriend ? (
-              <button className="smile-watch-button" onClick={handleSmileWatch}>
+              <button
+                className="smile-watch-button"
+                onClick={handleSmileWatch}
+              >
                 웃음 보기
               </button>
             ) : (
               <button
                 className={
                   isFriendApply
-                    ? "friend-apply-button requested"
-                    : "friend-apply-button"
+                    ? 'friend-apply-button requested'
+                    : 'friend-apply-button'
                 }
                 onClick={handleFriendApply}
               >
-                {isFriendApply ? "요청됨" : "팔로우 요청"}
+                {isFriendApply ? '요청됨' : '팔로우 요청'}
               </button>
             )}
           </div>
