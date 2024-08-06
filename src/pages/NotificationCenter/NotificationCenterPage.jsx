@@ -47,9 +47,9 @@ export default function NotificationCenter() {
 
   const userId = user ? user.id : 0;
 
-  const fetchSenderData = async (uid) => {
+  const fetchSenderData = async (id) => {
     try {
-      const url = `https://mango.angrak.cloud/user/uid/${uid}`;
+      const url = `https://mango.angrak.cloud/user/id/${id}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -65,7 +65,7 @@ export default function NotificationCenter() {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error(`Error fetching sender data for ${uid}:`, error);
+      console.error(`Error fetching sender data for ${id}:`, error);
       return null;
     }
   };
