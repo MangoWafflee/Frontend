@@ -34,9 +34,8 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const encodedNickname = encodeURIComponent(nickname);
-      const url = `https://mango.angrak.cloud/smile/user/${encodedNickname}`;
-
+      const url = `https://mango.angrak.cloud/smile/user/${nickname}`;
+      console.log(image);
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -47,7 +46,6 @@ export default function ProfilePage() {
 
         if (response.status === 200) {
           const data = await response.json();
-          console.log(data);
           setSmileCount(data.length);
         } else if (response.status === 404) {
           console.log('검색 결과가 없습니다.');
