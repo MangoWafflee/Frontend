@@ -50,9 +50,9 @@ export default function NotificationCenter() {
 
   const userId = user ? user.id : 0;
 
-  const fetchSenderData = async (uid) => {
+  const fetchSenderData = async (id) => {
     try {
-      const url = `https://mango.angrak.cloud/user/uid/${uid}`;
+      const url = `https://mango.angrak.cloud/user/id/${id}`;
       const response = await fetch(url, {
         method: 'GET',
         headers: {
