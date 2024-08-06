@@ -27,10 +27,8 @@ export default function ProfilePage() {
       setNickname(storedUser.nickname);
       setEmail(storedUser.email);
       setImage(storedUser.image);
-    } else {
-      navigate('/');
     }
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
