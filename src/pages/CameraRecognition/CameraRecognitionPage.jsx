@@ -16,6 +16,7 @@ export default function CameraRecognitionPage() {
   const [faceDetected, setFaceDetected] = useState(false);
   const [animationVisible, setAnimationVisible] =
     useState(false);
+  const [isStop, setIsStop] = useState(false);
   const location = useLocation();
   const intervalRef = useRef(null);
 
@@ -58,7 +59,7 @@ export default function CameraRecognitionPage() {
   }, [happyPercentage]);
 
   useEffect(() => {
-    if (maxHappyPercentage > 90) {
+    if (maxHappyPercentage > 90 && isStop == false) {
       const fetchData = async () => {
         let url = `https://mango.angrak.cloud/smile/save`;
         const smileData = {
@@ -113,6 +114,7 @@ export default function CameraRecognitionPage() {
         setVideoVisible(false);
       }, 5000);
       fetchData();
+      setIsStop(true);
       return () => clearTimeout(timer);
     }
   }, [maxHappyPercentage]);
