@@ -103,10 +103,10 @@ export default function AchievementPage() {
 					<div>Loading...</div>
 				) : userChallengesError ? (
 					<div>Error: {userChallengesError.message}</div>
-				) : userChallenges?.participatingChallengeList?.length === 0 ? (
+				) : userChallenges?.participatedChallengeList?.length === 0 ? (
 					<div className="challenge">성공했던 챌린지가 없습니다.</div>
 				) : (
-					userChallenges?.participatingChallengeList?.map(
+					userChallenges?.participatedChallengeList?.map(
 						(challenge) => (
 							<div className="badge" key={challenge.id}>
 								<img
