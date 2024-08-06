@@ -27,6 +27,7 @@ export default function ProfilePage() {
       setNickname(storedUser.nickname);
       setEmail(storedUser.email);
       setImage(storedUser.image);
+      console.log(storedUser);
     }
   }, []);
 
