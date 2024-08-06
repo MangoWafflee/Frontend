@@ -48,8 +48,8 @@ export default function ProfileEditPage() {
   const handleChange = (e) => {
     if (e.target.value.length <= 12) {
       setSearchText(e.target.value);
-    } else{
-      message.warning("닉네임은 최대 12자까지 가능합니다.")
+    } else {
+      message.warning('닉네임은 최대 12자까지 가능합니다.');
     }
   };
 
@@ -177,7 +177,7 @@ export default function ProfileEditPage() {
       if (response.ok) {
         const updatedUser = {
           ...user,
-          image: changeImage || user.image,
+          image: changeImage,
         };
         setUser(updatedUser);
         localStorage.setItem(
