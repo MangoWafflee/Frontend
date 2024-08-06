@@ -20,7 +20,7 @@ dayjs.extend(utc);
 dayjs.locale("ko"); // Set Day.js locale to Korean
 
 const getRelativeTime = (dateString) => {
-  const koreanTime = dayjs(dateString).tz("Asia/Seoul");
+  const koreanTime = dayjs.utc(dateString).tz("Asia/Seoul");
   return koreanTime.fromNow();
 };
 
@@ -378,10 +378,11 @@ export default function NotificationCenter() {
 
               <div className="button-container">
                 <div className="timestamp">
-                  {getRelativeTime(
-                    notification.requestDate ||
-                      `${notification.date}T${notification.time}`
-                  )}
+                  {notification.requestDate
+                    ? getRelativeTime(notification.requestDate)
+                    : getRelativeTime(
+                        `${notification.date}T${notification.time}`
+                      )}
                 </div>
                 {notification.type === "follow" && (
                   <>
