@@ -177,14 +177,14 @@ export default function ProfileEditPage() {
       if (response.ok) {
         const updatedUser = {
           ...user,
-          image: changeImage,
+          image: changeImage, // image 필드만 변경
         };
         setUser(updatedUser);
         localStorage.setItem(
           'user',
           JSON.stringify(updatedUser)
         );
-        console.log(user);
+        console.log(updatedUser); // 업데이트된 user 객체를 출력
         message.success(
           '프로필이 성공적으로 업데이트되었습니다.'
         );
