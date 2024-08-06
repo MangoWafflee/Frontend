@@ -56,7 +56,10 @@ export default function ChallengePage() {
 			try {
 				const currentTime = new Date().getTime();
 				await queryClient.invalidateQueries(["userChallenges", currentTime]);
-				await getOngoingChallenges(userChallenges);
+				await queryClient.invalidateQueries(["ongoingChallenges", currentTime]);
+				// 데이터를 명시적으로 다시 가져오기
+				await queryClient.refetchQueries(["userChallenges", user.uid]);
+				await queryClient.refetchQueries(["ongoingChallenges", user.uid]);
 			} catch (error) {
 				console.error("쿼리 무효화 중 오류 발생:", error);
 			}
