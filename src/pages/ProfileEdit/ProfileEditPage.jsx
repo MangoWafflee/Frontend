@@ -44,7 +44,6 @@ export default function ProfileEditPage() {
         setImage(storedUser.image);
         setPreviewImage(storedUser.image);
       }
-
       setSearchText(storedUser.nickname || '');
     } else {
       navigate('/');
@@ -166,7 +165,7 @@ export default function ProfileEditPage() {
   const updateImageData = async () => {
     const formData = new FormData();
     formData.append('image', changeImage);
-    console.log('', changeImage);
+    console.log('변화 이미지', changeImage);
     try {
       const response = await fetch(
         `https://mango.angrak.cloud/user/${uid}`,
@@ -178,11 +177,10 @@ export default function ProfileEditPage() {
       );
 
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
+        const data = await response.json(); // 서버에서 반환된 JSON 데이터 (예: 업로드된 이미지 URL)
         const updatedUser = {
           ...user,
-          image: changeImage, // image 필드만 변경
+          image: data.imageUrl, // 서버에서 반환된 실제 이미지 URL 사용
         };
         setUser(updatedUser);
         localStorage.setItem(
@@ -199,14 +197,15 @@ export default function ProfileEditPage() {
       }
     } catch (error) {
       console.error(error);
+      message.error('프로필 업데이트에 실패했습니다.');
     }
   };
 
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const file = e.target.files[0];
-      setChangeImage(URL.createObjectURL(file));
-      setPreviewImage(URL.createObjectURL(file));
+      setChangeImage(file); // 파일 객체를 저장
+      setPreviewImage(URL.createObjectURL(file)); // 미리보기 URL 설정
     }
   };
 
