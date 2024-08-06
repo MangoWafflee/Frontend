@@ -24,6 +24,12 @@ const getRelativeTime = (dateString) => {
   return koreanTime.fromNow();
 };
 
+const getCombinedRelativeTime = (date, time) => {
+  const dateTimeString = `${date}T${time}`;
+  const koreanTime = dayjs(dateTimeString).tz("Asia/Seoul");
+  return koreanTime.fromNow();
+};
+
 export default function NotificationCenter() {
   const [notifications, setNotifications] = useState([]);
   const [smileNotifications, setSmileNotifications] = useState([]);
@@ -380,8 +386,9 @@ export default function NotificationCenter() {
                 <div className="timestamp">
                   {notification.requestDate
                     ? getRelativeTime(notification.requestDate)
-                    : getRelativeTime(
-                        `${notification.date}T${notification.time}`
+                    : getCombinedRelativeTime(
+                        notification.date,
+                        notification.time
                       )}
                 </div>
                 {notification.type === "follow" && (
