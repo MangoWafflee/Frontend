@@ -50,28 +50,31 @@ export default function NotificationCenter() {
 
   const userId = user ? user.id : 0;
 
-  // const fetchSenderData = async (uid) => {
-  //   try {
-  //     const url = `https://mango.angrak.cloud/user/uid/${uid}`;
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `${token}`,
-  //       },
-  //     });
+  const fetchSenderData = async (uid) => {
+    try {
+      const url = `https://mango.angrak.cloud/user/uid/${uid}`;
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      });
 
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error(`Error fetching sender data for ${uid}:`, error);
-  //     return null;
-  //   }
-  // };
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(
+        `Error fetching sender data for ${uid}:`,
+        error
+      );
+      return null;
+    }
+  };
 
   const fetchNotifications = async () => {
     if (!userId || !token) return;

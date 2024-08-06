@@ -20,7 +20,7 @@ export default function UserCard({
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-
+  const [userId, setUserId] = useState(0);
   useEffect(() => {
     const storedUser = JSON.parse(
       localStorage.getItem('user')
@@ -29,12 +29,11 @@ export default function UserCard({
     if (storedUser && storedToken) {
       setUser(storedUser);
       setToken(storedToken);
+      setUserId(storedUser.id);
     } else {
       navigate('/');
     }
   }, [navigate]);
-
-  const userId = user ? user.id : 0;
 
   const handleFriendApply = async () => {
     try {
