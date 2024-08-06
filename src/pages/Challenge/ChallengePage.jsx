@@ -13,7 +13,7 @@ export default function ChallengePage() {
 	const [isParticipatingChallenge, setIsParticipatingChallenge] =
 		useState(null);
 	const user = JSON.parse(localStorage.getItem("user")); // localStorage에서 user 정보 가져오기
-	const token = JSON.parse(localStorage.getItem("token")); // localStorage에서 token 정보 가져오기
+	const token = localStorage.getItem("token"); // localStorage에서 token 정보 가져오기
 	const queryClient = useQueryClient(); // react-query queryClient 생성
 
 	// 챌린지 모달 창 제거
