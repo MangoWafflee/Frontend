@@ -165,10 +165,11 @@ export default function ProfileEditPage() {
 
   const updateImageData = async () => {
     const formData = new FormData();
-    let imageUrl = changeImage;
+    let imageUrl;
     if (changeImage.startsWith('blob:')) {
       imageUrl = imageUrl.slice(5); // 'blob:' 접두사를 제거
       formData.append('image', imageUrl);
+      console.log(imageUrl);
     }
 
     console.log(changeImage);
