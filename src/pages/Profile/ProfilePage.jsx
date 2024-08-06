@@ -35,7 +35,9 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       const encodedNickname = encodeURIComponent(nickname);
-      const url = `https://mango.angrak.cloud/smile/user/${encodedNickname}`;
+      console.log(encodedNickname);
+      console.log(nickname);
+      const url = `https://mango.angrak.cloud/smile/user/${nickname}`;
 
       try {
         const response = await fetch(url, {
