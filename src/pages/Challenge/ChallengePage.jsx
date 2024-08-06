@@ -50,11 +50,18 @@ export default function ChallengePage() {
 	// 챌린지 참여 api Mutation
 	const participateChallengeMutation = useMutation({
 		mutationFn: participateChallenge,
-		onSuccess: (response) => {
+		onSuccess: async (response) => {
 			console.log(response);
 			message.success("챌린지에 참가되었습니다.");
-			queryClient.invalidateQueries(["userChallenges", user.uid]); // 참여한 챌린지 목록 업데이트
-			queryClient.invalidateQueries(["ongoingChallenges"]); // 진행중인 챌린지 목록 업데이트
+			try {
+				await queryClient.invalidateQueries([
+					"userChallenges",
+					user.uid,
+				]); // 참여한 챌린지 목록 업데이트
+				await queryClient.invalidateQueries(["ongoingChallenges"]); // 진행중인 챌린지 목록 업데이트
+			} catch (error) {
+				console.error("쿼리 무효화 중 오류 발생:", error);
+			}
 		},
 		onError: (error) => {
 			console.log(error);
@@ -200,7 +207,7 @@ export default function ChallengePage() {
 			{/* 진행중인 챌린지 중에 참여 안한 것들 */}
 			<h2>챌린지 참여하기</h2>
 			{ongoingChallenges === null || ongoingChallenges.length === 0 ? (
-				<div className="challenge">진행중인 챌린지가 없습니다.</div>
+				<div className="challenge">참여 가능한 챌린지가 없습니다.</div>
 			) : (
 				ongoingChallenges.map((challenge) => (
 					<div
@@ -348,7 +355,7 @@ export default function ChallengePage() {
 										setIsModalOpen(false);
 									}}
 								>
-									<strong>챌린지 참여하기</strong>
+									챌린지 참여하기
 								</button>
 							)}
 						</div>
