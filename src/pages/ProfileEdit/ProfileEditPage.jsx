@@ -177,10 +177,9 @@ export default function ProfileEditPage() {
       );
 
       if (response.ok) {
-        const data = await response.json(); // 서버에서 반환된 JSON 데이터 (예: 업로드된 이미지 URL)
         const updatedUser = {
           ...user,
-          image: data.imageUrl, // 서버에서 반환된 실제 이미지 URL 사용
+          image: changeImage, // 서버에서 반환된 실제 이미지 URL 사용
         };
         setUser(updatedUser);
         localStorage.setItem(
