@@ -20,6 +20,7 @@ export default function MainPage() {
     const storedUser = JSON.parse(
       localStorage.getItem('user')
     );
+    console.log(storedUser.image);
     const storedToken = localStorage.getItem('token');
     if (storedUser && storedToken) {
       setToken(storedToken);
