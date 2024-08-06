@@ -8,8 +8,9 @@ export default function CameraRecognitionPage() {
   const [nickname, setNickname] = useState('test');
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const happyPercentageRef = useRef(0);
-  const maxHappyPercentageRef = useRef(0);
+  const [happyPercentage, setHappyPercentage] = useState(0);
+  const [maxHappyPercentage, setMaxHappyPercentage] =
+    useState(0);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [videoVisible, setVideoVisible] = useState(true);
   const [faceDetected, setFaceDetected] = useState(false);
@@ -51,21 +52,17 @@ export default function CameraRecognitionPage() {
   }, []);
 
   useEffect(() => {
-    if (
-      happyPercentageRef.current >
-      maxHappyPercentageRef.current
-    ) {
-      maxHappyPercentageRef.current =
-        happyPercentageRef.current;
+    if (happyPercentage > maxHappyPercentage) {
+      setMaxHappyPercentage(happyPercentage);
     }
-  }, [happyPercentageRef.current]);
+  }, [happyPercentage]);
 
   useEffect(() => {
-    if (maxHappyPercentageRef.current > 90) {
+    if (maxHappyPercentage > 90) {
       const fetchData = async () => {
         let url = `https://mango.angrak.cloud/smile/save`;
         const smileData = {
-          smilePercentage: maxHappyPercentageRef.current,
+          smilePercentage: maxHappyPercentage,
           date: new Date()
             .toLocaleDateString('ko-KR', {
               year: 'numeric',
@@ -118,7 +115,7 @@ export default function CameraRecognitionPage() {
       fetchData();
       return () => clearTimeout(timer);
     }
-  }, [maxHappyPercentageRef.current]);
+  }, [maxHappyPercentage]);
 
   const startVideo = () => {
     navigator.mediaDevices
@@ -175,9 +172,7 @@ export default function CameraRecognitionPage() {
           setFaceDetected(true);
           const happy =
             resizedDetections[0].expressions.happy;
-          happyPercentageRef.current = (
-            happy * 100
-          ).toFixed(0);
+          setHappyPercentage((happy * 100).toFixed(0));
         } else {
           setFaceDetected(false);
         }
@@ -281,7 +276,7 @@ export default function CameraRecognitionPage() {
               className="video-box"
             />
             {animationVisible &&
-              maxHappyPercentageRef.current < 90 && (
+              maxHappyPercentage < 90 && (
                 <svg className="circle-animation">
                   <circle cx="185" cy="180" r="175" />
                 </svg>
@@ -289,16 +284,16 @@ export default function CameraRecognitionPage() {
           </div>
           <div className="emotion-display">
             <div className="max-happy-percentage">
-              {maxHappyPercentageRef.current}%
+              {maxHappyPercentage}%
             </div>
             <div className="happy-text">
-              {maxHappyPercentageRef.current > 90
+              {maxHappyPercentage > 90
                 ? '행복한 얼굴이에요!'
-                : maxHappyPercentageRef.current > 70
+                : maxHappyPercentage > 70
                 ? '더 크게 웃어보아요!'
-                : maxHappyPercentageRef.current > 50
+                : maxHappyPercentage > 50
                 ? '입이 찢어지게! 흐하하하!'
-                : maxHappyPercentageRef.current > 30
+                : maxHappyPercentage > 30
                 ? '수줍은 미소네요! 더 크게!'
                 : '오늘도 행복한 하루를 시작하는거에요!'}
             </div>

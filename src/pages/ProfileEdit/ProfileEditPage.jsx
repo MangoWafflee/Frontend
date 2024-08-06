@@ -163,7 +163,7 @@ export default function ProfileEditPage() {
     if (changeImage) {
       formData.append('image', changeImage);
     }
-
+    console.log(changeImage);
     try {
       const response = await fetch(
         `https://mango.angrak.cloud/user/${uid}`,
@@ -175,15 +175,18 @@ export default function ProfileEditPage() {
       );
 
       if (response.ok) {
+        const data = await response.json();
+        console.log(data);
         const updatedUser = {
           ...user,
-          image: changeImage,
+          image: changeImage, // image 필드만 변경
         };
         setUser(updatedUser);
         localStorage.setItem(
           'user',
           JSON.stringify(updatedUser)
         );
+        console.log(updatedUser); // 업데이트된 user 객체를 출력
         message.success(
           '프로필이 성공적으로 업데이트되었습니다.'
         );
@@ -199,7 +202,7 @@ export default function ProfileEditPage() {
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       const file = e.target.files[0];
-      setChangeImage(file);
+      setChangeImage(URL.createObjectURL(file));
       setPreviewImage(URL.createObjectURL(file));
     }
   };
