@@ -38,7 +38,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchData = async () => {
       const url = `https://mango.angrak.cloud/smile/user/${nickname}`;
-      console.log(image);
+      console.log('프로필 페이지', image);
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -103,10 +103,7 @@ export default function ProfilePage() {
     <div id="profile-page">
       <div className="profile-section">
         <div className="profile-image">
-          <img
-            src={image && UserDefaultImage}
-            alt="프로필 사진"
-          />
+          <img src={image} alt="프로필 사진" />
         </div>
         <div className="user-info">
           <h2>{name}</h2>
