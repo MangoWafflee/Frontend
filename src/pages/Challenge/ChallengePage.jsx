@@ -54,11 +54,8 @@ export default function ChallengePage() {
 			console.log(response);
 			message.success("챌린지에 참가되었습니다.");
 			try {
-				await queryClient.invalidateQueries([
-					"userChallenges",
-					user.uid,
-				]); // 참여한 챌린지 목록 업데이트
-				await queryClient.invalidateQueries(["ongoingChallenges"]); // 진행중인 챌린지 목록 업데이트
+				await queryClient.fetchQuery(["userChallenges", user.uid], getUserChallenges); // 참여한 챌린지 목록 업데이트
+				await queryClient.fetchQuery(["ongoingChallenges"], () => getOngoingChallenges(userChallenges)); // 진행중인 챌린지 목록 업데이트
 			} catch (error) {
 				console.error("쿼리 무효화 중 오류 발생:", error);
 			}
@@ -355,7 +352,7 @@ export default function ChallengePage() {
 										setIsModalOpen(false);
 									}}
 								>
-									챌린지 참여하기
+									<strong>챌린지 참여하기</strong>
 								</button>
 							)}
 						</div>
