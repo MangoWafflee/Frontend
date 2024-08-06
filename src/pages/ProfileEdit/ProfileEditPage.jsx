@@ -17,7 +17,7 @@ export default function ProfileEditPage() {
   const [nickname, setNickname] = useState('test');
   const [uid, setUid] = useState(0);
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState(UserDefaultImage);
+  const [image, setImage] = useState('');
 
   const [changeImage, setChangeImage] = useState(null);
   const [searchText, setSearchText] = useState('');
@@ -37,7 +37,7 @@ export default function ProfileEditPage() {
       setNickname(storedUser.nickname || 'test');
       setUid(storedUser.uid || 0);
       setEmail(storedUser.email || '');
-      setImage(storedUser.image || UserDefaultImage);
+      setImage(storedUser.image);
       setPreviewImage(storedUser.image || UserDefaultImage);
       setSearchText(storedUser.nickname || '');
     } else {
