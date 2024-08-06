@@ -184,6 +184,7 @@ export default function ProfileEditPage() {
           'user',
           JSON.stringify(updatedUser)
         );
+        console.log(user);
         message.success(
           '프로필이 성공적으로 업데이트되었습니다.'
         );
