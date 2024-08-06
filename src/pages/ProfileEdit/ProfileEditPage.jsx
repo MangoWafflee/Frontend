@@ -163,7 +163,7 @@ export default function ProfileEditPage() {
     if (changeImage) {
       formData.append('image', changeImage);
     }
-
+    console.log(changeImage);
     try {
       const response = await fetch(
         `https://mango.angrak.cloud/user/${uid}`,
