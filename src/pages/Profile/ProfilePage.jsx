@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
-  const [image, setImage] = useState(UserDefaultImage);
+  const [image, setImage] = useState('');
 
   useEffect(() => {
     const storedUser = JSON.parse(
