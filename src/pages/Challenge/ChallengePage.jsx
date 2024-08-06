@@ -4,7 +4,7 @@ import "./ChallengePage.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../app/axios";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation,useQueryClient } from "@tanstack/react-query";
 import Loading from "../../components/Loading/Loading";
 
 export default function ChallengePage() {
@@ -14,6 +14,7 @@ export default function ChallengePage() {
 		useState(null);
 	const user = JSON.parse(localStorage.getItem("user")); // localStorage에서 user 정보 가져오기
 	const token = localStorage.getItem("token"); // localStorage에서 token 정보 가져오기
+	const queryClient = useQueryClient(); // react-query queryClient 생성
 
 	// 챌린지 모달 창 제거
 	const handleCancel = () => {
@@ -53,8 +54,9 @@ export default function ChallengePage() {
 			console.log(response);
 			message.success("챌린지에 참가되었습니다.");
 			try {
-				await refetchUserChallenges();
-				await refetchOngoingChallenges();
+				const currentTime = new Date().getTime();
+				await queryClient.invalidateQueries(["userChallenges", currentTime]);
+				await queryClient.invalidateQueries(["ongoingChallenges", currentTime]);
 			} catch (error) {
 				console.error("쿼리 무효화 중 오류 발생:", error);
 			}
@@ -105,7 +107,6 @@ export default function ChallengePage() {
 		data: userChallenges,
 		error: userChallengesError,
 		isLoading: isUserChallengesLoading,
-		refetch: refetchUserChallenges,
 	} = useQuery({
 		queryKey: ["userChallenges", user.uid],
 		queryFn: getUserChallenges,
@@ -116,9 +117,8 @@ export default function ChallengePage() {
 		data: ongoingChallenges,
 		error: ongoingChallengesError,
 		isLoading: isOngoingChallengesLoading,
-		refetch: refetchOngoingChallenges,
 	} = useQuery({
-		queryKey: ["ongoingChallenges"],
+		queryKey: ["ongoingChallenges",user.uid],
 		queryFn: () => getOngoingChallenges(userChallenges),
 		enabled: !!userChallenges, // userChallenges 데이터가 존재할 때만 실행
 	});

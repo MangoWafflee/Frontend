@@ -4,7 +4,7 @@ import axios from '../../app/axios';
 import { useMutation } from '@tanstack/react-query';
 import './LoginRedirectPage.scss';
 import Loading from '../../components/Loading/Loading';
-import { Input, Button, message } from 'antd';
+import { Input, message } from 'antd';
 
 const { Search } = Input;
 
