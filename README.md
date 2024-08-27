@@ -36,7 +36,7 @@ SmileHub는 카메라를 통해 웃음을 인식하고 기록하는 웹 애플�
     <img src="https://skillicons.dev/icons?theme=light&i=aws,nginx,githubactions,netlify" />
 </p>
 
-### 🗣️ Comunication
+### 🗣️ Communication
 <p align="center">
     <img src="https://skillicons.dev/icons?theme=light&i=figma,notion,discord" />
 </p>
