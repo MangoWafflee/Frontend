@@ -11,7 +11,7 @@ export default function AchievementPage() {
 	const [uid, setUid] = useState("");
 	const [token, setToken] = useState("");
 	const [userId, setUserId] = useState(null);
-	const { badgeList, error } = useFetchUserBadges(uid, token);
+	const { badgeList } = useFetchUserBadges(uid, token);
 
 	useEffect(() => {
 		const storedUser = JSON.parse(localStorage.getItem("user"));
